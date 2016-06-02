@@ -1,1 +1,23 @@
-<h1>Home</h1>
+<h1>Prisoners API</h1>
+
+<h2>Registered services</h2>
+
+<table>
+  <thead>
+    <th>Service</th>
+    <th>Action</th>
+  </thead>
+  <tbody>
+    <% @applications.each do |application| %>
+      <tr>
+        <td><%= application.name %></td>
+        <td><%= link_to 'Authorise', oauth_authorization_path(client_id: application.uid, redirect_uri: application.redirect_uri, response_type: 'code') %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if params[:code].present? %>
+  <h2>Authorisation code:</h2>
+  <p><%= params[:code] %></p>
+<% end %>
