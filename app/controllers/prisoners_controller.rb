@@ -1,4 +1,5 @@
 class PrisonersController < ApplicationController
+  before_action :doorkeeper_authorize!
   before_action :set_prisoner, only: [:show, :update, :destroy]
 
   def index
