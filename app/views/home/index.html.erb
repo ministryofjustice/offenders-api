@@ -5,17 +5,13 @@
 <table>
   <thead>
     <th>Service</th>
-    <th>Client ID</th>
-    <th>Secret</th>
     <th>Action</th>
   </thead>
   <tbody>
     <% @applications.each do |application| %>
       <tr>
         <td><%= application.name %></td>
-        <td><%= application.uid %></td>
-        <td><%= application.secret %></td>
-        <td><%= link_to 'Authorise', oauth_authorization_path(client_id: application.uid, redirect_uri: application.redirect_uri, response_type: 'code') %>
+        <td><%= button_to 'Get access token', oauth_token_path(grant_type: 'client_credentials', client_id: application.uid, client_secret: application.secret) %>
       </tr>
     <% end %>
   </tbody>
