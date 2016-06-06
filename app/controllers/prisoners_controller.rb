@@ -3,9 +3,7 @@ class PrisonersController < ApplicationController
   before_action :set_prisoner, only: [:show, :update, :destroy]
 
   def index
-    @prisoners = [
-      { name: 'John Smith' }
-    ]
+    @prisoners = Prisoner.all
 
     render json: @prisoners
   end
@@ -26,6 +24,6 @@ class PrisonersController < ApplicationController
   private
 
   def set_prisoner
-    @prisoner = { name: 'John Smith' }
+    @prisoner = Prisoner.find(params[:id])
   end
 end
