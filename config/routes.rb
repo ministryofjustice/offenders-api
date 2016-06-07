@@ -3,7 +3,11 @@ Rails.application.routes.draw do
 
   root to: 'home#index'
 
-  resources :prisoners, format: :json do
-    resources :aliases
+  namespace :api, format: :json do
+    resources :prisoners, format: :json do
+      resources :aliases
+    end
   end
+
+  devise_for :users
 end

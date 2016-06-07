@@ -14,3 +14,7 @@ mps = Doorkeeper::Application.create!(
   name: 'Moving People Safely',
   redirect_uri: 'http://localhost:3000'
 )
+
+# Default admin user
+
+User.create!(email: 'example@example.com', password: 'password', password_confirmation: 'password')

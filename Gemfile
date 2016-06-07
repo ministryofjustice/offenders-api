@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'devise'
 gem 'doorkeeper'
 gem 'rails', '4.2.6'
 gem 'sqlite3'
@@ -11,9 +12,10 @@ end
 group :development, :test do
   gem 'awesome_print'
   gem 'byebug'
+  gem 'rspec-rails', '~> 3.4'
 end
 
 group :test do
   gem 'factory_girl_rails', '~> 4.5.0'
-  gem 'rspec-rails', '~> 3.4'
+  gem 'shoulda-matchers',   '~> 2.8.0', require: false
 end

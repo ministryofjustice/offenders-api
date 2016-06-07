@@ -3,9 +3,5 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  before_action :doorkeeper_authorize!
-
-  def doorkeeper_unauthorized_render_options(error: nil)
-    { json: { error: "Not authorised" } }
-  end
+  before_action :authenticate_user!
 end
