@@ -10,6 +10,10 @@ class Prisoner
   end
 
   def self.find(id)
-    { name: 'John Smith' }
+    { id: SecureRandom.uuid, name: 'John Smith' }
+  end
+
+  def aliases
+    [{ name: 'Shanker' }]
   end
 end
