@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'devise'
 gem 'doorkeeper'
+gem 'jquery-rails', '~> 3.1.2'
 gem 'rails', '4.2.6'
 gem 'sqlite3'
 
