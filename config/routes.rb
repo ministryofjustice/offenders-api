@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   use_doorkeeper
 
-  root to: 'home#index'
+  root to: 'services#index'
+
+  resources :services
 
   namespace :api, format: :json do
     resources :prisoners, format: :json do
