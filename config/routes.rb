@@ -3,5 +3,7 @@ Rails.application.routes.draw do
 
   root to: 'home#index'
 
-  resources :prisoners, format: :json
+  resources :prisoners, format: :json do
+    resources :aliases
+  end
 end
