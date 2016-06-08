@@ -4,15 +4,7 @@ Doorkeeper.configure do
 
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    class User
-      attr_accessor :id
-
-      def initialize(id)
-        @id = id
-      end
-    end
-
-    User.new(1)
+    User.find_by_id(session['warden.user.user.key'][0][0]) rescue redirect_to(new_user_session_url)
   end
 
   # If you want to restrict access to the web interface for adding oauth authorized applications, you need to declare the block below.
