@@ -1,4 +1,4 @@
-<%= form_for @service, url: services_path do |f| %>
+<%= form_for @service, url: services_path, as: :service do |f| %>
   <p>
     <%= f.label :name %>
     <%= f.text_field :name %>
