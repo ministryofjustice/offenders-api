@@ -1,2 +1,5 @@
-<h1>Services#show</h1>
-<p>Find me in app/views/services/show.html.erb</p>
+<h1>Service: <%= @service.name %></h1>
+
+<p>Client ID: <%= @service.uid %></p>
+<p>Client secret: <%= @service.secret %></p>
+<p>Redirect URI: <%= @service.redirect_uri %></p>

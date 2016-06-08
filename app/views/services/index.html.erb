@@ -3,24 +3,32 @@
 <table>
   <thead>
     <th>Service</th>
-    <th>Action</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
   </thead>
   <tbody>
-    <% @applications.each do |application| %>
+    <% @services.each do |service| %>
       <tr>
-        <td><%= application.name %></td>
         <td>
-          <%= button_to 'Get access token', oauth_token_path(grant_type: 'client_credentials', client_id: application.uid, client_secret: application.secret) %>
-          <%= link_to 'Show', '#' %>
-          <%= link_to 'Edit', '#' %>
-          <%= link_to 'Destroy', '#' %>
+          <%= service.name %>
+        </td>
+        <td>
+          <%= link_to 'Show', service_path(service) %>
+        </td>
+        <td>
+          <%= link_to 'Edit', edit_service_path(service) %>
+        </td>
+        <td>
+          <%= link_to 'Destroy', service_path(service), method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+        <td>
+          <%= button_to 'Get access token', oauth_token_path(grant_type: 'client_credentials', client_id: service.uid, client_secret: service.secret) %>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<% if params[:code].present? %>
-  <h2>Authorisation code:</h2>
-  <p><%= params[:code] %></p>
-<% end %>
+<p><%= link_to 'Add service', new_service_path %></p>
