@@ -1,5 +1,5 @@
 module Api
-  class PrisonersController < ApplicationController
+  class PrisonersController < Api::ApplicationController
     before_action :set_prisoner, only: [:show, :update, :destroy]
 
     def index

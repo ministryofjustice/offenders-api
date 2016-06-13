@@ -1,5 +1,5 @@
 module Api
-  class AliasesController < ApplicationController
+  class AliasesController < Api::ApplicationController
     before_action :set_prisoner
     before_action :set_alias, only: [:show, :update, :destroy]
 
