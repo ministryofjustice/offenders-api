@@ -12,6 +12,21 @@ module Api
       render json: @prisoner
     end
 
+    def search
+      if params[:noms_id].blank? || params[:date_of_birth].blank?
+        render json: { error: 'NOMS ID or date of birth not present' }, status: 400
+      else
+        output = {
+          found: true,
+          offender: {
+            id: 1234
+          }
+        }
+
+        render json: output, status: 200
+      end
+    end
+
     def create
     end
 
