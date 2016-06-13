@@ -21,6 +21,6 @@ User.create!(email: 'example@example.com', password: 'password', password_confir
 
 # Sample Prisoner records
 
-Prisoner.create!(given_name: 'John', surname: 'Smith')
-Prisoner.create!(given_name: 'Bob', surname: 'Jones')
-Prisoner.create!(given_name: 'Keith', surname: 'Johnson')
+Prisoner.create!(given_name: 'John', surname: 'Smith', offender_id: 1)
+Prisoner.create!(given_name: 'Bob', surname: 'Jones', offender_id: 2)
+Prisoner.create!(given_name: 'Keith', surname: 'Johnson', offender_id: 3)
