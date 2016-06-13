@@ -1,13 +1,7 @@
 class Alias
-  def self.all
-    [first]
-  end
+  include Mongoid::Document
 
-  def self.first
-    find(1)
-  end
+  field :name, type: String
 
-  def self.find(id)
-    { name: 'Shanker' }
-  end
+  belongs_to :prisoner
 end

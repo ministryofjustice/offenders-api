@@ -18,3 +18,9 @@ mps = Doorkeeper::Application.create!(
 # Default admin user
 
 User.create!(email: 'example@example.com', password: 'password', password_confirmation: 'password')
+
+# Sample Prisoner records
+
+Prisoner.create!(given_name: 'John', surname: 'Smith')
+Prisoner.create!(given_name: 'Bob', surname: 'Jones')
+Prisoner.create!(given_name: 'Keith', surname: 'Johnson')

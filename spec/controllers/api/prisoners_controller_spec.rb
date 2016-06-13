@@ -17,7 +17,9 @@ RSpec.describe Api::PrisonersController, type: :controller do
     end
 
     describe 'GET #show' do
-      before { get :show, id: 1 }
+      let(:prisoner) { create(:prisoner) }
+
+      before { get :show, id: prisoner }
 
       it 'returns status 200' do
         expect(response.status).to eq(200)
