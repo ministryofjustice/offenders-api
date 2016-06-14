@@ -16,14 +16,20 @@ module Api
       if params[:noms_id].blank? || params[:date_of_birth].blank?
         render json: { error: 'NOMS ID or date of birth not present' }, status: 400
       else
-        output = {
-          found: true,
-          offender: {
-            id: 1234
-          }
-        }
+        prisoner = Prisoner.where(noms_id: params[:noms_id], date_of_birth: params[:date_of_birth]).first
 
-        render json: output, status: 200
+        if prisoner
+          output = {
+            found: true,
+            offender: {
+              id: prisoner.offender_id
+            }
+          }
+
+          render json: output, status: 200
+        else
+          render json: { found: false }, status: 404
+        end
       end
     end
 
