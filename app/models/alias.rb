@@ -3,5 +3,5 @@ class Alias
 
   field :name, type: String
 
-  belongs_to :prisoner
+  embedded_in :prisoner
 end

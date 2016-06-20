@@ -12,5 +12,5 @@ class Prisoner
   field :gender, type: String
   field :pnc_number, type: String
 
-  has_many :aliases, dependent: :destroy
+  embeds_many :aliases
 end
