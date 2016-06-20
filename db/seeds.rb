@@ -21,13 +21,15 @@ User.create!(email: 'example@example.com', password: 'password', password_confir
 
 # Sample Prisoner records
 
-Prisoner.create!(
+p = Prisoner.create!(
   given_name: 'John',
   surname: 'Smith',
   offender_id: '1',
   noms_id: 'A1234AA',
   date_of_birth: '19911010'
 )
+p.aliases.build(name: 'Johnny')
+p.save!
 
 Prisoner.create!(
   given_name: 'Bob',
