@@ -37,9 +37,17 @@ module Api
     end
 
     def update
+      if @prisoner.update(prisoner_params)
+        render json: true, status: 200
+      else
+        render json: { error: @prisoner.errors }, status: 422
+      end
     end
 
     def destroy
+      @prisoner.destroy
+
+      render json: true, status: :ok
     end
 
     private

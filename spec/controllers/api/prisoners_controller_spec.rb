@@ -100,11 +100,44 @@ RSpec.describe Api::PrisonersController, type: :controller do
     end
 
     describe 'PATCH #update' do
+      let!(:prisoner) { create(:prisoner, noms_id: 'A1234BC', date_of_birth: Date.parse('19801010')) }
 
+      before do
+        patch :update, id: prisoner, prisoner: { noms_id: 'B1234BC' }
+        prisoner.reload
+      end
+
+      it 'updates the prisoner record' do
+        expect(prisoner.noms_id).to eq('B1234BC')
+      end
+
+      it 'returns status "success"' do
+        expect(response.status).to eq(200)
+      end
+
+      it 'returns "true"' do
+        expect(response.body).to eq('true')
+      end
     end
 
     describe 'DELETE #destroy' do
+      let!(:prisoner) { create(:prisoner, noms_id: 'A1234BC', date_of_birth: Date.parse('19801010')) }
 
+      before do
+        delete :destroy, id: prisoner
+      end
+
+      it 'destroys the prisoner' do
+        expect(Prisoner.count).to eq(0)
+      end
+
+      it 'returns status 200' do
+        expect(response.status).to eq(200)
+      end
+
+      it 'returns "true"' do
+        expect(response.body).to eq('true')
+      end
     end
   end
 
