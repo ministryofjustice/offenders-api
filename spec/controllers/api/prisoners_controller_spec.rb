@@ -14,6 +14,10 @@ RSpec.describe Api::PrisonersController, type: :controller do
       it 'returns status 200' do
         expect(response.status).to eq(200)
       end
+
+      it 'returns JSON collection of prisoner records' do
+        expect(JSON.parse(response.body)).to match_array(Prisoner.all.map(&:to_json))
+      end
     end
 
     describe 'GET #search' do
@@ -70,6 +74,10 @@ RSpec.describe Api::PrisonersController, type: :controller do
 
       it 'returns status 200' do
         expect(response.status).to eq(200)
+      end
+
+      it 'returns JSON represenation of prisoner record' do
+        expect(response.body).to eq(prisoner.to_json)
       end
     end
 
