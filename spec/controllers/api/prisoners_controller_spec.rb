@@ -74,7 +74,29 @@ RSpec.describe Api::PrisonersController, type: :controller do
     end
 
     describe 'POST #create' do
+      let(:params) do
+        {
+          given_name: 'John',
+          surname: 'Smith',
+          offender_id: '134',
+          noms_id: 'A1234ZZ',
+          date_of_birth: '19711010'
+        }
+      end
 
+      before { post :create, prisoner: params }
+
+      it 'creates a new Prisoner record' do
+        expect(Prisoner.count).to eq(1)
+      end
+
+      it 'returns status 201/created' do
+        expect(response.status).to eq(201)
+      end
+
+      it 'returns "true"' do
+        expect(response.body).to eq('true')
+      end
     end
 
     describe 'PATCH #update' do

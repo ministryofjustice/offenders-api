@@ -27,6 +27,13 @@ module Api
     end
 
     def create
+      @prisoner = Prisoner.new(prisoner_params)
+
+      if @prisoner.save
+        render json: true, status: :created
+      else
+        render json: { error: @prisoner.errors }, status: 422
+      end
     end
 
     def update
@@ -36,6 +43,21 @@ module Api
     end
 
     private
+
+    def prisoner_params
+      params.require(:prisoner).permit(
+        :noms_id,
+        :offender_id,
+        :given_name,
+        :middle_names,
+        :surname,
+        :title,
+        :suffix,
+        :date_of_birth,
+        :gender,
+        :pnc_number
+      )
+    end
 
     def set_prisoner
       @prisoner = Prisoner.find(params[:id])
