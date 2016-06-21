@@ -11,6 +11,11 @@ class Prisoner
   field :date_of_birth, type: Date
   field :gender, type: String
   field :pnc_number, type: String
+  field :nationality, type: String
+  field :ethnicity, type: String
+  field :languages, type: Array
+  field :requires_interpreter, type: Boolean
+  field :sexual_orientation, type: String
 
   embeds_many :aliases
 end

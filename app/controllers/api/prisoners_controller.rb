@@ -63,7 +63,12 @@ module Api
         :suffix,
         :date_of_birth,
         :gender,
-        :pnc_number
+        :pnc_number,
+        :nationality,
+        :ethnicity,
+        :requires_interpreter,
+        :sexual_orientation,
+        languages: []
       )
     end
 
