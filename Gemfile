@@ -6,6 +6,7 @@ gem 'jquery-rails', '~> 3.1.2'
 gem 'mongoid', '~> 5.1.0'
 gem 'rails', '4.2.6'
 gem 'sqlite3'
+gem 'swagger-docs'
 
 group :development do
   gem 'web-console', '~> 2.0'
