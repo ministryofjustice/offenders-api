@@ -13,13 +13,16 @@
 
 ActiveRecord::Schema.define(version: 20160623125301) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "aliases", force: :cascade do |t|
     t.integer "prisoner_id"
     t.string  "name"
   end
 
-  add_index "aliases", ["name"], name: "index_aliases_on_name"
-  add_index "aliases", ["prisoner_id"], name: "index_aliases_on_prisoner_id"
+  add_index "aliases", ["name"], name: "index_aliases_on_name", using: :btree
+  add_index "aliases", ["prisoner_id"], name: "index_aliases_on_prisoner_id", using: :btree
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer  "resource_owner_id", null: false
@@ -32,7 +35,7 @@ ActiveRecord::Schema.define(version: 20160623125301) do
     t.string   "scopes"
   end
 
-  add_index "oauth_access_grants", ["token"], name: "index_oauth_access_grants_on_token", unique: true
+  add_index "oauth_access_grants", ["token"], name: "index_oauth_access_grants_on_token", unique: true, using: :btree
 
   create_table "oauth_access_tokens", force: :cascade do |t|
     t.integer  "resource_owner_id"
@@ -45,9 +48,9 @@ ActiveRecord::Schema.define(version: 20160623125301) do
     t.string   "scopes"
   end
 
-  add_index "oauth_access_tokens", ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true
-  add_index "oauth_access_tokens", ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id"
-  add_index "oauth_access_tokens", ["token"], name: "index_oauth_access_tokens_on_token", unique: true
+  add_index "oauth_access_tokens", ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true, using: :btree
+  add_index "oauth_access_tokens", ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id", using: :btree
+  add_index "oauth_access_tokens", ["token"], name: "index_oauth_access_tokens_on_token", unique: true, using: :btree
 
   create_table "oauth_applications", force: :cascade do |t|
     t.string   "name",                      null: false
@@ -59,7 +62,7 @@ ActiveRecord::Schema.define(version: 20160623125301) do
     t.datetime "updated_at"
   end
 
-  add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true
+  add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
   create_table "prisoners", force: :cascade do |t|
     t.string   "noms_id"
@@ -81,9 +84,9 @@ ActiveRecord::Schema.define(version: 20160623125301) do
     t.datetime "updated_at"
   end
 
-  add_index "prisoners", ["noms_id"], name: "index_prisoners_on_noms_id"
-  add_index "prisoners", ["offender_id"], name: "index_prisoners_on_offender_id"
-  add_index "prisoners", ["pnc_number"], name: "index_prisoners_on_pnc_number"
+  add_index "prisoners", ["noms_id"], name: "index_prisoners_on_noms_id", using: :btree
+  add_index "prisoners", ["offender_id"], name: "index_prisoners_on_offender_id", using: :btree
+  add_index "prisoners", ["pnc_number"], name: "index_prisoners_on_pnc_number", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -100,7 +103,8 @@ ActiveRecord::Schema.define(version: 20160623125301) do
     t.datetime "updated_at",                          null: false
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "aliases", "prisoners"
 end
