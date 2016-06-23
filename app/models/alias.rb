@@ -1,7 +1,5 @@
-class Alias
-  include Mongoid::Document
+class Alias < ActiveRecord::Base
+  # field :name, type: String
 
-  field :name, type: String
-
-  embedded_in :prisoner
+  belongs_to :prisoner
 end

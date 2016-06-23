@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160607151911) do
+ActiveRecord::Schema.define(version: 20160623125301) do
+
+  create_table "aliases", force: :cascade do |t|
+    t.integer "prisoner_id"
+    t.string  "name"
+  end
+
+  add_index "aliases", ["name"], name: "index_aliases_on_name"
+  add_index "aliases", ["prisoner_id"], name: "index_aliases_on_prisoner_id"
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer  "resource_owner_id", null: false
@@ -52,6 +60,30 @@ ActiveRecord::Schema.define(version: 20160607151911) do
   end
 
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true
+
+  create_table "prisoners", force: :cascade do |t|
+    t.string   "noms_id"
+    t.string   "offender_id"
+    t.string   "given_name"
+    t.string   "middle_names"
+    t.string   "surname"
+    t.string   "title"
+    t.string   "suffix"
+    t.date     "date_of_birth"
+    t.string   "gender"
+    t.string   "pnc_number"
+    t.string   "nationality"
+    t.string   "ethnicity"
+    t.string   "languages"
+    t.boolean  "requires_interpreter"
+    t.string   "sexual_orientation"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "prisoners", ["noms_id"], name: "index_prisoners_on_noms_id"
+  add_index "prisoners", ["offender_id"], name: "index_prisoners_on_offender_id"
+  add_index "prisoners", ["pnc_number"], name: "index_prisoners_on_pnc_number"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false

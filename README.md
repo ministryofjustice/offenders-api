@@ -4,8 +4,6 @@ Initial Prisoners API microservice Rails app. Set up with Doorkeeper OAuth2 prov
 
 Instructions:
 
-Install MongoDB.
-
 `rake db:create db:migrate db:seed`
 
 Navigate to http://localhost:3000
