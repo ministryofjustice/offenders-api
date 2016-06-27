@@ -15,10 +15,11 @@ ActiveRecord::Schema.define(version: 20160623125301) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "aliases", force: :cascade do |t|
-    t.integer "prisoner_id"
-    t.string  "name"
+    t.uuid   "prisoner_id"
+    t.string "name"
   end
 
   add_index "aliases", ["name"], name: "index_aliases_on_name", using: :btree
@@ -64,7 +65,7 @@ ActiveRecord::Schema.define(version: 20160623125301) do
 
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
-  create_table "prisoners", force: :cascade do |t|
+  create_table "prisoners", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string   "noms_id"
     t.string   "offender_id"
     t.string   "given_name"
@@ -77,9 +78,12 @@ ActiveRecord::Schema.define(version: 20160623125301) do
     t.string   "pnc_number"
     t.string   "nationality"
     t.string   "ethnicity"
+    t.string   "ethnicity_code"
     t.string   "languages"
     t.boolean  "requires_interpreter"
     t.string   "sexual_orientation"
+    t.string   "second_nationality"
+    t.string   "cro_number"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -106,5 +110,4 @@ ActiveRecord::Schema.define(version: 20160623125301) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
-  add_foreign_key "aliases", "prisoners"
 end
