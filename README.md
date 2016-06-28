@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ministryofjustice/prisoners_api.svg?branch=master)](https://travis-ci.org/ministryofjustice/prisoners_api)
+
 # Prisoners API
 
 Initial Prisoners API microservice Rails app. Set up with Doorkeeper OAuth2 provider for [two-legged](https://github.com/doorkeeper-gem/doorkeeper/wiki/Client-Credentials-flow) auth.
