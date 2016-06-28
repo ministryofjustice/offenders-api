@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/ministryofjustice/prisoners_api.svg?branch=master)](https://travis-ci.org/ministryofjustice/prisoners_api)
+[![Code Climate](https://codeclimate.com/github/ministryofjustice/prisoners_api/badges/gpa.svg)](https://codeclimate.com/github/ministryofjustice/prisoners_api)
+[![Test Coverage](https://codeclimate.com/github/ministryofjustice/prisoners_api/badges/coverage.svg)](https://codeclimate.com/github/ministryofjustice/prisoners_api/coverage)
 
 # Prisoners API
 
