@@ -6,6 +6,8 @@ class ApiConstraint
   end
 
   def matches?(request)
+    return true if Rails.env.development?
+
     request
       .headers
       .fetch(:accept)
