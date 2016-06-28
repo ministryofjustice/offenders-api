@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::PrisonersController, type: :controller do
+RSpec.describe Api::V1::PrisonersController, type: :controller do
 
   let!(:application) { create(:application) }
   let!(:token)       { create(:access_token, application: application) }
