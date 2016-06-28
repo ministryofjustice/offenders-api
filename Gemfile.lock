@@ -43,6 +43,8 @@ GEM
       debug_inspector (>= 0.0.1)
     builder (3.2.2)
     byebug (9.0.5)
+    codeclimate-test-reporter (0.5.0)
+      simplecov (>= 0.7.1, < 1.0.0)
     concurrent-ruby (1.0.2)
     database_cleaner (1.5.3)
     debug_inspector (0.0.2)
@@ -166,6 +168,7 @@ PLATFORMS
 DEPENDENCIES
   awesome_print
   byebug
+  codeclimate-test-reporter
   database_cleaner (~> 1.5.3)
   devise
   doorkeeper
@@ -180,6 +183,9 @@ DEPENDENCIES
   sqlite3
   swagger-docs
   web-console (~> 2.0)
+
+RUBY VERSION
+   ruby 2.3.0p0
 
 BUNDLED WITH
    1.12.5

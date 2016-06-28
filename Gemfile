@@ -20,6 +20,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'codeclimate-test-reporter', require: nil
   gem 'database_cleaner',   '~> 1.5.3'
   gem 'factory_girl_rails', '~> 4.5.0'
   gem 'rspec-mocks',        '~> 3.4.1'
