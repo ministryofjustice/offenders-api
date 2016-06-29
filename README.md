@@ -19,4 +19,6 @@ password
 
 Select one of the sample applications and click "Get access token." The returned JSON contains the access token.
 
-Once the access token has been obtained you can make requests to the `/api/prisoners` and `/api/prisoners/<ID>` endpoints passing the access token in the header or as a request param. And accept header containing the API version can also be optionally passed, currently this defaults to "1."
+Once the access token has been obtained you can make requests to the `/api/prisoners` and `/api/prisoners/<ID>` endpoints passing the access token in the header or as a request param.
+
+An accept header containing the API version can be passed, currently this defaults to version 1 if not passed.

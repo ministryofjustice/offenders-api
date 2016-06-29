@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe ApiConstraint do
   describe '#matches?' do
-    let(:options_version) { '1' }
-    let(:accept_version) { '1' }
+    let(:options_version) { 1 }
+    let(:accept_version) { 1 }
     let(:request) { double }
     let(:options) { { version: options_version } }
     let(:returned_result) do
@@ -14,6 +14,14 @@ RSpec.describe ApiConstraint do
 
     before :each do
       allow(request).to receive(:headers).and_return(returned_result)
+    end
+
+    context 'when version not specified' do
+      let(:returned_result) { {} }
+
+      it 'returns true' do
+        expect(subject.matches?(request)).to eq(true)
+      end
     end
 
     context 'when version matches' do

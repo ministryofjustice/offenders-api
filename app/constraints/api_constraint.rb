@@ -6,11 +6,11 @@ class ApiConstraint
   end
 
   def matches?(request)
-    return true if Rails.env.development?
+    return true if @version == 1 && request.headers.fetch(:accept, '') !~ /version/
 
     request
       .headers
-      .fetch(:accept)
+      .fetch(:accept, '')
       .include?("version=#{version}")
   end
 end
