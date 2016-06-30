@@ -19,11 +19,17 @@ ActiveRecord::Schema.define(version: 20160623125301) do
 
   create_table "aliases", force: :cascade do |t|
     t.uuid   "prisoner_id"
-    t.string "name"
+    t.string "title"
+    t.string "given_name"
+    t.string "middle_names"
+    t.string "surname"
+    t.string "suffix"
+    t.date   "date_of_birth"
   end
 
-  add_index "aliases", ["name"], name: "index_aliases_on_name", using: :btree
+  add_index "aliases", ["given_name"], name: "index_aliases_on_given_name", using: :btree
   add_index "aliases", ["prisoner_id"], name: "index_aliases_on_prisoner_id", using: :btree
+  add_index "aliases", ["surname"], name: "index_aliases_on_surname", using: :btree
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer  "resource_owner_id", null: false

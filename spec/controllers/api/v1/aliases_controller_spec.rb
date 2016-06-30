@@ -23,7 +23,7 @@ RSpec.describe Api::V1::AliasesController, type: :controller do
     describe 'GET #show' do
       let(:prisoner) do
         prisoner = create(:prisoner)
-        prisoner.aliases.build(name: 'Tommy')
+        prisoner.aliases.build(given_name: 'Tommy')
         prisoner.save
         prisoner.reload
       end
