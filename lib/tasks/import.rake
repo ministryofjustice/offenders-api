@@ -8,7 +8,14 @@ namespace :import do
     file = Rails.root.join('lib', 'assets', 'data', 'offenders.csv')
     data = CSV.read(file, headers: true)
 
-    data.each do |row|
+    data_groups = data.group_by { |row| row['ROOT_OFFENDER_ID'] }
+    data_groups.values.each do |values|
+      values.sort_by! { |r| !(r['WORKING_NAME'] || '') }
+    end
+
+    data_groups.each do |root_offender_id, rows|
+      row = rows.first
+
       p = Prisoner.create!(
         offender_id: (row['OFFENDER_ID'].gsub(/,/, '').strip  rescue nil),
         title: (row['TITLE'].strip rescue nil),
@@ -29,6 +36,20 @@ namespace :import do
       )
 
       puts "PRISONER RECORD CREATED: #{p.offender_id}"
+
+      rows[1..-1].each do |row|
+        a = Alias.create!(
+          prisoner_id: p.id,
+          title: (row['TITLE'].strip rescue nil),
+          given_name: (row['FIRST_NAME'].strip rescue nil),
+          middle_names: (row['MIDDLE_NAME'].strip rescue nil),
+          surname: (row['LAST_NAME'].strip rescue nil),
+          suffix: (row['SUFFIX'].strip rescue nil),
+          date_of_birth: (Date.parse(row['BIRTH_DATE'].strip) rescue nil)
+        )
+
+        puts "ALIAS RECORD CREATED: #{p.offender_id}"
+      end
     end
   end
 end
