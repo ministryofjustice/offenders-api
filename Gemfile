@@ -8,6 +8,7 @@ gem 'pg',           '~> 0.18.2'
 gem 'rails',        '4.2.6'
 gem 'sqlite3'
 gem 'swagger-docs'
+gem 'textacular',   '~> 3.0'
 
 group :development do
   gem 'web-console', '~> 2.0'
