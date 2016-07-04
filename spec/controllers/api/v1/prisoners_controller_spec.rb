@@ -9,60 +9,33 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
     before { request.headers['HTTP_AUTHORIZATION'] = "Bearer #{token.token}" }
 
     describe 'GET #index' do
-      before { get :index }
+      let(:query) { nil }
 
-      it 'returns status 200' do
-        expect(response.status).to eq(200)
+      before do
+        create(:prisoner, given_name: 'john')
+        create(:prisoner, given_name: 'james')
+        get :index, query: query
       end
 
-      it 'returns JSON collection of prisoner records' do
-        expect(JSON.parse(response.body)).to match_array(Prisoner.all.map(&:to_json))
-      end
-    end
-
-    describe 'GET #search' do
-      context 'missing required params' do
-        before { get :search }
-
-        it 'should return status 400' do
-          expect(response.status).to eq(400)
-        end
-
-        it 'returns JSON with error message' do
-          expect(JSON.parse(response.body)['error']).to eq('NOMS ID or date of birth not present')
+      context 'with no query present' do
+        it 'returns an empty set' do
+          expect(response.body).to eq('[]')
         end
       end
 
-      context 'required params present' do
-        let(:prisoner) { create(:prisoner, noms_id: 'A1234BC', date_of_birth: Date.parse('19801010')) }
-        let(:params) { { noms_id: prisoner.noms_id, date_of_birth: prisoner.date_of_birth }}
+      context 'when query matches' do
+        let(:query) { 'john' }
 
-        before { get :search, params }
-
-        context 'no matching record found' do
-          let(:params) { { noms_id: 'A999ZZ', date_of_birth: Date.today }}
-
-          it 'returns status 200' do
-            expect(response.status).to eq(200)
-          end
-
-          it 'returns JSON signifying record not found' do
-            expect(JSON.parse(response.body)).to eq({ 'found' => false })
-          end
+        it 'returns collection of prisoner records' do
+          expect(JSON.parse(response.body).map { |h| h['id'] }).to match_array(Prisoner.where(given_name: 'john').pluck(:id))
         end
+      end
 
-        context 'matching record found' do
-          let(:expected_response) do
-            { 'found' => true, 'offender' => { 'id' => prisoner.offender_id } }
-          end
+      context 'when query does not match' do
+        let(:query) { 'bob' }
 
-          it 'returns status 200' do
-            expect(response.status).to eq(200)
-          end
-
-          it 'returns JSON signifying record found with offender id' do
-            expect(JSON.parse(response.body)).to eq(expected_response)
-          end
+        it 'returns an empty set' do
+          expect(response.body).to eq('[]')
         end
       end
     end
