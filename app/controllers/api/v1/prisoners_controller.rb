@@ -42,7 +42,6 @@ module Api
       def prisoner_params
         params.require(:prisoner).permit(
           :noms_id,
-          :offender_id,
           :given_name,
           :middle_names,
           :surname,

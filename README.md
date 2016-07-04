@@ -10,6 +10,10 @@ Instructions:
 
 `rake db:create db:migrate db:seed`
 
+To import sample records:
+
+`bundle exec rake import:sample`
+
 Navigate to http://localhost:3000
 
 Sign in with:

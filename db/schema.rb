@@ -73,7 +73,6 @@ ActiveRecord::Schema.define(version: 20160623125301) do
 
   create_table "prisoners", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string   "noms_id"
-    t.string   "offender_id"
     t.string   "given_name"
     t.string   "middle_names"
     t.string   "surname"
@@ -83,19 +82,15 @@ ActiveRecord::Schema.define(version: 20160623125301) do
     t.string   "gender"
     t.string   "pnc_number"
     t.string   "nationality"
-    t.string   "ethnicity"
-    t.string   "ethnicity_code"
-    t.string   "languages"
-    t.boolean  "requires_interpreter"
-    t.string   "sexual_orientation"
     t.string   "second_nationality"
+    t.string   "ethnicity_code"
+    t.string   "sexual_orientation"
     t.string   "cro_number"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "prisoners", ["noms_id"], name: "index_prisoners_on_noms_id", using: :btree
-  add_index "prisoners", ["offender_id"], name: "index_prisoners_on_offender_id", using: :btree
   add_index "prisoners", ["pnc_number"], name: "index_prisoners_on_pnc_number", using: :btree
 
   create_table "users", force: :cascade do |t|

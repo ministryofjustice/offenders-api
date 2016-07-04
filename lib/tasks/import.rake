@@ -17,7 +17,6 @@ namespace :import do
       row = rows.first
 
       p = Prisoner.create!(
-        offender_id: (row['OFFENDER_ID'].gsub(/,/, '').strip  rescue nil),
         title: (row['TITLE'].strip rescue nil),
         given_name: (row['FIRST_NAME'].strip rescue nil),
         middle_names: (row['MIDDLE_NAME'].strip rescue nil),
@@ -27,7 +26,6 @@ namespace :import do
         gender: (row['SEX_CODE'].strip rescue nil),
         noms_id: (row['NOMS_ID'].strip rescue nil),
         ethnicity_code: (row['ETHNICITY_CODE'].strip rescue nil),
-        ethnicity: (row['ETHNICITY'].strip rescue nil),
         cro_number: (row['CRO_NUMBER'].strip rescue nil),
         pnc_number: (row['PNC_NUMBER'].strip rescue nil),
         nationality: (row['NATIONALITY'].strip rescue nil),
@@ -35,7 +33,7 @@ namespace :import do
         sexual_orientation: (row['SEXUAL_ORIENTATION'].strip rescue nil)
       )
 
-      puts "PRISONER RECORD CREATED: #{p.offender_id}"
+      puts "PRISONER RECORD CREATED: #{p.noms_id}"
 
       rows[1..-1].each do |row|
         a = Alias.create!(
@@ -48,7 +46,7 @@ namespace :import do
           date_of_birth: (Date.parse(row['BIRTH_DATE'].strip) rescue nil)
         )
 
-        puts "ALIAS RECORD CREATED: #{p.offender_id}"
+        puts "ALIAS RECORD CREATED: #{p.noms_id}"
       end
     end
   end
