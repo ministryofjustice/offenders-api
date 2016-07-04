@@ -18,8 +18,9 @@ Navigate to http://localhost:3000
 
 Sign in with:
 
-example@example.com
-password
+Email: example@example.com
+
+Password: password
 
 Select one of the sample applications and click "Get access token." The returned JSON contains the access token.
 
