@@ -24,6 +24,8 @@ ActiveRecord::Schema.define(version: 20160623125301) do
     t.string "middle_names"
     t.string "surname"
     t.string "suffix"
+    t.string "gender"
+    t.string "ethnicity_code"
     t.date   "date_of_birth"
   end
 
