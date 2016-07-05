@@ -10,6 +10,10 @@ gem 'sqlite3'
 gem 'swagger-docs'
 gem 'textacular',   '~> 3.0'
 
+group :production, :devunicorn do
+  gem 'unicorn-rails',  '2.2.0'
+end
+
 group :development do
   gem 'web-console', '~> 2.0'
 end
