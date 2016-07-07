@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   use_doorkeeper
   devise_for :users
 
+  get 'ping', to: 'heartbeat#ping', format: :json
+  get 'healthcheck', to: 'heartbeat#healthcheck',  as: 'healthcheck', format: :json
+
   authenticate :user do
     root to: 'services#index'
     resources :services
