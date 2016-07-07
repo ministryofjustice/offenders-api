@@ -8,7 +8,9 @@ Initial Prisoners API microservice Rails app. Set up with Doorkeeper OAuth2 prov
 
 Instructions:
 
-`rake db:create db:migrate db:seed`
+`ADMIN_EMAIL=example@example.com ADMIN_PASSWORD=password123 rake db:create db:migrate db:seed`
+
+Replace `ADMIN_EMAIL` and `ADMIN_PASSWORD` with preferred values.
 
 To import sample records:
 
