@@ -41,20 +41,20 @@ module Api
 
       def prisoner_params
         params.require(:prisoner).permit(
-          :noms_id,
-          :given_name,
-          :middle_names,
-          :surname,
-          :title,
-          :suffix,
-          :date_of_birth,
-          :gender,
-          :pnc_number,
-          :nationality,
-          :ethnicity,
-          :requires_interpreter,
-          :sexual_orientation,
-          languages: []
+        :noms_id,
+        :given_name,
+        :middle_names,
+        :surname,
+        :title,
+        :suffix,
+        :date_of_birth,
+        :gender,
+        :pnc_number,
+        :nationality,
+        :second_nationality,
+        :ethnicity_code,
+        :sexual_orientation,
+        :cro_number
         )
       end
 
