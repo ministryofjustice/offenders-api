@@ -1,5 +1,10 @@
 # Register sample applications for the Doorkeeper OAuth2 provider
 
+nomis = Doorkeeper::Application.create!(
+  name: 'NOMIS',
+  redirect_uri: 'http://localhost:3000'
+)
+
 pvb = Doorkeeper::Application.create!(
   name: 'Prison Visits Booking',
   redirect_uri: 'http://localhost:3000'
