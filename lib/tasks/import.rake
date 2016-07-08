@@ -22,7 +22,7 @@ namespace :import do
         middle_names: (row['MIDDLE_NAME'].strip rescue nil),
         surname: (row['LAST_NAME'].strip rescue nil),
         suffix: (row['SUFFIX'].strip rescue nil),
-        date_of_birth: (Date.parse(row['BIRTH_DATE'].strip) rescue nil),
+        date_of_birth: (Date.strptime(row['BIRTH_DATE'].strip, '%d/%m/%y') rescue nil),
         gender: (row['SEX_CODE'].strip rescue nil),
         noms_id: (row['NOMS_ID'].strip rescue nil),
         ethnicity_code: (row['ETHNICITY_CODE'].strip rescue nil),
@@ -43,7 +43,7 @@ namespace :import do
           middle_names: (row['MIDDLE_NAME'].strip rescue nil),
           surname: (row['LAST_NAME'].strip rescue nil),
           suffix: (row['SUFFIX'].strip rescue nil),
-          date_of_birth: (Date.parse(row['BIRTH_DATE'].strip) rescue nil),
+          date_of_birth: (Date.strptime(row['BIRTH_DATE'].strip, '%d/%m/%y') rescue nil),
           gender: (row['SEX_CODE'].strip rescue nil),
           ethnicity_code: (row['ETHNICITY_CODE'].strip rescue nil)
         )
