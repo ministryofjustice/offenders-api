@@ -17,7 +17,7 @@ module Api
         @prisoner = Prisoner.new(prisoner_params)
 
         if @prisoner.save
-          render json: true, status: :created
+          render json: @prisoner.id, status: :created
         else
           render json: { error: @prisoner.errors }, status: 422
         end

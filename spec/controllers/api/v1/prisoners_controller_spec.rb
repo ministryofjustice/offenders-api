@@ -75,8 +75,8 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
         expect(response.status).to eq(201)
       end
 
-      it 'returns "true"' do
-        expect(response.body).to eq('true')
+      it 'returns the id of the created record' do
+        expect(response.body).to eq(Prisoner.first.id)
       end
     end
 
