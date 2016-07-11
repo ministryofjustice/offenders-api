@@ -144,26 +144,6 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
         end
       end
     end
-
-    describe 'DELETE #destroy' do
-      let!(:prisoner) { create(:prisoner, noms_id: 'A1234BC', date_of_birth: Date.parse('19801010')) }
-
-      before do
-        delete :destroy, id: prisoner
-      end
-
-      it 'destroys the prisoner' do
-        expect(Prisoner.count).to eq(0)
-      end
-
-      it 'returns status 200' do
-        expect(response.status).to eq(200)
-      end
-
-      it 'returns "true"' do
-        expect(response.body).to eq('true')
-      end
-    end
   end
 
   context 'when unauthenticated' do
@@ -211,16 +191,6 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
           gender: 'M'
         }
       }
-
-      it 'returns status 401' do
-        expect(response.status).to eq(401)
-      end
-    end
-
-    describe 'DELETE #destroy' do
-      let(:prisoner) { create(:prisoner) }
-
-      before { delete :destroy, id: prisoner.id }
 
       it 'returns status 401' do
         expect(response.status).to eq(401)

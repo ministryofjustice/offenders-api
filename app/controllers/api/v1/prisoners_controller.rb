@@ -31,12 +31,6 @@ module Api
         end
       end
 
-      def destroy
-        @prisoner.destroy
-
-        render json: true, status: :ok
-      end
-
       private
 
       def prisoner_params
