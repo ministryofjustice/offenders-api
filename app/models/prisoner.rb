@@ -1,4 +1,6 @@
 class Prisoner < ActiveRecord::Base
+  has_paper_trail
+
   has_many :aliases, dependent: :destroy
 
   validates :noms_id, presence: true
