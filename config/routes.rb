@@ -12,8 +12,8 @@ Rails.application.routes.draw do
 
   namespace :api, format: :json do
     scope module: :v1, constraints: ApiConstraint.new(version: 1) do
-      resources :prisoners, format: :json do
-        resources :aliases
+      resources :prisoners, format: :json, except: [:new, :edit] do
+        resources :aliases, except: [:new, :edit]
       end
     end
   end
