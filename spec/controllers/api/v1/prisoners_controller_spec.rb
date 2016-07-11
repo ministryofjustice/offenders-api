@@ -184,15 +184,47 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
     end
 
     describe 'POST #create' do
+      before { post :create, prisoner: {
+          given_name: 'John',
+          surname: 'Smith',
+          offender_id: '134',
+          noms_id: 'A1234ZZ',
+          date_of_birth: '19711010',
+          gender: 'M'
+        }
+      }
 
+      it 'returns status 401' do
+        expect(response.status).to eq(401)
+      end
     end
 
     describe 'PATCH #update' do
+      let(:prisoner) { create(:prisoner) }
 
+      before { post :update, id: prisoner.id, prisoner: {
+          given_name: 'John',
+          surname: 'Smith',
+          offender_id: '134',
+          noms_id: 'A1234ZZ',
+          date_of_birth: '19711010',
+          gender: 'M'
+        }
+      }
+
+      it 'returns status 401' do
+        expect(response.status).to eq(401)
+      end
     end
 
     describe 'DELETE #destroy' do
+      let(:prisoner) { create(:prisoner) }
 
+      before { delete :destroy, id: prisoner.id }
+
+      it 'returns status 401' do
+        expect(response.status).to eq(401)
+      end
     end
   end
 end
