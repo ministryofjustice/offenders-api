@@ -104,21 +104,44 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
     describe 'PATCH #update' do
       let!(:prisoner) { create(:prisoner, noms_id: 'A1234BC', date_of_birth: Date.parse('19801010')) }
 
-      before do
-        patch :update, id: prisoner, prisoner: { noms_id: 'B1234BC' }
-        prisoner.reload
+      context 'when valid' do
+        before do
+          patch :update, id: prisoner, prisoner: { noms_id: 'B1234BC' }
+          prisoner.reload
+        end
+
+        it 'updates the prisoner record' do
+          expect(prisoner.noms_id).to eq('B1234BC')
+        end
+
+        it 'returns status "success"' do
+          expect(response.status).to eq(200)
+        end
+
+        it 'returns "true"' do
+          expect(response.body).to eq('true')
+        end
       end
 
-      it 'updates the prisoner record' do
-        expect(prisoner.noms_id).to eq('B1234BC')
-      end
+      context 'when invalid' do
+        before do
+          patch :update, id: prisoner, prisoner: { noms_id: 'B1234BC', gender: '' }
+          prisoner.reload
+        end
 
-      it 'returns status "success"' do
-        expect(response.status).to eq(200)
-      end
+        it 'does not update the prisoner record' do
+          expect(prisoner.noms_id).to eq('A1234BC')
+        end
 
-      it 'returns "true"' do
-        expect(response.body).to eq('true')
+        it 'returns status "unprocessable entity"' do
+          expect(response.status).to eq(422)
+        end
+
+        it 'returns JSON error' do
+          expect(JSON.parse(response.body)).to eq(
+            { 'error' => { 'gender' => ['can\'t be blank'] } }
+          )
+        end
       end
     end
 
