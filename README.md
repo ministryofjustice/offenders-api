@@ -30,7 +30,9 @@ Once the access token has been obtained you can make requests to the `/api/priso
 
 e.g:
 
-```http://localhost:3000/api/prisoners/0029d940-a835-418a-af7d-37e7cd6edd10?access_token=96183e17f3194cdbdd24eb8483fadab73d4778be04b77a2ca9c9b3371a2fceb6```
+```
+http://localhost:3000/api/prisoners/0029d940-a835-418a-af7d-37e7cd6edd10?access_token=96183e17f3194cdbdd24eb8483fadab73d4778be04b77a2ca9c9b3371a2fceb6
+```
 
 You can find a prisoner id by opening a rails console e.g:
 
