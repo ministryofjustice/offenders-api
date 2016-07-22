@@ -4,6 +4,12 @@ module Api
       before_action :set_prisoner, only: [:show, :update, :destroy]
 
       def index
+        @prisoners = Prisoner.all
+
+        render json: @prisoners
+      end
+
+      def search
         @prisoners = Prisoner.search(params[:query])
 
         render json: @prisoners

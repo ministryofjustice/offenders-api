@@ -26,15 +26,15 @@ Password: password
 
 Select one of the sample applications and click "Get access token." The returned JSON contains the access token.
 
-Once the access token has been obtained you can make requests to the `/api/prisoners` and `/api/prisoners/<ID>` endpoints passing the access token in the header or as a request param.
+Once the access token has been obtained you can make requests to the `/api/prisoners` (to get a list of all prisoners), `/api/prisoners/search` with a `query` param to search prisoners, and `/api/prisoners/<ID>` to get a specific prisoner. The access token should be passed either in the header or as a request params.
 
 e.g:
 
 ```
-http://localhost:3000/api/prisoners/0029d940-a835-418a-af7d-37e7cd6edd10?access_token=96183e17f3194cdbdd24eb8483fadab73d4778be04b77a2ca9c9b3371a2fceb6
+http://localhost:3000/api/prisoners/<PRISONER ID>?access_token=<ACCESS TOKEN>
 ```
 
-You can find a prisoner id by opening a rails console e.g:
+You can find a prisoner ID by opening the Rails console, e.g:
 
 ```
 $ rails c
@@ -42,4 +42,4 @@ $ rails c
  => "0029d940-a835-418a-af7d-37e7cd6edd10"
 ```
 
-An accept header containing the API version can be passed, currently this defaults to version 1 if not passed.
+An accept header containing the API version can be passed, currently this defaults to version 1 if nothing is passed.

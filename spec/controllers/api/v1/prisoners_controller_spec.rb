@@ -9,12 +9,25 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
     before { request.headers['HTTP_AUTHORIZATION'] = "Bearer #{token.token}" }
 
     describe 'GET #index' do
+
+      before do
+        create(:prisoner, given_name: 'john')
+        create(:prisoner, given_name: 'james')
+        get :index
+      end
+
+      it 'returns collection of prisoner records' do
+        expect(JSON.parse(response.body).map { |h| h['id'] }).to match_array(Prisoner.all.pluck(:id))
+      end
+    end
+
+    describe 'GET #search' do
       let(:query) { nil }
 
       before do
         create(:prisoner, given_name: 'john')
         create(:prisoner, given_name: 'james')
-        get :index, query: query
+        get :search, query: query
       end
 
       context 'with no query present' do
