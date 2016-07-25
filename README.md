@@ -42,4 +42,10 @@ $ rails c
  => "0029d940-a835-418a-af7d-37e7cd6edd10"
 ```
 
+To create a prisoner record using Curl:
+
+```
+curl -v -H "Authorization: Bearer <ACCESS TOKEN>" -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{ "prisoner" : { "noms_id" : "1234", "given_name" : "John", "surname" : "Smith", "date_of_birth" : "19800101", "gender" : "M" } }'  http://localhost:3000/api/prisoners
+```
+
 An accept header containing the API version can be passed, currently this defaults to version 1 if nothing is passed.
