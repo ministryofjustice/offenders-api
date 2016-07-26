@@ -1,0 +1,6 @@
+<h2>Import records</h2>
+
+<%= form_for @import, url: import_index_url do |f| %>
+  <p><%= f.file_field :file %></p>
+  <p><%= f.submit 'Import' %></p>
+<% end %>
