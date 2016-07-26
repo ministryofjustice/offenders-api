@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   authenticate :user do
     root to: 'services#index'
     resources :services
+    resources :import, only: [:new, :create]
   end
 
   namespace :api, format: :json do
