@@ -1,11 +1,10 @@
 <h2>Import records</h2>
 
-<%= form_for @import, url: import_index_url, method: :post do |f| %>
-<%= @import.errors.inspect %>
+<%= form_for @import, html: { multipart: true } do |f| %>
   <% if @import.errors.any? %>
     <ul>
-      <% @import.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
+      <% @import.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
       <% end %>
     </ul>
   <% end %>
