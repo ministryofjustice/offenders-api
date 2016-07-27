@@ -4,9 +4,10 @@ class ImportsController < ApplicationController
   end
 
   def create
-    @import = Import.new(import_params)
+    result = ImportPrisoners.new(import_params).call
+    @import = result.import
 
-    if @import.save
+    if result.success?
       redirect_to root_url
     else
       render :new
@@ -16,8 +17,6 @@ class ImportsController < ApplicationController
   private
 
   def import_params
-    params.require(:import).permit(
-      :file
-    )
+    params.require(:import).permit(:file)
   end
 end
