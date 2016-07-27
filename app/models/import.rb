@@ -1,16 +1,5 @@
-class Import
-  include ActiveModel::Model
-  include ActiveModel::Validations
+class Import < ActiveRecord::Base
+  mount_uploader :file, FileUploader
 
   validates :file, presence: true
-
-  attr_accessor :file
-
-  def initialize(file = nil)
-    @file = file
-  end
-
-  def save
-    # TODO
-  end
 end

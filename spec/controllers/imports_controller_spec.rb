@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ImportController, type: :controller do
+RSpec.describe ImportsController, type: :controller do
   let(:user) { create(:user) }
 
   before { sign_in user }

@@ -1,0 +1,17 @@
+<h2>Import records</h2>
+
+<%= form_for @import, url: import_index_url, method: :post do |f| %>
+<%= @import.errors.inspect %>
+  <% if @import.errors.any? %>
+    <ul>
+      <% @import.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <p><%= hidden_field_tag 'import[placeholder]', nil %></p>
+
+  <p><%= f.file_field :file %></p>
+  <p><%= f.submit 'Import' %></p>
+<% end %>
