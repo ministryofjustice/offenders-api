@@ -35,9 +35,12 @@ ActiveRecord::Schema.define(version: 20160727090200) do
 
   create_table "imports", force: :cascade do |t|
     t.string   "file"
+    t.string   "md5"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "imports", ["md5"], name: "index_imports_on_md5", using: :btree
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer  "resource_owner_id", null: false

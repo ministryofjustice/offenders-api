@@ -8,4 +8,8 @@ class FileUploader < CarrierWave::Uploader::Base
   def store_dir
     "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
   end
+
+  def md5
+    @md5 ||= Digest::MD5.hexdigest model.send(mounted_as).read.to_s
+  end
 end
