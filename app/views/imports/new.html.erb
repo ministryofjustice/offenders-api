@@ -1,6 +1,8 @@
 <h2>Import records</h2>
 
 <%= form_for @import, html: { multipart: true } do |f| %>
+  <%= hidden_field_tag 'import[file]' %>
+
   <% if @import.errors.any? %>
     <ul>
       <% @import.errors.full_messages.each do |message| %>

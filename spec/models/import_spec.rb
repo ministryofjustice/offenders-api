@@ -24,17 +24,4 @@ RSpec.describe Import, type: :model do
       expect(import.errors.messages).to include(md5: ['has already been taken'])
     end
   end
-
-  describe 'remove previous imports' do
-    subject { Import.new(file: sample_import_1) }
-
-    before { subject.save! }
-
-    it 'should remove previous imports when a new one is created' do
-      expect(Import.count).to eq(1)
-      import = Import.create(file: sample_import_2)
-      expect(Import.count).to eq(1)
-      expect(Import.first).to eq(import)
-    end
-  end
 end
