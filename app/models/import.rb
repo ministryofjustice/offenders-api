@@ -4,12 +4,12 @@ class Import < ActiveRecord::Base
   validates :file, presence: true
   validates :md5, presence: true, uniqueness: true
 
-  before_validation :generate_md5
+  before_validation :set_md5
   after_create :remove_previous
 
   private
 
-  def generate_md5
+  def set_md5
     if file.present? && file_changed?
       self.md5 = file.md5
     end
