@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.3.0'
 
+gem 'carrierwave'
 gem 'devise'
 gem 'doorkeeper'
 gem 'jquery-rails', '~> 3.1.2'
