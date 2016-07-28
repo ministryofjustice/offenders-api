@@ -12,7 +12,7 @@ class ImportsController < ApplicationController
     @import = result.import
 
     if result.success?
-      redirect_to root_url
+      redirect_to imports_url
     else
       render :new
     end

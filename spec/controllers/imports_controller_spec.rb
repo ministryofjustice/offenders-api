@@ -46,9 +46,9 @@ RSpec.describe ImportsController, type: :controller do
         }.to change(Import, :count).by(1)
       end
 
-      it 'should redirect to the root url' do
+      it 'should redirect to the imports index url' do
         post :create, import_params
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(imports_url)
       end
     end
 
