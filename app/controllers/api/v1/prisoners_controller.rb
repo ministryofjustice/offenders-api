@@ -3,6 +3,16 @@ module Api
     class PrisonersController < Api::ApplicationController
       before_action :set_prisoner, only: [:show, :update, :destroy]
 
+      swagger_controller :prisoners, "Prisoner core records"
+
+      swagger_api :index do
+        summary "Fetches all prisoners"
+        notes "This lists all the active prisoners"
+        response :unauthorized
+        response :not_acceptable, "The request you made is not acceptable"
+        response :requested_range_not_satisfiable
+      end
+
       def index
         @prisoners = Prisoner.all
 

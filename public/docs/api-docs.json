@@ -1,0 +1,17 @@
+{
+  "apiVersion": "1.0",
+  "swaggerVersion": "1.2",
+  "basePath": "",
+  "apis": [
+    {
+      "path": "/api/v1/prisoners.{format}",
+      "description": "Prisoner core records"
+    }
+  ],
+  "authorizations": null,
+  "info": {
+    "title": "Prisoners API",
+    "description": "single source of truth for prisoners.",
+    "contact": "singleoffenderidentity@digital.jsutice.gov.uk"
+  }
+}
