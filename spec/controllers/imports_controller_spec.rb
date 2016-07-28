@@ -17,6 +17,20 @@ RSpec.describe ImportsController, type: :controller do
     end
   end
 
+  describe 'GET #show' do
+    let(:import) { Import.create(file: fixture_file_upload('files/sample_import_1.csv', 'text/csv')) }
+
+    before { get :show, id: import }
+
+    it 'should render status 200' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'should render the show template' do
+      expect(response).to render_template(:show)
+    end
+  end
+
   describe 'GET #new' do
     before { get :new }
 
@@ -48,7 +62,7 @@ RSpec.describe ImportsController, type: :controller do
 
       it 'should redirect to the imports index url' do
         post :create, import_params
-        expect(response).to redirect_to(imports_url)
+        expect(response).to redirect_to(import_url(Import.first))
       end
     end
 
