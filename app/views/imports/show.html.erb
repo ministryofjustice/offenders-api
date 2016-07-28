@@ -1,0 +1,9 @@
+Import on <%= @import.created_at.strftime('%d/%m/%Y %H:%M:%S') %>
+
+<p>
+  <% if @import.successful? %>
+    Successful
+  <% else %>
+    Failed
+  <% end %>
+</p>
