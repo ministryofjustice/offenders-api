@@ -1,9 +1,8 @@
 class ImportPrisoners
-  attr_reader :params, :success, :errors
+  attr_reader :params, :errors
 
   def initialize(params)
     @params = params
-    @success = false
     @errors = []
   end
 
@@ -15,7 +14,7 @@ class ImportPrisoners
 
       begin
         process_import_file
-        @success = true
+        @import.update_attribute(:successful, true)
       rescue
         @errors << 'Could not complete import'
       end
@@ -29,7 +28,7 @@ class ImportPrisoners
   end
 
   def success?
-    @success
+    @import.successful? rescue false
   end
 
   def errors

@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20160727090200) do
   create_table "imports", force: :cascade do |t|
     t.string   "file"
     t.string   "md5"
+    t.boolean  "successful", default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
