@@ -5,6 +5,18 @@ RSpec.describe ImportsController, type: :controller do
 
   before { sign_in user }
 
+  describe 'GET #index' do
+    before { get :index }
+
+    it 'should return status 200' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'should render the index template' do
+      expect(response).to render_template(:index)
+    end
+  end
+
   describe 'GET #new' do
     before { get :new }
 

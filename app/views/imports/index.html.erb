@@ -1,0 +1,32 @@
+<h2>Imports</h2>
+
+<% if @imports.none? %>
+  <p>No previous imports found.</p>
+<% else %>
+  <table>
+    <thead>
+      <tr>
+        <th>
+          Date
+        </th>
+        <th>
+          Status
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @imports.each do |import| %>
+        <tr>
+          <td>
+            <%= import.created_at.strftime('%d/%m/%Y %H:%M:%S') %>
+          </td>
+          <td>
+            <%= import.successful? ? 'Successful' : 'Failed' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<p><%= link_to 'New import', new_import_path %></p>
