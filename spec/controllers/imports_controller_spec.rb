@@ -18,5 +18,41 @@ RSpec.describe ImportsController, type: :controller do
   end
 
   describe 'POST #create' do
+    let(:file) { fixture_file_upload('files/sample_import_1.csv', 'text/csv') }
+    let(:import_params) do
+      {
+        import: {
+          file: file
+        }
+      }
+    end
+
+    context 'creates an import when valid' do
+      it 'should create an import' do
+        expect {
+          post :create, import_params
+        }.to change(Import, :count).by(1)
+      end
+
+      it 'should redirect to the root url' do
+        post :create, import_params
+        expect(response).to redirect_to(root_url)
+      end
+    end
+
+    context 'does not create an import when not valid' do
+      before { import_params[:import][:file] = '' }
+
+      it 'should not create an import' do
+        expect {
+          post :create, import_params
+        }.to_not change(Import, :count)
+      end
+
+      it 'should render the new action' do
+        post :create, import_params
+        expect(response).to render_template(:new)
+      end
+    end
   end
 end
