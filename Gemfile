@@ -10,6 +10,7 @@ gem 'pg',           '~> 0.18.2'
 gem 'rails',        '4.2.6'
 gem 'swagger-docs'
 gem 'textacular',   '~> 3.0'
+gem 'swagger-docs'
 
 group :production, :devunicorn do
   gem 'unicorn-rails',  '2.2.0'
