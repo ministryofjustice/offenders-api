@@ -7,9 +7,11 @@ class PrisonerSerializer < ActiveModel::Serializer
     :cro_number, :created_at, :updated_at, :links
 
   def links
-    {
-      rel: 'prisoners',
-      href: api_prisoners_path
-    }
+    [
+      {
+        rel: :self,
+        href: api_prisoner_path(object)
+      }
+    ]
   end
 end
