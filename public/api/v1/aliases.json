@@ -20,11 +20,15 @@
               "code": 406,
               "responseModel": null,
               "message": "The request you made is not acceptable"
-            },
+            }
+          ],
+          "parameters": [
             {
-              "code": 500,
-              "responseModel": null,
-              "message": "Requested Range Not Satisfiable"
+              "paramType": "path",
+              "name": "prisoner_id",
+              "type": "integer",
+              "description": "Prisoner Id",
+              "required": true
             }
           ],
           "nickname": "Api::V1::Aliases#index",

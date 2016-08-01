@@ -9,9 +9,9 @@ module Api
       swagger_api :index do
         summary "Fetches all prisoners aliases"
         notes "This lists all the known active prisoner aliases"
+        param :path, :prisoner_id, :integer, :required, "Prisoner Id"
         response :unauthorized
         response :not_acceptable, "The request you made is not acceptable"
-        response :requested_range_not_satisfiable
       end
 
       def index
