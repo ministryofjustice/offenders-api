@@ -1,6 +1,10 @@
 class ImportPrisoners
   attr_reader :params, :errors
 
+  def self.call(params)
+    new(params).call
+  end
+
   def initialize(params)
     @params = params
     @errors = []

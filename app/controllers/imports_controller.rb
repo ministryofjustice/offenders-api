@@ -13,7 +13,7 @@ class ImportsController < ApplicationController
   end
 
   def create
-    result = ImportPrisoners.new(import_params).call
+    result = ImportPrisoners.call(import_params)
     @import = result.import
 
     if result.success?
