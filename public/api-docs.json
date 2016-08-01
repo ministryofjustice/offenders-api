@@ -6,6 +6,10 @@
     {
       "path": "/api/v1/prisoners.{format}",
       "description": "Prisoner core records"
+    },
+    {
+      "path": "/api/v1/aliases.{format}",
+      "description": "Prisoner aliases"
     }
   ],
   "authorizations": null,
