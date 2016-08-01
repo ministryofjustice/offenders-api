@@ -63,7 +63,7 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
       end
 
       it 'returns JSON represenation of prisoner record' do
-        expect(response.body).to eq(prisoner.to_json)
+        expect(JSON.parse(response.body).except('links').to_json).to eq(prisoner.to_json)
       end
     end
 
