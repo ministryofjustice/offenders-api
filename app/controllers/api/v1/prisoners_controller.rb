@@ -3,6 +3,52 @@ module Api
     class PrisonersController < Api::ApplicationController
       before_action :set_prisoner, only: [:show, :update, :destroy]
 
+      swagger_controller :prisoners, "Prisoner core records"
+
+      swagger_api :index do
+        summary "Fetches all prisoners"
+        notes "This lists all the active prisoners"
+        response :unauthorized
+        response :not_acceptable, "The request you made is not acceptable"
+      end
+
+      swagger_api :search do
+        summary "Searches prisoners"
+        notes "This searches all the active prisoners"
+        param :query, :query, :string, :required, "Search query"
+        response :unauthorized
+        response :not_acceptable, "The request you made is not acceptable"
+      end
+
+      swagger_api :show do
+        summary "Show a prisoners record"
+        notes "This shows a prisoner record"
+        param :path, :id, :integer, :required, "Prisoner Id"
+        response :unauthorized
+        response :not_acceptable, "The request you made is not acceptable"
+      end
+
+      swagger_api :update do
+        summary "Update prisoners record"
+        notes "This updates a prisoner record"
+        param :path, :id, :integer, :required, "Prisoner Id"
+        param :form, "prisoner[noms_id]", :string, :optional, "NOMS Id"
+        response :unauthorized
+        response :not_acceptable, "The request you made is not acceptable"
+      end
+
+      swagger_api :create do
+        summary "Create a new prisoner record"
+        notes "This creates a new prisoner record"
+        param :form, "prisoner[noms_id]", :string, :required, "NOMS Id"
+        param :form, "prisoner[given_name]", :string, :required, "First or given name"
+        param :form, "prisoner[surname]", :string, :required, "Surname"
+        param :form, "prisoner[date_of_birth]", :string, :required, "DOB"
+        param :form, "prisoner[gender]", :string, :required, "Gender"
+        response :unauthorized
+        response :not_acceptable, "The request you made is not acceptable"
+      end
+
       def index
         @prisoners = Prisoner.all
 

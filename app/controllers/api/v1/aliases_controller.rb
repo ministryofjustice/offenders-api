@@ -4,6 +4,16 @@ module Api
       before_action :set_prisoner
       before_action :set_alias, only: [:show, :update, :destroy]
 
+      swagger_controller :aliases, "Prisoner aliases"
+
+      swagger_api :index do
+        summary "Fetches all prisoners aliases"
+        notes "This lists all the known active prisoner aliases"
+        param :path, :prisoner_id, :integer, :required, "Prisoner Id"
+        response :unauthorized
+        response :not_acceptable, "The request you made is not acceptable"
+      end
+
       def index
         @aliases = @prisoner.aliases
 
