@@ -20,7 +20,7 @@
           <td>
             <%= import.created_at.strftime('%d/%m/%Y %H:%M:%S') %>
           </td>
-          <td>
+          <td style="color: <%= import.successful? ? 'green' : 'red' %>;">
             <%= import.successful? ? 'Successful' : 'Failed' %>
           </td>
         </tr>
