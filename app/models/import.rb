@@ -2,15 +2,19 @@ class Import < ActiveRecord::Base
   mount_uploader :file, FileUploader
 
   validates :file, presence: true
-  validates :md5, presence: true, uniqueness: true
+  validate :file_uniqueness
 
-  before_validation :set_md5
+  after_create :create_upload
 
   private
 
-  def set_md5
-    if file.present? && file_changed?
-      self.md5 = file.md5
+  def create_upload
+    Upload.create(md5: file.md5)
+  end
+
+  def file_uniqueness
+    if Upload.where(md5: file.md5).any?
+      errors[:base] << 'File has already been uploaded'
     end
   end
 end
