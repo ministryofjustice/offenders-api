@@ -1,0 +1,25 @@
+%h2
+  Imports
+
+- if @imports.none?
+  %p
+    No previous imports found.
+
+- else
+  %table
+    %thead
+      %tr
+        %th
+          Date
+        %th
+          Status
+    %tbody
+      - @imports.each do |import|
+        %tr
+          %td
+            = import.created_at.strftime('%d/%m/%Y %H:%M:%S')
+          %td{ style: "color: #{import.successful? ? 'green' : 'red'};" }
+            = import.successful? ? 'Successful' : 'Failed'
+
+%p
+  = link_to 'New import', new_import_path

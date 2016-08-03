@@ -1,0 +1,26 @@
+%h2
+  Registered services
+
+%table
+  %thead
+    %th
+      Service
+    %th
+    %th
+    %th
+  %tbody
+    - @services.each do |service|
+      %tr
+        %td
+          = service.name
+        %td
+          = link_to 'Show', service_path(service)
+        %td
+          = link_to 'Edit', edit_service_path(service)
+        %td
+          = link_to 'Destroy', service_path(service), method: :delete, data: { confirm: 'Are you sure?' }
+        %td
+          = button_to 'Get access token', oauth_token_path(grant_type: 'client_credentials', client_id: service.uid, client_secret: service.secret)
+
+%p
+  = link_to 'Add service', new_service_path
