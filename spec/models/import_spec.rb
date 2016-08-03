@@ -11,17 +11,31 @@ RSpec.describe Import, type: :model do
 
     before { subject.save! }
 
-    it 'should create an Upload record saving the md5 hash when successful' do
-      expect(Import.count).to eq(1)
-      expect(Upload.count).to eq(1)
-      expect(Upload.first.md5).to_not be_blank
+    context 'when valid' do
+      it 'should save the Import' do
+        expect(Import.count).to eq(1)
+      end
+
+      it 'should create an upload record with an MD5 hash' do
+        expect(Upload.count).to eq(1)
+        expect(Upload.first.md5).to_not be_blank
+      end
     end
 
-    it 'should not save when same file used to create another import' do
-      import = Import.create(file: sample_import_1)
-      expect(Import.count).to eq(1)
-      expect(Upload.count).to eq(1)
-      expect(import.errors.messages).to include(base: ['File has already been uploaded'])
+    context 'when invalid (trying to import a previously used file)' do
+      let!(:import) { Import.create(file: sample_import_1) }
+
+      it 'should not create an import record' do
+        expect(Import.count).to eq(1)
+      end
+
+      it 'should not create an upload record' do
+        expect(Upload.count).to eq(1)
+      end
+
+      it 'should have a validation error' do
+        expect(import.errors.messages).to include(base: ['File has already been uploaded'])
+      end
     end
   end
 end
