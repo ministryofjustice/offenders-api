@@ -20,12 +20,22 @@ mps = Doorkeeper::Application.create!(
   redirect_uri: 'http://localhost:3000'
 )
 
-# Default admin user
+# Admin user
 
 User.create!(
   email: ENV['ADMIN_EMAIL'],
   password: ENV['ADMIN_PASSWORD'],
-  password_confirmation: ENV['ADMIN_PASSWORD']
+  password_confirmation: ENV['ADMIN_PASSWORD'],
+  role: 'admin'
+)
+
+# Staff user
+
+User.create!(
+  email: 'staff@example.com',
+  password: ENV['ADMIN_PASSWORD'],
+  password_confirmation: ENV['ADMIN_PASSWORD'],
+  role: 'staff'
 )
 
 # Sample Prisoner records
