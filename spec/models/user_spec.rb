@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  it { should validate_presence_of(:role) }
-  it { should validate_inclusion_of(:role).in_array(User::ROLES) }
+  it { is_expected.to validate_presence_of(:role) }
+  it { is_expected.to validate_inclusion_of(:role).in_array(User::ROLES) }
 
   describe 'roles' do
     let(:user) do
@@ -17,11 +17,11 @@ RSpec.describe User, type: :model do
     describe '#admin?' do
       let(:role) { 'admin' }
 
-      it 'should return true when admin' do
+      it 'returns true when admin' do
         expect(user.admin?).to be true
       end
 
-      it 'should return false when not admin' do
+      it 'returns false when not admin' do
         user.update_attribute(:role, 'staff')
         expect(user.admin?).to be false
       end
@@ -30,11 +30,11 @@ RSpec.describe User, type: :model do
     describe '#staff?' do
       let(:role) { 'staff' }
 
-      it 'should return true when staff' do
+      it 'returns true when staff' do
         expect(user.staff?).to be true
       end
 
-      it 'should return false when not staff' do
+      it 'returns false when not staff' do
         user.update_attribute(:role, 'admin')
         expect(user.staff?).to be false
       end
