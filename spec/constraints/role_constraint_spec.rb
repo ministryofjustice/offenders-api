@@ -17,15 +17,15 @@ RSpec.describe RoleConstraint do
 
     context 'when role matches' do
       it 'returns true' do
-        expect(subject.matches?(request)).to eq(true)
+        expect(subject.matches?(request)).to be true
       end
     end
 
     context 'when role does not match' do
       before { user.update_attribute(:role, 'staff') }
 
-      it 'returns true' do
-        expect(subject.matches?(request)).to eq(false)
+      it 'returns false' do
+        expect(subject.matches?(request)).to be false
       end
     end
   end

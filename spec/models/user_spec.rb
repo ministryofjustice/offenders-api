@@ -18,12 +18,12 @@ RSpec.describe User, type: :model do
       let(:role) { 'admin' }
 
       it 'should return true when admin' do
-        expect(user.admin?).to eq(true)
+        expect(user.admin?).to be true
       end
 
       it 'should return false when not admin' do
         user.update_attribute(:role, 'staff')
-        expect(user.admin?).to eq(false)
+        expect(user.admin?).to be false
       end
     end
 
@@ -31,12 +31,12 @@ RSpec.describe User, type: :model do
       let(:role) { 'staff' }
 
       it 'should return true when staff' do
-        expect(user.staff?).to eq(true)
+        expect(user.staff?).to be true
       end
 
       it 'should return false when not staff' do
         user.update_attribute(:role, 'admin')
-        expect(user.staff?).to eq(false)
+        expect(user.staff?).to be false
       end
     end
   end

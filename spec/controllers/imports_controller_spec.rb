@@ -9,7 +9,7 @@ RSpec.describe ImportsController, type: :controller do
     before { get :index }
 
     it 'should return status 200' do
-      expect(response.status).to eq(200)
+      expect(response.status).to be 200
     end
 
     it 'should render the index template' do
@@ -23,7 +23,7 @@ RSpec.describe ImportsController, type: :controller do
     before { get :show, id: import }
 
     it 'should render status 200' do
-      expect(response.status).to eq(200)
+      expect(response.status).to be 200
     end
 
     it 'should render the show template' do
@@ -35,7 +35,7 @@ RSpec.describe ImportsController, type: :controller do
     before { get :new }
 
     it 'should return status 200' do
-      expect(response.status).to eq(200)
+      expect(response.status).to be 200
     end
 
     it 'should render the new template' do
