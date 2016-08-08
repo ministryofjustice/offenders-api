@@ -4,7 +4,7 @@ RSpec.describe ApiConstraint do
   describe '#matches?' do
     let(:options_version) { 1 }
     let(:accept_version) { 1 }
-    let(:request) { double }
+    let(:request) { instance_double('ActionDispatch::Request') }
     let(:options) { { version: options_version } }
     let(:returned_result) do
       { accept: "version=#{accept_version}" }

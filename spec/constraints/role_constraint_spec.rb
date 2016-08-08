@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe RoleConstraint do
   describe '#matches?' do
-    let(:request) { double }
+    let(:request) { instance_double('ActionDispatch::Request') }
     let(:user) { create(:user, :admin) }
 
     subject { RoleConstraint.new('admin') }
