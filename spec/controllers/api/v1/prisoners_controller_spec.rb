@@ -59,7 +59,7 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
       before { get :show, id: prisoner }
 
       it 'returns status 200' do
-        expect(response.status).to eq(200)
+        expect(response.status).to be 200
       end
 
       it 'returns JSON represenation of prisoner record' do
@@ -83,11 +83,11 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
         before { post :create, prisoner: params }
 
         it 'creates a new Prisoner record' do
-          expect(Prisoner.count).to eq(1)
+          expect(Prisoner.count).to be 1
         end
 
         it 'returns status 201/created' do
-          expect(response.status).to eq(201)
+          expect(response.status).to be 201
         end
 
         it 'returns the id of the created record' do
@@ -99,11 +99,11 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
         before { params.delete(:gender); post :create, prisoner: params }
 
         it 'does not create a Prisoner record' do
-          expect(Prisoner.count).to eq(0)
+          expect(Prisoner.count).to be 0
         end
 
         it 'returns status 422/unprocessable entity' do
-          expect(response.status).to eq(422)
+          expect(response.status).to be 422
         end
 
         it 'returns error for missing attribute' do
@@ -128,7 +128,7 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
         end
 
         it 'returns status "success"' do
-          expect(response.status).to eq(200)
+          expect(response.status).to be 200
         end
 
         it 'returns "true"' do
@@ -147,7 +147,7 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
         end
 
         it 'returns status "unprocessable entity"' do
-          expect(response.status).to eq(422)
+          expect(response.status).to be 422
         end
 
         it 'returns JSON error' do
@@ -164,7 +164,7 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
       before { get :index }
 
       it 'returns status 401' do
-        expect(response.status).to eq(401)
+        expect(response.status).to be 401
       end
     end
 
@@ -172,7 +172,7 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
       before { get :show, id: 1 }
 
       it 'returns status 401' do
-        expect(response.status).to eq(401)
+        expect(response.status).to be 401
       end
     end
 
@@ -188,7 +188,7 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
       }
 
       it 'returns status 401' do
-        expect(response.status).to eq(401)
+        expect(response.status).to be 401
       end
     end
 
@@ -206,7 +206,7 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
       }
 
       it 'returns status 401' do
-        expect(response.status).to eq(401)
+        expect(response.status).to be 401
       end
     end
   end

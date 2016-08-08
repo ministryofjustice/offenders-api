@@ -12,7 +12,7 @@ RSpec.describe Api::V1::AliasesController, type: :controller do
       before { get :index, prisoner_id: prisoner }
 
       it 'returns status 200' do
-        expect(response.status).to eq(200)
+        expect(response.status).to be 200
       end
 
       it 'returns JSON collection of the prisoner\'s aliases' do
@@ -31,7 +31,7 @@ RSpec.describe Api::V1::AliasesController, type: :controller do
       before { get :show, prisoner_id: prisoner, id: prisoner.aliases.first }
 
       it 'returns status 200' do
-        expect(response.status).to eq(200)
+        expect(response.status).to be 200
       end
     end
 
@@ -53,7 +53,7 @@ RSpec.describe Api::V1::AliasesController, type: :controller do
       before { get :index, prisoner_id: prisoner }
 
       it 'returns status 401' do
-        expect(response.status).to eq(401)
+        expect(response.status).to be 401
       end
     end
 
@@ -61,7 +61,7 @@ RSpec.describe Api::V1::AliasesController, type: :controller do
       before { get :show, prisoner_id: prisoner, id: 1 }
 
       it 'returns status 401' do
-        expect(response.status).to eq(401)
+        expect(response.status).to be 401
       end
     end
 

@@ -6,7 +6,12 @@ Rails.application.routes.draw do
   get 'healthcheck', to: 'heartbeat#healthcheck',  as: 'healthcheck', format: :json
 
   authenticate :user do
-    root to: 'services#index'
+    constraints RoleConstraint.new(:admin) do
+      get '/', to: redirect('services#index')
+    end
+
+    root to: 'imports#index'
+
     resources :services
     resources :imports, only: [:index, :show, :new, :create]
   end
