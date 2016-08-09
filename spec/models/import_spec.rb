@@ -3,11 +3,11 @@ require 'rails_helper'
 RSpec.describe Import, type: :model do
   it { is_expected.to validate_presence_of(:file) }
 
-  let(:sample_import_1) { fixture_file_upload('files/sample_import_1.csv', 'text/csv') }
-  let(:sample_import_2) { fixture_file_upload('files/sample_import_2.csv', 'text/csv') }
+  let(:prisoners) { fixture_file_upload('files/prisoners.csv', 'text/csv') }
+  let(:aliases) { fixture_file_upload('files/aliases.csv', 'text/csv') }
 
   describe 'creating a new import' do
-    subject { Import.new(file: sample_import_1) }
+    subject { Import.new(file: prisoners) }
 
     before { subject.save! }
 
@@ -23,7 +23,7 @@ RSpec.describe Import, type: :model do
     end
 
     context 'when invalid (trying to import a previously used file)' do
-      let!(:import) { Import.create(file: sample_import_1) }
+      let!(:import) { Import.create(file: prisoners) }
 
       it 'should not create an import record' do
         expect(Import.count).to be 1
