@@ -96,10 +96,10 @@ module Api
           :date_of_birth,
           :gender,
           :pnc_number,
-          :nationality,
-          :second_nationality,
+          :nationality_code,
+          :second_nationality_code,
           :ethnicity_code,
-          :sexual_orientation,
+          :sexual_orientation_code,
           :cro_number
         )
       end
