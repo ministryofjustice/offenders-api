@@ -19,8 +19,8 @@ class ImportPrisoners
       begin
         ParseCsv.call(params[:file].read)
         @import.update_attribute(:successful, true)
-      rescue
-        @errors << 'Could not complete import'
+      rescue ParseCsv::ParsingError => e
+        @errors << e.to
       end
     end
 

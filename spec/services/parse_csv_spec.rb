@@ -1,12 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe ParseCsv do
-  let(:prisoners) { fixture_file_upload('files/prisoners.csv', 'text/csv') }
-  let(:aliases) { fixture_file_upload('files/aliases.csv', 'text/csv') }
+  let(:csv_data) { fixture_file_upload('files/prisoners.csv', 'text/csv') }
 
   describe '#call' do
-    context 'when importing prisoners' do
-      before { described_class.call(prisoners) }
+    context 'when parsing prisoners' do
+      before { described_class.call(csv_data) }
 
       it 'creates prisoner records' do
         expect(Prisoner.count).to eq(2)
@@ -29,10 +28,12 @@ RSpec.describe ParseCsv do
       end
     end
 
-    context 'when importing aliases' do
+    context 'when parsing aliases' do
+      let(:csv_data) { fixture_file_upload('files/aliases.csv', 'text/csv') }
+
       before do
         create(:prisoner, noms_id: 'A1234BC')
-        described_class.call(aliases)
+        described_class.call(csv_data)
       end
 
       it 'creates aliases records' do
@@ -46,6 +47,26 @@ RSpec.describe ParseCsv do
         expect(first_alias.surname).to eq('WHITE')
         expect(first_alias.gender).to eq('Male')
         expect(first_alias.date_of_birth).to eq(Date.civil(1991, 7, 17))
+      end
+    end
+
+    context 'invalid CSV data' do
+      context 'with invalid headers' do
+        let(:csv_data) { fixture_file_upload('files/prisoners_with_invalid_headers.csv', 'text/csv') }
+
+        it 'throws a MalformedHeaderError' do
+          expect{described_class.call(csv_data)}.
+            to raise_error(ParseCsv::MalformedHeaderError)
+        end
+      end
+
+      context 'with invalid records' do
+        let(:csv_data) { fixture_file_upload('files/prisoners_with_invalid_content.csv', 'text/csv') }
+
+        it 'throws an error with the line number' do
+          expect{described_class.call(csv_data)}.
+            to raise_error(ParseCsv::ParsingError)
+        end
       end
     end
   end

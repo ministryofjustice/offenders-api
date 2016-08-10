@@ -1,24 +1,57 @@
 module ParseCsv
+  class ParsingError < StandardError; end
+  class MalformedHeaderError < StandardError; end
+
+  PRISONERS_HEADERS = [
+    "NOMS Number",
+    "Date of Birth",
+    "Offender Given Name 1",
+    "Offender Given Name 2",
+    "Offender Surname",
+    "Salutation",
+    "Gender Code",
+    "PNC ID",
+    "Nationality Code",
+    "Ethnic Code",
+    "Ethnic Description",
+    "Sexual Orientation Code",
+    "Sexual Orientation Description",
+    "Criminal Records Office number"
+  ]
+
+  ALIASES_HEADERS = [
+    "NOMS Number",
+    "Alias Surname",
+    "Alias Given Name 1",
+    "Alias Given Name 2",
+    "Alias Date of Birth",
+    "Alias Gender","Alias or Working Name?"
+  ]
+
   module_function
 
   def call(data)
     require 'csv'
     csv = CSV.parse(data, headers: true)
-    csv.each do |row|
-      import_prisoner_or_alias(csv.headers, row)
+    csv.each_with_index do |row, line_number|
+      import_prisoner_or_alias(csv.headers, row, line_number + 1)
     end
   end
 
   class << self
     private
 
-    def import_prisoner_or_alias(headers, row)
-      if headers.include?('Offender Surname')
-        Prisoner.create! prisoner_attributes_from(row)
-      elsif headers.include?('Alias Surname')
+    def import_prisoner_or_alias(headers, row, line_number)
+      if headers == PRISONERS_HEADERS
+        Prisoner.create!(prisoner_attributes_from(row))
+      elsif headers == ALIASES_HEADERS
         prisoner = Prisoner.where(noms_id: row['NOMS Number']).first
-        prisoner.aliases.create!(alias_attributes_from(row)) if prisoner
+        prisoner.aliases.create!(alias_attributes_from(row))
+      else
+        fail MalformedHeaderError
       end
+    rescue ActiveRecord::RecordInvalid, ArgumentError
+      fail(ParsingError, "Error parsing line #{line_number}")
     end
 
     def prisoner_attributes_from(row)
