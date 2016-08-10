@@ -17,10 +17,10 @@ class ImportPrisoners
       remove_previous_imports
 
       begin
-        process_import_file
+        ParseCsv.call(params[:file].read)
         @import.update_attribute(:successful, true)
-      rescue
-        @errors << 'Could not complete import'
+      rescue ParseCsv::ParsingError => e
+        @errors << e.to
       end
     end
 
@@ -43,9 +43,5 @@ class ImportPrisoners
 
   def remove_previous_imports
     Import.where('id != ?', @import.id).destroy_all
-  end
-
-  def process_import_file
-    # TODO
   end
 end

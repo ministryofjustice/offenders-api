@@ -28,9 +28,9 @@ namespace :import do
         ethnicity_code: (row['ETHNICITY_CODE'].strip rescue nil),
         cro_number: (row['CRO_NUMBER'].strip rescue nil),
         pnc_number: (row['PNC_NUMBER'].strip rescue nil),
-        nationality: (row['NATIONALITY'].strip rescue nil),
-        second_nationality: (row['SECOND_NATIONALITY'].strip rescue nil),
-        sexual_orientation: (row['SEXUAL_ORIENTATION'].strip rescue nil)
+        nationality_code: (row['NATIONALITY_CODE'].strip rescue nil),
+        second_nationality_code: (row['SECOND_NATIONALITY_CODE'].strip rescue nil),
+        sexual_orientation_code: (row['SEXUAL_ORIENTATION_CODE'].strip rescue nil)
       )
 
       puts "PRISONER RECORD CREATED: #{p.noms_id}"

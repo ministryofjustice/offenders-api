@@ -1,28 +1,37 @@
 require 'rails_helper'
 
 RSpec.describe ImportPrisoners do
-  let(:sample_import_1) { fixture_file_upload('files/sample_import_1.csv', 'text/csv') }
-  let(:sample_import_2) { fixture_file_upload('files/sample_import_2.csv', 'text/csv') }
+  let(:prisoners) { fixture_file_upload('files/prisoners.csv', 'text/csv') }
+  let(:aliases) { fixture_file_upload('files/aliases.csv', 'text/csv') }
 
-  let(:params) { { file: sample_import_1 } }
+  let(:params) { { file: prisoners } }
 
   subject { ImportPrisoners.new(params) }
 
   describe '#call' do
-    context 'when valid creates an import' do
+    context 'when valid' do
       it 'creates an Import record' do
         subject.call
         expect(Import.count).to eq(1)
         expect(Import.first).to eq(subject.import)
       end
+
+      it 'calls the parse csv service with the file' do
+        expect(ParseCsv).to receive(:call).with(File.read(params[:file]))
+        subject.call
+      end
     end
 
-    context 'when invalid doesn not create an import' do
+    context 'when invalid' do
       it 'does not create an Import record' do
         subject.params.delete(:file)
         subject.call
         expect(Import.count).to eq(0)
         expect(Import.first).to eq(nil)
+      end
+
+      it 'does not call the parse csv service' do
+        expect(ParseCsv).to_not receive(:call)
       end
     end
   end

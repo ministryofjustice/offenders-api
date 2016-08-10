@@ -18,7 +18,7 @@ RSpec.describe ImportsController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:import) { Import.create(file: fixture_file_upload('files/sample_import_1.csv', 'text/csv')) }
+    let(:import) { Import.create(file: fixture_file_upload('files/prisoners.csv', 'text/csv')) }
 
     before { get :show, id: import }
 
@@ -44,7 +44,7 @@ RSpec.describe ImportsController, type: :controller do
   end
 
   describe 'POST #create' do
-    let(:file) { fixture_file_upload('files/sample_import_1.csv', 'text/csv') }
+    let(:file) { fixture_file_upload('files/prisoners.csv', 'text/csv') }
     let(:import_params) do
       {
         import: {
