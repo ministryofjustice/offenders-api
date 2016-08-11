@@ -4,15 +4,15 @@ cd /usr/src/app
 case ${DOCKER_STATE} in
 create)
     echo "running create"
-    bundle exec rails db:setup db:seed
+    bundle exec rake db:setup db:seed
     ;;
 migrate_and_seed)
     echo "running migrate and seed"
-    bundle exec rails db:migrate db:seed
+    bundle exec rake db:migrate db:seed
     ;;
 drop_and_create)
     echo "running drop and create"
-    bundle exec rails db:drop db:setup db:seed
+    bundle exec rake db:drop db:setup db:seed
     ;;
 esac
 ruby bin/rails server -d --binding 0.0.0.0
