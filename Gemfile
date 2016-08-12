@@ -9,7 +9,7 @@ gem 'haml-rails',   '~> 0.9.0'
 gem 'jquery-rails', '~> 3.1.2'
 gem 'paper_trail'
 gem 'pg',           '~> 0.18.2'
-gem 'rails',        '4.2.6'
+gem 'rails',        '4.2.7'
 gem 'swagger-docs'
 gem 'textacular',   '~> 3.0'
 
