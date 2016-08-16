@@ -6,4 +6,4 @@ RUN bundle exec rake swagger:docs
 
 RUN RAILS_ENV=production bin/rake --trace
 
-ENTRYPOINT ["./run.sh"]
+CMD ["./run.sh"]
