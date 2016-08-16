@@ -20,7 +20,7 @@ class ImportPrisoners
         ParseCsv.call(params[:file].read)
         @import.update_attribute(:successful, true)
       rescue ParseCsv::ParsingError => e
-        @errors << e.to
+        @errors << e.to_s
       end
     end
 
