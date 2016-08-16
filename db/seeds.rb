@@ -2,22 +2,22 @@
 
 nomis = Doorkeeper::Application.create!(
   name: 'NOMIS',
-  redirect_uri: 'http://localhost:3000'
+  redirect_uri: "https://#{ENV['HTTP_HOST']}"
 )
 
 pvb = Doorkeeper::Application.create!(
   name: 'Prison Visits Booking',
-  redirect_uri: 'http://localhost:3000'
+  redirect_uri: "https://#{ENV['HTTP_HOST']}"
 )
 
 mtp = Doorkeeper::Application.create!(
   name: 'Money to Prisoners',
-  redirect_uri: 'http://localhost:3000'
+  redirect_uri: "https://#{ENV['HTTP_HOST']}"
 )
 
 mps = Doorkeeper::Application.create!(
   name: 'Moving People Safely',
-  redirect_uri: 'http://localhost:3000'
+  redirect_uri: "https://#{ENV['HTTP_HOST']}"
 )
 
 # Admin user
