@@ -12,6 +12,7 @@ gem 'pg',           '~> 0.18.2'
 gem 'rails',        '4.2.7'
 gem 'swagger-docs'
 gem 'textacular',   '~> 3.0'
+gem 'uglifier'
 
 group :production, :devunicorn do
   gem 'unicorn-rails',  '2.2.0'
