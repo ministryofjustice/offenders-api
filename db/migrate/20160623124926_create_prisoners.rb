@@ -11,9 +11,6 @@ class CreatePrisoners < ActiveRecord::Migration
       t.string  :gender
       t.string  :pnc_number, index: true
       t.string  :nationality_code
-      t.string  :second_nationality_code
-      t.string  :ethnicity_code
-      t.string  :sexual_orientation_code
       t.string  :cro_number
 
       t.timestamps

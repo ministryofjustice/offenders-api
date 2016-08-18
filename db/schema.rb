@@ -25,7 +25,6 @@ ActiveRecord::Schema.define(version: 20160803144245) do
     t.string "surname"
     t.string "suffix"
     t.string "gender"
-    t.string "ethnicity_code"
     t.date   "date_of_birth"
   end
 
@@ -91,9 +90,6 @@ ActiveRecord::Schema.define(version: 20160803144245) do
     t.string   "gender"
     t.string   "pnc_number"
     t.string   "nationality_code"
-    t.string   "second_nationality_code"
-    t.string   "ethnicity_code"
-    t.string   "sexual_orientation_code"
     t.string   "cro_number"
     t.datetime "created_at"
     t.datetime "updated_at"

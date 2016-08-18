@@ -25,12 +25,9 @@ namespace :import do
         date_of_birth: (Date.strptime(row['BIRTH_DATE'].strip, '%d/%m/%y') rescue nil),
         gender: (row['SEX_CODE'].strip rescue nil),
         noms_id: (row['NOMS_ID'].strip rescue nil),
-        ethnicity_code: (row['ETHNICITY_CODE'].strip rescue nil),
         cro_number: (row['CRO_NUMBER'].strip rescue nil),
         pnc_number: (row['PNC_NUMBER'].strip rescue nil),
-        nationality_code: (row['NATIONALITY_CODE'].strip rescue nil),
-        second_nationality_code: (row['SECOND_NATIONALITY_CODE'].strip rescue nil),
-        sexual_orientation_code: (row['SEXUAL_ORIENTATION_CODE'].strip rescue nil)
+        nationality_code: (row['NATIONALITY_CODE'].strip rescue nil)
       )
 
       puts "PRISONER RECORD CREATED: #{p.noms_id}"
@@ -44,8 +41,7 @@ namespace :import do
           surname: (row['LAST_NAME'].strip rescue nil),
           suffix: (row['SUFFIX'].strip rescue nil),
           date_of_birth: (Date.strptime(row['BIRTH_DATE'].strip, '%d/%m/%y') rescue nil),
-          gender: (row['SEX_CODE'].strip rescue nil),
-          ethnicity_code: (row['ETHNICITY_CODE'].strip rescue nil)
+          gender: (row['SEX_CODE'].strip rescue nil)
         )
 
         puts "ALIAS RECORD CREATED: #{p.noms_id}"
