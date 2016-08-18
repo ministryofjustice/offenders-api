@@ -17,5 +17,6 @@
 /tmp
 /public/uploads
 /public/api
+/public/api-docs.json
 
 coverage
