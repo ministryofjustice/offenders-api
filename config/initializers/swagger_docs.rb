@@ -2,9 +2,9 @@
 Swagger::Docs::Config.register_apis({
   "1.0" => {
     :api_extension_type => :json,
-    :api_file_path => "public/",
+    :api_file_path => "public/assets/",
     :clean_directory => false,
-    :base_path => "#{Rails.application.config.force_ssl ? 'https' : 'http'}://#{ENV['HTTP_HOST']}",
+    :base_path => "/assets/",
     :attributes => {
       :info => {
         "title" => "Prisoners API",
