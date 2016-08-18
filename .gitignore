@@ -16,6 +16,6 @@
 !/log/.keep
 /tmp
 /public/uploads
-/public/swagger-ui
+/public/api
 
 coverage
