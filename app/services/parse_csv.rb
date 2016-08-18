@@ -65,8 +65,6 @@ module ParseCsv
         gender: row['Gender Code'],
         pnc_number: row['PNC ID'],
         nationality_code: row['Nationality Code'],
-        ethnicity_code: row['Ethnic Code'],
-        sexual_orientation_code: row['Sexual Orientation Code'],
         cro_number: row['Criminal Records Office number']
       }
     end

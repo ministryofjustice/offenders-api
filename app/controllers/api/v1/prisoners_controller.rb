@@ -97,9 +97,6 @@ module Api
           :gender,
           :pnc_number,
           :nationality_code,
-          :second_nationality_code,
-          :ethnicity_code,
-          :sexual_orientation_code,
           :cro_number
         )
       end

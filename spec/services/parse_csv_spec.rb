@@ -22,8 +22,6 @@ RSpec.describe ParseCsv do
         expect(prisoner_A1234BC.gender).to eq('M')
         expect(prisoner_A1234BC.pnc_number).to eq('05/123456A')
         expect(prisoner_A1234BC.nationality_code).to eq('BRIT')
-        expect(prisoner_A1234BC.ethnicity_code).to eq('W3')
-        expect(prisoner_A1234BC.sexual_orientation_code).to eq('HET')
         expect(prisoner_A1234BC.cro_number).to eq('123456/01A')
       end
     end

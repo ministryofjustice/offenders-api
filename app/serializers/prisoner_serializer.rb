@@ -3,8 +3,7 @@ class PrisonerSerializer < ActiveModel::Serializer
 
   attributes :id, :noms_id, :given_name, :middle_names,
     :surname, :title, :suffix, :date_of_birth, :gender, :pnc_number,
-    :nationality_code, :second_nationality_code, :ethnicity_code, :sexual_orientation_code,
-    :cro_number, :created_at, :updated_at, :links
+    :nationality_code, :cro_number, :created_at, :updated_at, :links
 
   def links
     [
