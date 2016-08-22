@@ -1,0 +1,10 @@
+%p
+  = @import.created_at
+  failed
+
+%p
+  Errors
+%ul
+  - @errors.each do |error|
+    %li
+      = error
