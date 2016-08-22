@@ -5,7 +5,7 @@ RSpec.describe NotificationMailer, type: :mailer do
     let(:import) { instance_double('Import') }
     let(:mailer) { described_class.import_failed(import).deliver_now }
 
-    before :each do
+    before(:each) do
       allow(import).to receive(:created_at).and_return(Time.now)
     end
 

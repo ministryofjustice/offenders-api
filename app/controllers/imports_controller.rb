@@ -19,7 +19,7 @@ class ImportsController < ApplicationController
     if result.success?
       redirect_to @import
     else
-      NotificationMailer.import_failed(@import).deliver_now
+      NotificationMailer.import_failed(@import, result.errors).deliver_now
       render :new
     end
   end
