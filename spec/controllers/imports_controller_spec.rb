@@ -8,11 +8,11 @@ RSpec.describe ImportsController, type: :controller do
   describe 'GET #index' do
     before { get :index }
 
-    it 'should return status 200' do
+    it 'returns status 200' do
       expect(response.status).to be 200
     end
 
-    it 'should render the index template' do
+    it 'renders the index template' do
       expect(response).to render_template(:index)
     end
   end
@@ -22,11 +22,11 @@ RSpec.describe ImportsController, type: :controller do
 
     before { get :show, id: import }
 
-    it 'should render status 200' do
+    it 'renders status 200' do
       expect(response.status).to be 200
     end
 
-    it 'should render the show template' do
+    it 'renders the show template' do
       expect(response).to render_template(:show)
     end
   end
@@ -34,11 +34,11 @@ RSpec.describe ImportsController, type: :controller do
   describe 'GET #new' do
     before { get :new }
 
-    it 'should return status 200' do
+    it 'returns status 200' do
       expect(response.status).to be 200
     end
 
-    it 'should render the new template' do
+    it 'renders the new template' do
       expect(response).to render_template(:new)
     end
   end
@@ -54,13 +54,13 @@ RSpec.describe ImportsController, type: :controller do
     end
 
     context 'creates an import when valid' do
-      it 'should create an import' do
+      it 'creates an import' do
         expect {
           post :create, import_params
         }.to change(Import, :count).by(1)
       end
 
-      it 'should redirect to the imports index url' do
+      it 'redirects to the imports index url' do
         post :create, import_params
         expect(response).to redirect_to(import_url(Import.first))
       end
@@ -69,18 +69,18 @@ RSpec.describe ImportsController, type: :controller do
     context 'does not create an import when not valid' do
       before { import_params[:import][:file] = '' }
 
-      it 'should not create an import' do
+      it 'does not create an import' do
         expect {
           post :create, import_params
         }.to_not change(Import, :count)
       end
 
-      it 'should render the new action' do
+      it 'renders the new action' do
         post :create, import_params
         expect(response).to render_template(:new)
       end
 
-      it 'should send an import failed notification email' do
+      it 'sends an import failed notification email' do
         expect {
           post :create, import_params
         }.to change(ActionMailer::Base.deliveries, :count).by(1)
