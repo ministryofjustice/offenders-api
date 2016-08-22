@@ -5,14 +5,17 @@ RSpec.describe ParseCsv do
 
   describe '#call' do
     context 'when parsing prisoners' do
-      before { described_class.call(csv_data) }
+      before do
+        create(:prisoner)
+        described_class.call(csv_data)
+      end
 
       it 'creates prisoner records' do
         expect(Prisoner.count).to eq(2)
       end
 
       it 'imports all the fields correctly' do
-        prisoner_A1234BC = Prisoner.where(noms_id: 'A1234BC').first
+        prisoner_A1234BC = Prisoner.find_by!(noms_id: 'A1234BC')
 
         expect(prisoner_A1234BC.given_name).to eq('BOB')
         expect(prisoner_A1234BC.middle_names).to eq('ROBERT')
@@ -24,6 +27,10 @@ RSpec.describe ParseCsv do
         expect(prisoner_A1234BC.nationality_code).to eq('BRIT')
         expect(prisoner_A1234BC.cro_number).to eq('123456/01A')
       end
+
+      it 'empties temporary table' do
+        expect(TemporaryPrisoner.count).to be_zero
+      end
     end
 
     context 'when parsing aliases' do
@@ -31,20 +38,25 @@ RSpec.describe ParseCsv do
 
       before do
         create(:prisoner, noms_id: 'A1234BC')
+        create(:alias)
         described_class.call(csv_data)
       end
 
       it 'creates aliases records' do
-        expect(Prisoner.first.aliases.count).to eq(2)
+        expect(Prisoner.find_by!(noms_id: 'A1234BC').aliases.count).to eq(2)
       end
 
       it 'imports all the fields correctly' do
-        first_alias = Prisoner.first.aliases.first
+        first_alias = Prisoner.find_by!(noms_id: 'A1234BC').aliases.first
 
         expect(first_alias.given_name).to eq('JOHN')
         expect(first_alias.surname).to eq('WHITE')
         expect(first_alias.gender).to eq('Male')
         expect(first_alias.date_of_birth).to eq(Date.civil(1991, 7, 17))
+      end
+
+      it 'empties temporary table' do
+        expect(TemporaryAlias.count).to be_zero
       end
     end
 
