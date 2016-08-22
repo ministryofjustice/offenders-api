@@ -79,6 +79,12 @@ RSpec.describe ImportsController, type: :controller do
         post :create, import_params
         expect(response).to render_template(:new)
       end
+
+      it 'should send an import failed notification email' do
+        expect {
+          post :create, import_params
+        }.to change(ActionMailer::Base.deliveries, :count).by(1)
+      end
     end
   end
 end
