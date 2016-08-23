@@ -12,6 +12,12 @@ module PrisonersApi
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
+    config.app_title = 'Prisoners API'
+    config.proposition_title = 'Prisoners API'
+    config.phase = 'beta'
+    config.product_type = 'service'
+    config.feedback_url = ''
+
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     config.time_zone = 'London'
@@ -27,5 +33,7 @@ module PrisonersApi
       g.view_specs false
       g.helper_specs false
     end
+
+    ActionView::Base.default_form_builder = GovukElementsFormBuilder::FormBuilder
   end
 end
