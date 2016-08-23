@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160803144245) do
+ActiveRecord::Schema.define(version: 20160822132607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -97,6 +97,40 @@ ActiveRecord::Schema.define(version: 20160803144245) do
 
   add_index "prisoners", ["noms_id"], name: "index_prisoners_on_noms_id", using: :btree
   add_index "prisoners", ["pnc_number"], name: "index_prisoners_on_pnc_number", using: :btree
+
+  create_table "temporary_aliases", force: :cascade do |t|
+    t.uuid   "prisoner_id"
+    t.string "title"
+    t.string "given_name"
+    t.string "middle_names"
+    t.string "surname"
+    t.string "suffix"
+    t.string "gender"
+    t.date   "date_of_birth"
+  end
+
+  add_index "temporary_aliases", ["given_name"], name: "index_temporary_aliases_on_given_name", using: :btree
+  add_index "temporary_aliases", ["prisoner_id"], name: "index_temporary_aliases_on_prisoner_id", using: :btree
+  add_index "temporary_aliases", ["surname"], name: "index_temporary_aliases_on_surname", using: :btree
+
+  create_table "temporary_prisoners", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.string   "noms_id"
+    t.string   "given_name"
+    t.string   "middle_names"
+    t.string   "surname"
+    t.string   "title"
+    t.string   "suffix"
+    t.date     "date_of_birth"
+    t.string   "gender"
+    t.string   "pnc_number"
+    t.string   "nationality_code"
+    t.string   "cro_number"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "temporary_prisoners", ["noms_id"], name: "index_temporary_prisoners_on_noms_id", using: :btree
+  add_index "temporary_prisoners", ["pnc_number"], name: "index_temporary_prisoners_on_pnc_number", using: :btree
 
   create_table "uploads", force: :cascade do |t|
     t.string   "md5"

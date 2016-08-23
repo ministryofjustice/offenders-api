@@ -32,10 +32,14 @@ module ParseCsv
 
   def call(data)
     require 'csv'
+
     csv = CSV.parse(data, headers: true)
     csv.each_with_index do |row, line_number|
       import_prisoner_or_alias(csv.headers, row, line_number + 1)
     end
+
+    rename_tables(csv)
+    empty_temporary_tables
   end
 
   class << self
@@ -43,10 +47,11 @@ module ParseCsv
 
     def import_prisoner_or_alias(headers, row, line_number)
       if headers == PRISONERS_HEADERS
-        Prisoner.create!(prisoner_attributes_from(row))
+        TemporaryPrisoner.create!(prisoner_attributes_from(row))
       elsif headers == ALIASES_HEADERS
-        prisoner = Prisoner.where(noms_id: row['NOMS Number']).first
-        prisoner.aliases.create!(alias_attributes_from(row))
+        prisoner_id = Prisoner.find_by!(noms_id: row['NOMS Number']).id
+        alias_attributes = alias_attributes_from(row).merge(prisoner_id: prisoner_id)
+        TemporaryAlias.create!(alias_attributes)
       else
         fail MalformedHeaderError
       end
@@ -77,6 +82,25 @@ module ParseCsv
         gender: row['Alias Gender'],
         date_of_birth: Date.parse(row['Alias Date of Birth'])
       }
+    end
+
+    def rename_tables(csv)
+      if TemporaryPrisoner.count == csv.size
+        ActiveRecord::Migration.rename_table(:prisoners, :temp)
+        ActiveRecord::Migration.rename_table(:temporary_prisoners, :prisoners)
+        ActiveRecord::Migration.rename_table(:temp, :temporary_prisoners)
+      end
+
+      if TemporaryAlias.count == csv.size
+        ActiveRecord::Migration.rename_table(:aliases, :temp)
+        ActiveRecord::Migration.rename_table(:temporary_aliases, :aliases)
+        ActiveRecord::Migration.rename_table(:temp, :temporary_aliases)
+      end
+    end
+
+    def empty_temporary_tables
+      TemporaryPrisoner.delete_all
+      TemporaryAlias.delete_all
     end
   end
 end
