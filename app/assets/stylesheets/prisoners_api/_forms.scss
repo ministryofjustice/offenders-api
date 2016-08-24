@@ -1,0 +1,18 @@
+form {
+  input.form-control {
+    @include media(desktop) {
+      max-width: 13em;
+    }
+  }
+
+  select {
+    font-size: 19px;
+    line-height: 1.31579;
+    border: 1px solid $grey-2;
+    width: 13em;
+  }
+
+  .form-actions {
+    clear: both;
+  }
+}

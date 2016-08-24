@@ -1,25 +1,30 @@
-!!! 5
-%html
-  %head
-    %title
-      Prisoners API
+= content_for :head do
+  = stylesheet_link_tag "main.css"
+  = csrf_meta_tags
 
-    = stylesheet_link_tag    'application', media: 'all'
-    = javascript_include_tag 'application'
-    = csrf_meta_tags
+= content_for :body_end do
+  .javascript
+    = javascript_include_tag "application.js"
 
-  - if user_signed_in?
-    %p
-      = current_user.email
-      = link_to '(sign out)', destroy_user_session_path, method: :delete
+= content_for :homepage_url do
+  = root_path
 
-  %body
-    %p.notice
-      = notice
-    %p.alert
-      = alert
+= content_for :header_class do
+  = "with-proposition"
 
-    %h1
-      Prisoners API
+= content_for :proposition_header do
+  .header-proposition
+    .content
+      %nav{ class: "proposition-menu" }
+        = link_to 'Prisoners API', root_path, id: 'proposition-name'
+        - if user_signed_in?
+          .sign-out
+            = button_to 'Sign out', destroy_user_session_path, method: :delete, class: 'styled-as-link'
 
-    = yield
+= content_for :content do
+  %main{ id: "wrapper", role: "main" }
+    .container
+      %section{ class: "content inner cf", id: "content", role: "main" }
+        = yield
+
+= render template: "layouts/govuk_template"

@@ -8,6 +8,7 @@
     %th
     %th
     %th
+    %th
   %tbody
     - @services.each do |service|
       %tr
@@ -20,7 +21,7 @@
         %td
           = link_to 'Destroy', service_path(service), method: :delete, data: { confirm: 'Are you sure?' }
         %td
-          = button_to 'Get access token', oauth_token_path(grant_type: 'client_credentials', client_id: service.uid, client_secret: service.secret)
+          = button_to 'Get access token', oauth_token_path(grant_type: 'client_credentials', client_id: service.uid, client_secret: service.secret), class: 'button button-secondary'
 
 %p
-  = link_to 'Add service', new_service_path
+  = link_to 'Add service', new_service_path, class: 'button'

@@ -1,19 +1,16 @@
 %h2
   Import records
 
+= GovukElementsErrorsHelper.error_summary @import,
+  'There were problems submitting this form', ''
+
 = form_for @import, html: { multipart: true } do |f|
   = hidden_field_tag 'import[file]'
 
-  - if @import.errors.any?
-    %ul
-      - @import.errors.full_messages.each do |message|
-        %li
-          = message
-
-  %p
+  .form-group
     = f.file_field :file
-  %p
-    = f.submit 'Import'
+
+  = f.submit 'Import', class: "button"
 
 %p
   = link_to 'Back', imports_url
