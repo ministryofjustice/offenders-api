@@ -4,73 +4,42 @@ RSpec.describe ImportPrisoners do
   let(:prisoners) { fixture_file_upload('files/prisoners.csv', 'text/csv') }
   let(:aliases) { fixture_file_upload('files/aliases.csv', 'text/csv') }
 
-  let(:params) { { file: prisoners } }
-
-  subject { ImportPrisoners.new(params) }
+  let(:import) { Import.create(file: prisoners) }
 
   describe '#call' do
-    context 'when valid' do
-      it 'creates an Import record' do
-        subject.call
-        expect(Import.count).to eq(1)
-        expect(Import.first).to eq(subject.import)
+    context 'when successful' do
+      it 'calls the parse csv service with the data' do
+        expect(ParseCsv).to receive(:call).with(import.file.read)
+        ImportPrisoners.call(import.file.read, import)
       end
 
-      it 'calls the parse csv service with the file' do
-        expect(ParseCsv).to receive(:call).with(File.read(params[:file]))
-        subject.call
-      end
-    end
-
-    context 'when invalid' do
-      it 'does not create an Import record' do
-        subject.params.delete(:file)
-        subject.call
-        expect(Import.count).to eq(0)
-        expect(Import.first).to eq(nil)
+      it 'marks the import successful' do
+        ImportPrisoners.call(import.file.read, import)
+        expect(import.status).to eq('successful')
       end
 
-      it 'does not call the parse csv service' do
-        expect(ParseCsv).to_not receive(:call)
-      end
-    end
-  end
-
-  describe '#import' do
-    context 'before #call triggered' do
-      it 'returns nil' do
-        expect(subject.import).to eq(nil)
+      it 'removes all other imports' do
+        Import.create(file: aliases)
+        ImportPrisoners.call(import.file.read, import)
+        expect(Import.count).to be 1
       end
     end
 
-    context 'after #call triggered' do
-      it 'returns the import object' do
-        subject.call
-        expect(subject.import).to be_a(Import)
+    context 'when failing' do
+      before do
+        expect(ParseCsv).to receive(:call).and_raise(Exception)
       end
-    end
-  end
 
-  describe '#success?' do
-    context 'when invalid' do
-      it 'returns false' do
-        subject.params.delete(:file)
-        subject.call
-        expect(subject.success?).to be(false)
+      it 'marks the import failed' do
+        ImportPrisoners.call(import.file.read, import)
+        expect(import.status).to eq('failed')
       end
-    end
 
-    context 'when valid' do
-      it 'returns true' do
-        subject.call
-        expect(subject.success?).to be(true)
+      it 'sends an email' do
+        expect {
+          ImportPrisoners.call(import.file.read, import)
+        }.to change(ActionMailer::Base.deliveries, :count).by(1)
       end
-    end
-  end
-
-  describe '#errors' do
-    it 'returns errors' do
-      expect(subject.errors).to eq([])
     end
   end
 end

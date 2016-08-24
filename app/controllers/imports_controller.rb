@@ -1,6 +1,4 @@
 class ImportsController < ApplicationController
-  before_action :set_import, only: [:show]
-
   def index
     @imports = Import.order(created_at: :desc)
   end
@@ -9,26 +7,17 @@ class ImportsController < ApplicationController
     @import = Import.new
   end
 
-  def show
-  end
-
   def create
-    result = ImportPrisoners.call(import_params)
-    @import = result.import
-
-    if result.success?
-      redirect_to @import
+    @import = Import.new(import_params)
+    if @import.save
+      ImportProcessor.perform_async(@import.id)
+      redirect_to imports_path
     else
-      NotificationMailer.import_failed(@import, result.errors).deliver_now
       render :new
     end
   end
 
   private
-
-  def set_import
-    @import = Import.find(params[:id])
-  end
 
   def import_params
     params.require(:import).permit(:file)

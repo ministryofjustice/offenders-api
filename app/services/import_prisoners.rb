@@ -1,47 +1,14 @@
-class ImportPrisoners
-  attr_reader :params, :errors
+module ImportPrisoners
+  module_function
 
-  def self.call(params)
-    new(params).call
-  end
-
-  def initialize(params)
-    @params = params
-    @errors = []
-  end
-
-  def call
-    @import = Import.new(params)
-
-    if @import.save
-      remove_previous_imports
-
-      begin
-        ParseCsv.call(params[:file].read)
-        @import.update_attribute(:successful, true)
-      rescue ParseCsv::ParsingError => e
-        @errors << e.to_s
-      end
+  def call(data, import = nil)
+    ParseCsv.call(data)
+    if import
+      import.update_attribute(:status, :successful)
+      Import.where('id != ?', import.id).destroy_all
     end
-
-    self
-  end
-
-  def import
-    @import
-  end
-
-  def success?
-    @import.successful? rescue false
-  end
-
-  def errors
-    @errors
-  end
-
-  private
-
-  def remove_previous_imports
-    Import.where('id != ?', @import.id).destroy_all
+  rescue Exception => e
+    import.update_attribute(:status, :failed) if import
+    NotificationMailer.import_failed(import, e.to_s).deliver_now
   end
 end

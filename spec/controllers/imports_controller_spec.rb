@@ -17,20 +17,6 @@ RSpec.describe ImportsController, type: :controller do
     end
   end
 
-  describe 'GET #show' do
-    let(:import) { Import.create(file: fixture_file_upload('files/prisoners.csv', 'text/csv')) }
-
-    before { get :show, id: import }
-
-    it 'renders status 200' do
-      expect(response.status).to be 200
-    end
-
-    it 'renders the show template' do
-      expect(response).to render_template(:show)
-    end
-  end
-
   describe 'GET #new' do
     before { get :new }
 
@@ -53,7 +39,9 @@ RSpec.describe ImportsController, type: :controller do
       }
     end
 
-    context 'creates an import when valid' do
+    context 'when valid' do
+      before { allow(ImportProcessor).to receive(:perform_async) }
+
       it 'creates an import' do
         expect {
           post :create, import_params
@@ -62,11 +50,11 @@ RSpec.describe ImportsController, type: :controller do
 
       it 'redirects to the imports index url' do
         post :create, import_params
-        expect(response).to redirect_to(import_url(Import.first))
+        expect(response).to redirect_to(imports_path)
       end
     end
 
-    context 'does not create an import when not valid' do
+    context 'when not valid' do
       before { import_params[:import][:file] = '' }
 
       it 'does not create an import' do
@@ -78,12 +66,6 @@ RSpec.describe ImportsController, type: :controller do
       it 'renders the new action' do
         post :create, import_params
         expect(response).to render_template(:new)
-      end
-
-      it 'sends an import failed notification email' do
-        expect {
-          post :create, import_params
-        }.to change(ActionMailer::Base.deliveries, :count).by(1)
       end
     end
   end

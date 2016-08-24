@@ -1,10 +1,5 @@
+- if @import
+  %p
+    = "Importing file: #{@import.file}, on: #{@import.created_at} failed"
 %p
-  = @import.created_at
-  failed
-
-%p
-  Errors
-%ul
-  - @errors.each do |error|
-    %li
-      = error
+  = @error

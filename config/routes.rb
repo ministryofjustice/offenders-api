@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     root to: 'imports#index'
 
     resources :services
-    resources :imports, only: [:index, :show, :new, :create]
+    resources :imports, only: [:index, :new, :create]
   end
 
   namespace :api, format: :json do
