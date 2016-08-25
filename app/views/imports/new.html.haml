@@ -8,7 +8,7 @@
   = hidden_field_tag 'import[file]'
 
   .form-group
-    = f.file_field :file
+    != f.file_field :file
 
   = f.submit 'Import', class: "button"
 

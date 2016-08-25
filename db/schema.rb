@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 20160822132607) do
 
   create_table "imports", force: :cascade do |t|
     t.string   "file"
-    t.boolean  "successful", default: false
+    t.string   "status",     default: "in_progress"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

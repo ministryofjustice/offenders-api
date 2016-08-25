@@ -55,7 +55,7 @@ module ParseCsv
       else
         fail MalformedHeaderError
       end
-    rescue ActiveRecord::RecordInvalid, ArgumentError
+    rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound, ArgumentError
       fail(ParsingError, "Error parsing line #{line_number}")
     end
 

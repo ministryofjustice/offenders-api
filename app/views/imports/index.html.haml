@@ -10,16 +10,16 @@
     %thead
       %tr
         %th
-          Date
+          File
         %th
-          Status
+          Date
     %tbody
       - @imports.each do |import|
         %tr
           %td
+            = import.file.file.filename
+          %td
             = import.created_at.strftime('%d/%m/%Y %H:%M:%S')
-          %td{ style: "color: #{import.successful? ? 'green' : 'red'};" }
-            = import.successful? ? 'Successful' : 'Failed'
 
 %p
   = link_to 'New import', new_import_path, class: "button"
