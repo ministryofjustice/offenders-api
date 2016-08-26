@@ -34,12 +34,12 @@ module ParseCsv
     require 'csv'
 
     csv = CSV.parse(data, headers: true)
+
+    Alias.delete_all if csv.headers == ALIASES_HEADERS
+
     csv.each_with_index do |row, line_number|
       import_prisoner_or_alias(csv.headers, row, line_number + 1)
     end
-
-    rename_tables(csv)
-    empty_temporary_tables
   end
 
   class << self
@@ -47,16 +47,29 @@ module ParseCsv
 
     def import_prisoner_or_alias(headers, row, line_number)
       if headers == PRISONERS_HEADERS
-        TemporaryPrisoner.create!(prisoner_attributes_from(row))
+        update_or_create_prisoner(row)
       elsif headers == ALIASES_HEADERS
-        prisoner_id = Prisoner.find_by!(noms_id: row['NOMS Number']).id
-        alias_attributes = alias_attributes_from(row).merge(prisoner_id: prisoner_id)
-        TemporaryAlias.create!(alias_attributes)
+        create_alias(row)
       else
         fail MalformedHeaderError
       end
     rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound, ArgumentError
       fail(ParsingError, "Error parsing line #{line_number}")
+    end
+
+    def update_or_create_prisoner(row)
+      prisoner = Prisoner.find_by(noms_id: row['NOMS Number'])
+      if prisoner
+        prisoner.update_attributes(prisoner_attributes_from(row))
+      else
+        Prisoner.create!(prisoner_attributes_from(row))
+      end
+    end
+
+    def create_alias(row)
+      prisoner_id = Prisoner.find_by!(noms_id: row['NOMS Number']).id
+      alias_attributes = alias_attributes_from(row).merge(prisoner_id: prisoner_id)
+      Alias.create!(alias_attributes)
     end
 
     def prisoner_attributes_from(row)
@@ -82,25 +95,6 @@ module ParseCsv
         gender: row['Alias Gender'],
         date_of_birth: Date.parse(row['Alias Date of Birth'])
       }
-    end
-
-    def rename_tables(csv)
-      if TemporaryPrisoner.count == csv.size
-        ActiveRecord::Migration.rename_table(:prisoners, :temp)
-        ActiveRecord::Migration.rename_table(:temporary_prisoners, :prisoners)
-        ActiveRecord::Migration.rename_table(:temp, :temporary_prisoners)
-      end
-
-      if TemporaryAlias.count == csv.size
-        ActiveRecord::Migration.rename_table(:aliases, :temp)
-        ActiveRecord::Migration.rename_table(:temporary_aliases, :aliases)
-        ActiveRecord::Migration.rename_table(:temp, :temporary_aliases)
-      end
-    end
-
-    def empty_temporary_tables
-      TemporaryPrisoner.delete_all
-      TemporaryAlias.delete_all
     end
   end
 end
