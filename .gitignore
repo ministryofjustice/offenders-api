@@ -16,7 +16,7 @@
 !/log/.keep
 /tmp
 /public/uploads
-/public/api
+/lib/swagger
 /public/api-docs.json
 
 coverage
