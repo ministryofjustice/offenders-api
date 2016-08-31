@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
     resources :services
     resources :imports, only: [:index, :new, :create]
+    mount SwaggerEngine::Engine, at: "/api-docs"
   end
 
   namespace :api, format: :json do
