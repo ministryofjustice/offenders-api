@@ -19,7 +19,6 @@ gem 'sentry-raven'
 gem 'sidekiq'
 gem 'swagger-docs'
 gem 'swagger_engine'
-gem 'textacular',   '~> 3.0'
 gem 'uglifier'
 
 group :production, :devunicorn do
