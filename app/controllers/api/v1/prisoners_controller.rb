@@ -34,7 +34,8 @@ module Api
             key :in, :query
             key :description, 'records updated after timestamp to return'
             key :required, false
-            key :type, :date
+            key :type, :string
+            key :format, :date
           end
           response 200 do
             key :description, 'prisoner response'

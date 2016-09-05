@@ -4,7 +4,8 @@ class Prisoner < ActiveRecord::Base
   swagger_schema :Prisoner do
     key :required, [:id, :noms_id, :given_name, :surname, :date_of_birth, :gender]
     property :id do
-      key :type, :uuid
+      key :type, :string
+      key :format, :uuid
     end
     property :noms_id do
       key :type, :string
@@ -16,7 +17,8 @@ class Prisoner < ActiveRecord::Base
       key :type, :string
     end
     property :date_of_birth do
-      key :type, :date
+      key :type, :string
+      key :format, :date
     end
     property :gender do
       key :type, :string
