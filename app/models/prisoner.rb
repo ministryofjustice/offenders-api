@@ -36,4 +36,14 @@ class Prisoner < ActiveRecord::Base
   validates :gender, presence: true
 
   scope :updated_after, -> (time) { where("updated_at > ?", time) }
+
+  def self.search(query=[])
+    return [] if query.nil?
+
+    values = query.map(&:values)
+    noms_ids = values.map(&:first)
+    dates_of_birth = values.map(&:last)
+
+    where(noms_id: noms_ids, date_of_birth: dates_of_birth)
+  end
 end

@@ -40,37 +40,51 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
       end
     end
 
-    # describe 'GET #search' do
-    #   let(:query) { nil }
-    #
-    #   before do
-    #     create(:prisoner, given_name: 'john')
-    #     create(:prisoner, given_name: 'james')
-    #     get :search, query: query
-    #   end
-    #
-    #   context 'with no query present' do
-    #     it 'returns an empty set' do
-    #       expect(response.body).to eq('[]')
-    #     end
-    #   end
-    #
-    #   context 'when query matches' do
-    #     let(:query) { 'john' }
-    #
-    #     it 'returns collection of prisoner records' do
-    #       expect(JSON.parse(response.body).map { |h| h['id'] }).to match_array(Prisoner.where(given_name: 'john').pluck(:id))
-    #     end
-    #   end
-    #
-    #   context 'when query does not match' do
-    #     let(:query) { 'bob' }
-    #
-    #     it 'returns an empty set' do
-    #       expect(response.body).to eq('[]')
-    #     end
-    #   end
-    # end
+    describe 'GET #search' do
+      let(:query) { nil }
+
+      let!(:prisoner_1) do
+        create(:prisoner, noms_id: 'AA123', date_of_birth: Date.parse('19750201'))
+      end
+
+      let!(:prisoner_2) do
+        create(:prisoner, noms_id: 'AB123', date_of_birth: Date.parse('19750201'))
+      end
+
+      before do
+        get :search, query: query
+      end
+
+      context 'with no query present' do
+        it 'returns an empty set' do
+          expect(response.body).to eq('[]')
+        end
+      end
+
+      context 'when query matches' do
+        let(:query) do
+          [
+            { noms_id: 'AA123', date_of_birth: Date.parse('19750201') }
+          ]
+        end
+
+        it 'returns collection of prisoner records matching query' do
+          expect(JSON.parse(response.body).map { |p| p['id'] }).to match_array([prisoner_1['id']])
+        end
+      end
+
+      context 'when query does not match' do
+        let(:query) do
+          [
+            { noms_id: 'AA123', date_of_birth: Date.parse('19650201') }
+          ]
+        end
+
+        it 'returns an empty set' do
+          expect(response.body).to eq('[]')
+        end
+      end
+    end
 
     describe 'GET #show' do
       let(:prisoner) { create(:prisoner) }
@@ -181,6 +195,14 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
   context 'when unauthenticated' do
     describe 'GET #index' do
       before { get :index }
+
+      it 'returns status 401' do
+        expect(response.status).to be 401
+      end
+    end
+
+    describe 'GET #search' do
+      before { get :search, query: '' }
 
       it 'returns status 401' do
         expect(response.status).to be 401

@@ -94,6 +94,12 @@ module Api
         render json: @prisoners
       end
 
+      def search
+        @prisoners = Prisoner.search(params[:query])
+
+        render json: @prisoners
+      end
+
       def show
         @prisoner = Prisoner.find(params[:id])
 
