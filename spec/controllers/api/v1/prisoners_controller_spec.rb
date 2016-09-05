@@ -10,14 +10,33 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
 
     describe 'GET #index' do
 
-      before do
-        create(:prisoner, given_name: 'john')
-        create(:prisoner, given_name: 'james')
+      it 'returns collection of prisoner records' do
+        create_list(:prisoner, 2)
+
         get :index
+
+        expect(JSON.parse(response.body).map { |h| h['id'] }).to match_array(Prisoner.all.pluck(:id))
       end
 
-      it 'returns collection of prisoner records' do
-        expect(JSON.parse(response.body).map { |h| h['id'] }).to match_array(Prisoner.all.pluck(:id))
+      it 'paginates records' do
+        create_list(:prisoner, 3)
+
+        get :index, { page: '1', per_page: '2' }
+
+        expect(JSON.parse(response.body).size).to eq 2
+
+        get :index, { page: '2', per_page: '2' }
+
+        expect(JSON.parse(response.body).size).to eq 1
+      end
+
+      it 'filters records updated after a timestamp' do
+        create(:prisoner, updated_at: 1.year.ago)
+        create(:prisoner, updated_at: 5.days.ago)
+
+        get :index, { updated_after: 10.days.ago }
+
+        expect(JSON.parse(response.body).size).to eq 1
       end
     end
 

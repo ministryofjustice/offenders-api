@@ -8,4 +8,6 @@ class Prisoner < ActiveRecord::Base
   validates :surname, presence: true
   validates :date_of_birth, presence: true
   validates :gender, presence: true
+
+  scope :updated_after, -> (time) { where("updated_at > ?", time) }
 end

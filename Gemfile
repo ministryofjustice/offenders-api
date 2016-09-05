@@ -11,6 +11,7 @@ gem 'govuk_elements_form_builder', git: 'https://github.com/ministryofjustice/go
 gem 'govuk_frontend_toolkit'
 gem 'govuk_template', '0.18.0'
 gem 'jquery-rails', '~> 3.1.2'
+gem 'kaminari'
 gem 'paper_trail'
 gem 'pg',           '~> 0.18.2'
 gem 'rails',        '4.2.7'
