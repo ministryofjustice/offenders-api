@@ -10,7 +10,13 @@ class Prisoner < ActiveRecord::Base
     property :noms_id do
       key :type, :string
     end
+    property :title do
+      key :type, :string
+    end
     property :given_name do
+      key :type, :string
+    end
+    property :middle_names do
       key :type, :string
     end
     property :surname do
@@ -21,6 +27,15 @@ class Prisoner < ActiveRecord::Base
       key :format, :date
     end
     property :gender do
+      key :type, :string
+    end
+    property :nationality_code do
+      key :type, :string
+    end
+    property :pnc_number do
+      key :type, :string
+    end
+    property :cro_number do
       key :type, :string
     end
   end
