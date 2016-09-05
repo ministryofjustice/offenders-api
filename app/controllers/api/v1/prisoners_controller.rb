@@ -50,7 +50,10 @@ module Api
       # end
 
       def index
-        @prisoners = Prisoner.all
+        @prisoners = Prisoner.page(params[:page]).per(params[:per_page])
+
+        updated_after = Time.parse(params[:updated_after]) rescue nil
+        @prisoners = @prisoners.updated_after(updated_after) if updated_after
 
         render json: @prisoners
       end
