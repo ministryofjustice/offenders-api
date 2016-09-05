@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   get 'ping', to: 'heartbeat#ping', format: :json
   get 'healthcheck', to: 'heartbeat#healthcheck',  as: 'healthcheck', format: :json
 
+  resources :apidocs, only: [:index]
+  mount SwaggerEngine::Engine, at: "/api-docs"
+
   authenticate :user do
     constraints RoleConstraint.new(:admin) do
       get '/', to: redirect('services#index')
@@ -14,7 +17,6 @@ Rails.application.routes.draw do
 
     resources :services
     resources :imports, only: [:index, :new, :create]
-    mount SwaggerEngine::Engine, at: "/api-docs"
   end
 
   namespace :api, format: :json do
