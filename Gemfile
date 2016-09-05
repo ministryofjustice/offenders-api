@@ -18,7 +18,7 @@ gem 'rails',        '4.2.7'
 gem 'sass-rails'
 gem 'sentry-raven'
 gem 'sidekiq'
-gem 'swagger-docs'
+gem 'swagger-blocks'
 gem 'swagger_engine'
 gem 'uglifier'
 

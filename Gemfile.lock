@@ -229,9 +229,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    swagger-docs (0.2.9)
-      activesupport (>= 3)
-      rails (>= 3)
+    swagger-blocks (1.3.4)
     swagger_engine (0.0.3)
     thor (0.19.1)
     thread_safe (0.3.5)
@@ -285,7 +283,7 @@ DEPENDENCIES
   shoulda-matchers (~> 2.8.0)
   sidekiq
   simplecov
-  swagger-docs
+  swagger-blocks
   swagger_engine
   uglifier
   unicorn-rails (= 2.2.0)
