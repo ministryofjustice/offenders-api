@@ -35,10 +35,10 @@ module Api
             key :description, 'records updated after timestamp to return'
             key :required, false
             key :type, :string
-            key :format, :date
+            key :format, 'date-time'
           end
           response 200 do
-            key :description, 'prisoner response'
+            key :description, 'A list of prisoners'
             schema do
               key :type, :array
               items do
@@ -67,7 +67,8 @@ module Api
             key :in, :path
             key :description, 'ID of prisoner to fetch'
             key :required, true
-            key :type, :uuid
+            key :type, :string
+            key :format, :uuid
           end
           response 200 do
             key :description, 'prisoner response'
