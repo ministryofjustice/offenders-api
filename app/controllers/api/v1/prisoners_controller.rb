@@ -71,10 +71,6 @@ module Api
             key :description, 'array of noms_id, date_of_birth hashes'
             key :required, false
             key :type, :array
-            items do
-              key :type, :hash
-            end
-            # key :collectionFormat, :csv
           end
           response 200 do
             key :description, 'A list of prisoners'
