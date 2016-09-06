@@ -1,9 +1,11 @@
 class PrisonerSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
 
-  attributes :id, :noms_id, :given_name, :middle_names,
-    :surname, :title, :suffix, :date_of_birth, :gender, :pnc_number,
-    :nationality_code, :cro_number, :created_at, :updated_at, :links
+  has_many :aliases
+
+  attributes :id, :noms_id, :title, :given_name, :middle_names, :surname,
+    :date_of_birth, :gender, :nationality_code, :pnc_number, :cro_number,
+    :aliases, :created_at, :updated_at, :links
 
   def links
     [

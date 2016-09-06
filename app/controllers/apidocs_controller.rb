@@ -25,6 +25,7 @@ class ApidocsController < ActionController::Base
   SWAGGERED_CLASSES = [
     Api::V1::PrisonersController,
     Prisoner,
+    Alias,
     ErrorModel,
     self,
   ].freeze
