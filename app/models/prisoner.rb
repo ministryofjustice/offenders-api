@@ -37,8 +37,8 @@ class Prisoner < ActiveRecord::Base
 
   scope :updated_after, -> (time) { where("updated_at > ?", time) }
 
-  def self.search(query=[])
-    return [] if query.nil?
+  def self.search(query)
+    return self.none if query.nil?
 
     values = query.map(&:values)
     noms_ids = values.map(&:first)
