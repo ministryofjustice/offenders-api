@@ -55,6 +55,45 @@ module Api
         end
       end
 
+      swagger_path '/prisoners/search' do
+        operation :get do
+          key :description, 'Returns all prisoners matching the given noms_ids and dates of birth'
+          key :operationId, 'searchPrisoners'
+          key :produces, [
+            'application/json'
+          ]
+          key :tags, [
+            'prisoner'
+          ]
+          parameter do
+            key :name, :query
+            key :in, :query
+            key :description, 'array of noms_id, date_of_birth hashes'
+            key :required, false
+            key :type, :array
+            items do
+              key :type, :hash
+            end
+            # key :collectionFormat, :csv
+          end
+          response 200 do
+            key :description, 'A list of prisoners'
+            schema do
+              key :type, :array
+              items do
+                key :'$ref', :Prisoner
+              end
+            end
+          end
+          response :default do
+            key :description, 'unexpected error'
+            schema do
+              key :'$ref', :ErrorModel
+            end
+          end
+        end
+      end
+
       swagger_path '/prisoners/{id}' do
         operation :get do
           key :description, 'Returns a single prisoner if the user has access'
