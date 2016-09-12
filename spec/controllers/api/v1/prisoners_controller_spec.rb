@@ -101,6 +101,21 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
           to include prisoner.as_json(except: %w[suffix date_of_birth created_at updated_at])
       end
     end
+
+    describe 'GET #noms' do
+      let(:prisoner) { create(:prisoner, noms_id: 'A1234BC') }
+
+      before { get :noms, id: prisoner.noms_id }
+
+      it 'returns status 200' do
+        expect(response.status).to be 200
+      end
+
+      it 'returns JSON represenation of prisoner record' do
+        expect(JSON.parse(response.body).as_json).
+          to include prisoner.as_json(except: %w[suffix date_of_birth created_at updated_at])
+      end
+    end
   end
 
   context 'when unauthenticated' do
@@ -122,6 +137,14 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
 
     describe 'GET #show' do
       before { get :show, id: 1 }
+
+      it 'returns status 401' do
+        expect(response.status).to be 401
+      end
+    end
+
+    describe 'GET #noms' do
+      before { get :noms, id: 'A1234BC' }
 
       it 'returns status 401' do
         expect(response.status).to be 401
