@@ -120,6 +120,36 @@ module Api
         end
       end
 
+      swagger_path '/prisoners/noms/{id}' do
+        operation :get do
+          key :description, 'Returns a single prisoner if the user has access'
+          key :operationId, 'findPrisonerByNomsId'
+          key :tags, [
+            'prisoner'
+          ]
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :description, 'Noms ID of prisoner to fetch'
+            key :required, true
+            key :type, :string
+            key :format, :uuid
+          end
+          response 200 do
+            key :description, 'prisoner response'
+            schema do
+              key :'$ref', :Prisoner
+            end
+          end
+          response :default do
+            key :description, 'unexpected error'
+            schema do
+              key :'$ref', :ErrorModel
+            end
+          end
+        end
+      end
+
       def index
         @prisoners = Prisoner.page(params[:page]).per(params[:per_page])
 
@@ -137,6 +167,12 @@ module Api
 
       def show
         @prisoner = Prisoner.find(params[:id])
+
+        render json: @prisoner
+      end
+
+      def noms
+        @prisoner = Prisoner.find_by!(noms_id: params[:id].upcase)
 
         render json: @prisoner
       end

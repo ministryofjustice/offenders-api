@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     scope module: :v1, constraints: ApiConstraint.new(version: 1) do
       resources :prisoners, format: :json, except: [:new, :create, :edit, :update, :destroy] do
         get :search, on: :collection
+        get 'noms/:id', to: 'prisoners#noms', on: :collection
       end
     end
   end
