@@ -67,9 +67,8 @@ module ParseCsv
     end
 
     def create_alias(row)
-      prisoner_id = Prisoner.find_by!(noms_id: row['NOMS Number']).id
-      alias_attributes = alias_attributes_from(row).merge(prisoner_id: prisoner_id)
-      Alias.create!(alias_attributes)
+      prisoner = Prisoner.find_by!(noms_id: row['NOMS Number'])
+      prisoner.aliases.create!(alias_attributes_from(row))
     end
 
     def prisoner_attributes_from(row)
