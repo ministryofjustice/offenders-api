@@ -61,6 +61,7 @@ GEM
       json (>= 1.7)
       mime-types (>= 1.16)
       mimemagic (>= 0.3.0)
+    chronic (0.10.2)
     codeclimate-test-reporter (0.6.0)
       simplecov (>= 0.7.1, < 1.0.0)
     concurrent-ruby (1.0.2)
@@ -252,6 +253,8 @@ GEM
       binding_of_caller (>= 0.7.2)
       railties (>= 4.0)
       sprockets-rails (>= 2.0, < 4.0)
+    whenever (0.9.7)
+      chronic (>= 0.6.3)
 
 PLATFORMS
   ruby
@@ -288,6 +291,7 @@ DEPENDENCIES
   uglifier
   unicorn-rails (= 2.2.0)
   web-console (~> 2.0)
+  whenever
 
 RUBY VERSION
    ruby 2.3.0p0

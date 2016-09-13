@@ -21,6 +21,7 @@ gem 'sidekiq'
 gem 'swagger-blocks'
 gem 'swagger_engine'
 gem 'uglifier'
+gem 'whenever', require: false
 
 group :production, :devunicorn do
   gem 'unicorn-rails',  '2.2.0'
