@@ -5,8 +5,8 @@ class ApidocsController < ActionController::Base
     key :swagger, '2.0'
     info do
       key :version, '1.0.0'
-      key :title, 'Single Offender ID'
-      key :description, 'Single source of truth for prisoners'
+      key :title, 'Prisoners API'
+      key :description, 'Single source of truth for prisoner information'
       contact do
         key :name, 'single-offender-identity@digital.justice.gov.uk'
       end
