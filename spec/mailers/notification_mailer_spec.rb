@@ -7,7 +7,8 @@ RSpec.describe NotificationMailer, type: :mailer do
 
     before(:each) do
       allow(import).to receive(:created_at).and_return(Time.now)
-      allow(import).to receive(:file).and_return("file_path")
+      allow(import).to receive(:prisoners_file).and_return("file_path")
+      allow(import).to receive(:aliases_file).and_return("file_path")
     end
 
     it 'renders the subject' do

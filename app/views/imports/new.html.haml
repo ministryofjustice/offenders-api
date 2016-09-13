@@ -5,10 +5,15 @@
   'There were problems submitting this form', ''
 
 = form_for @import, html: { multipart: true } do |f|
-  = hidden_field_tag 'import[file]'
+  = f.hidden_field :prisoners_file
+  = f.hidden_field :aliases_file
 
   .form-group
-    != f.file_field :file
+    != f.label :prisoners_file, class: 'form-label'
+    != f.file_field :prisoners_file, class: 'form-control'
+  .form-group
+    != f.label :aliases_file, class: 'form-label'
+    != f.file_field :aliases_file, class: 'form-control'
 
   = f.submit 'Import', class: "button"
 
