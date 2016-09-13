@@ -54,7 +54,8 @@ module ParseCsv
         fail MalformedHeaderError
       end
     rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound, ArgumentError
-      fail(ParsingError, "Error parsing line #{line_number}")
+      file_name = (headers == PRISONERS_HEADERS ? 'prisoners' : 'aliases')
+      fail(ParsingError, "Error parsing line #{line_number} on #{file_name} file")
     end
 
     def update_or_create_prisoner(row)

@@ -33,8 +33,9 @@ ActiveRecord::Schema.define(version: 20160803144245) do
   add_index "aliases", ["surname"], name: "index_aliases_on_surname", using: :btree
 
   create_table "imports", force: :cascade do |t|
-    t.string   "file"
-    t.string   "status",     default: "in_progress"
+    t.string   "prisoners_file"
+    t.string   "aliases_file"
+    t.string   "status",         default: "in_progress"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -10,14 +10,18 @@
     %thead
       %tr
         %th
-          File
+          Prisoner file
+        %th
+          Aliases file
         %th
           Date
     %tbody
       - @imports.each do |import|
         %tr
           %td
-            = import.file.file.filename
+            = import.prisoners_file.file.filename
+          %td
+            = import.aliases_file.file.filename
           %td
             = import.created_at.strftime('%d/%m/%Y %H:%M:%S')
 

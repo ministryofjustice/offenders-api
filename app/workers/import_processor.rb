@@ -3,6 +3,6 @@ class ImportProcessor
 
   def perform(import_id)
     import = Import.find(import_id)
-    ImportPrisoners.call(import.file.read, import)
+    ImportPrisoners.call(import)
   end
 end
