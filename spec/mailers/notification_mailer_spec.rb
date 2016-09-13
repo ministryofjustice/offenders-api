@@ -23,4 +23,20 @@ RSpec.describe NotificationMailer, type: :mailer do
       expect(mailer.from).to eq(['single-offender-identity@digital.justice.gov.uk'])
     end
   end
+
+  describe '#import_not_performed' do
+    let(:mailer) { described_class.import_not_performed.deliver_now }
+
+    it 'renders the subject' do
+      expect(mailer.subject).to eq('Import not performed in the last 24 hours')
+    end
+
+    it 'renders the receiver email' do
+      expect(mailer.to).to eq(['single-offender-identity@digital.justice.gov.uk'])
+    end
+
+    it 'renders the sender email' do
+      expect(mailer.from).to eq(['single-offender-identity@digital.justice.gov.uk'])
+    end
+  end
 end

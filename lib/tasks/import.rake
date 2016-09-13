@@ -26,4 +26,11 @@ namespace :import do
     file = Rails.root.join('lib', 'assets', 'data', 'aliases.csv')
     ParseCsv.call(file.read)
   end
+
+  desc 'Check and notify if import has not been performed the in last 24 hours'
+  task check: :environment do
+    unless Import.where('created_at > ?', 1.day.ago).any?
+      NotificationMailer.import_not_performed.deliver_now
+    end
+  end
 end
