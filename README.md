@@ -8,13 +8,13 @@ Initial Prisoners API microservice Rails app. Set up with Doorkeeper OAuth2 prov
 
 Instructions:
 
-`ADMIN_EMAIL=example@example.com ADMIN_PASSWORD=password123 rake db:create db:migrate db:seed`
+`HTTP_HOST=localhost:3000 ADMIN_EMAIL=example@example.com ADMIN_PASSWORD=password123 rake db:create db:migrate db:seed`
 
 Replace `ADMIN_EMAIL` and `ADMIN_PASSWORD` with preferred values.
 
 To import sample records:
 
-`bundle exec rake import:sample`
+`rake import:sample`
 
 Navigate to http://localhost:3000
 
@@ -22,16 +22,19 @@ Sign in with:
 
 Email: example@example.com
 
-Password: password
+Password: password123
 
 Select one of the sample applications and click "Get access token." The returned JSON contains the access token.
 
-Once the access token has been obtained you can make requests to the `/api/prisoners` (to get a list of all prisoners), `/api/prisoners/search` with a `query` param to search prisoners, and `/api/prisoners/<ID>` to get a specific prisoner. The access token should be passed either in the header or as a request params.
+Once the access token has been obtained you can make requests to `/api/prisoners` (to get a list of all prisoners), `/api/prisoners/search` with a `query` param to search prisoners, `/api/prisoners/<ID>` to get a specific prisoner, and `/api/prisoners/noms/<NOMS ID>` to get the the prisoner with the specified NOMS ID. The access token should be passed either in the header or as a request params.
 
 e.g:
 
 ```
+http://localhost:3000/api/prisoners?page=1&per_page=10&access_token=<ACCESS TOKEN>
+http://localhost:3000/api/prisoners/search?query[][noms_id]=B4758WB&query[][date_of_birth]=1982-11-05&query[][noms_id]=B7023AT&query[][date_of_birth]=1949-04-04&access_token=<ACCESS TOKEN>
 http://localhost:3000/api/prisoners/<PRISONER ID>?access_token=<ACCESS TOKEN>
+http://localhost:3000/api/prisoners/noms/<NOMS ID>?access_token=<ACCESS TOKEN>
 ```
 
 You can find a prisoner ID by opening the Rails console, e.g:
@@ -40,6 +43,12 @@ You can find a prisoner ID by opening the Rails console, e.g:
 $ rails c
 2.3.0 :001 > Prisoner.first.id
  => "0029d940-a835-418a-af7d-37e7cd6edd10"
+```
+
+You can access the Swagger documentation at:
+
+```
+http://localhost:3000/api-docs
 ```
 
 To create a prisoner record using Curl:
