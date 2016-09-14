@@ -1,17 +1,15 @@
 class ImportsController < ApplicationController
-  def index
-    @imports = Import.order(created_at: :desc)
-  end
-
   def new
+    @last_import = Import.last
     @import = Import.new
   end
 
   def create
+    @last_import = Import.last
     @import = Import.new(import_params)
     if @import.save
       ImportProcessor.perform_async(@import.id)
-      redirect_to imports_path
+      redirect_to new_import_path
     else
       render :new
     end

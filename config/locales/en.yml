@@ -21,3 +21,7 @@
 
 en:
   hello: "Hello world"
+
+  errors:
+    messages:
+      content_type_whitelist_error: has to be a CSV file

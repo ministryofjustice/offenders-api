@@ -5,18 +5,6 @@ RSpec.describe ImportsController, type: :controller do
 
   before { sign_in user }
 
-  describe 'GET #index' do
-    before { get :index }
-
-    it 'returns status 200' do
-      expect(response.status).to be 200
-    end
-
-    it 'renders the index template' do
-      expect(response).to render_template(:index)
-    end
-  end
-
   describe 'GET #new' do
     before { get :new }
 
@@ -50,9 +38,9 @@ RSpec.describe ImportsController, type: :controller do
         }.to change(Import, :count).by(1)
       end
 
-      it 'redirects to the imports index url' do
+      it 'redirects to new import url' do
         post :create, import_params
-        expect(response).to redirect_to(imports_path)
+        expect(response).to redirect_to(new_import_path)
       end
     end
 

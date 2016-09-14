@@ -13,10 +13,10 @@ Rails.application.routes.draw do
       get '/', to: redirect('services#index')
     end
 
-    root to: 'imports#index'
+    root to: 'imports#new'
 
     resources :services
-    resources :imports, only: [:index, :new, :create]
+    resources :imports, only: [:new, :create]
   end
 
   namespace :api, format: :json do
