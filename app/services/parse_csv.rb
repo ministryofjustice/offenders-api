@@ -92,9 +92,17 @@ module ParseCsv
         given_name: row['Alias Given Name 1'],
         middle_names: row['Alias Given Name 2'],
         surname: row['Alias Surname'],
-        gender: row['Alias Gender'],
+        gender: alias_gender(row['Alias Gender']),
         date_of_birth: Date.parse(row['Alias Date of Birth'])
       }
+    end
+
+    def alias_gender(value)
+      if %w[ Male Female ].include? value
+        value.first
+      else
+        'NS'
+      end
     end
   end
 end
