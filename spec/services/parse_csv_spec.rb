@@ -72,7 +72,7 @@ RSpec.describe ParseCsv do
 
           expect(first_alias.given_name).to eq('JOHN')
           expect(first_alias.surname).to eq('WHITE')
-          expect(first_alias.gender).to eq('Male')
+          expect(first_alias.gender).to eq('M')
           expect(first_alias.date_of_birth).to eq(Date.civil(1991, 7, 17))
         end
       end
