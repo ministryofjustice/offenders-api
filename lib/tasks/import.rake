@@ -1,5 +1,3 @@
-require 'csv'
-
 namespace :import do
   desc 'Retry last import'
   task retry: :environment do
@@ -10,7 +8,7 @@ namespace :import do
     Import.where('id != ?', import.id).destroy_all
   end
 
-  desc 'Removes all the imports, the uploads and the files'
+  desc 'Remove all imports, uploads and the files'
   task cleanup: :environment do
     Import.destroy_all
     Upload.destroy_all
@@ -27,7 +25,7 @@ namespace :import do
     ParseCsv.call(file.read)
   end
 
-  desc 'Check and notify if import has not been performed the in last 24 hours'
+  desc 'Check and notify if no import has been performed in the last 24 hours'
   task check: :environment do
     unless Import.where('created_at > ?', 1.day.ago).any?
       NotificationMailer.import_not_performed.deliver_now
