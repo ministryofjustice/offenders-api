@@ -58,3 +58,9 @@ curl -v -H "Authorization: Bearer <ACCESS TOKEN>" -H "Accept: application/json" 
 ```
 
 An accept header containing the API version can be passed, currently this defaults to version 1 if nothing is passed.
+
+To run the spec with Mutant:
+
+```
+RAILS_ENV=test mutant -r ./config/environment --use rspec --fail-fast ClassName
+```

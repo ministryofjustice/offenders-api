@@ -34,6 +34,7 @@ end
 
 group :development, :test do
   gem 'awesome_print'
+  gem 'mutant-rspec'
   gem 'pry-byebug'
   gem 'pry-rails'
 end
