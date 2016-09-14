@@ -1,0 +1,25 @@
+%h2
+  Last import
+
+- unless last_import
+  %p
+    No previous imports found.
+
+- else
+  %table
+    %thead
+      %tr
+        %th
+          Prisoners file
+        %th
+          Aliases file
+        %th
+          Date
+    %tbody
+      %tr
+        %td
+          = last_import.prisoners_file.file.filename
+        %td
+          = last_import.aliases_file.file.filename
+        %td
+          = last_import.created_at.strftime('%d/%m/%Y %H:%M:%S')

@@ -1,8 +1,10 @@
-%h2
-  Import records
-
 = GovukElementsErrorsHelper.error_summary @import,
   'There were problems submitting this form', ''
+
+= render 'last_import', last_import: @last_import
+
+%h2
+  New import
 
 = form_for @import, html: { multipart: true } do |f|
   = f.hidden_field :prisoners_file
@@ -16,6 +18,3 @@
     != f.file_field :aliases_file, class: 'form-control'
 
   = f.submit 'Import', class: "button"
-
-%p
-  = link_to 'Back', imports_url

@@ -2,7 +2,7 @@ class FileUploader < CarrierWave::Uploader::Base
   storage :file
 
   def content_type_whitelist
-    ['application/text', 'text/csv', 'application/vnd.ms-excel']
+    ['text/csv']
   end
 
   def store_dir
