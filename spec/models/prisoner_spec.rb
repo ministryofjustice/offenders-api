@@ -1,9 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Prisoner, type: :model do
+  subject { create(:prisoner, noms_id: 'A123BC', date_of_birth: Date.parse('19750201')) }
+
   it { is_expected.to have_many(:aliases) }
 
   it { is_expected.to validate_presence_of(:noms_id) }
+  it { is_expected.to validate_uniqueness_of(:noms_id).scoped_to(:date_of_birth) }
   it { is_expected.to validate_presence_of(:given_name) }
   it { is_expected.to validate_presence_of(:surname) }
   it { is_expected.to validate_presence_of(:date_of_birth) }
