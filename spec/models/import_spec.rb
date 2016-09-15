@@ -25,7 +25,7 @@ RSpec.describe Import, type: :model do
     end
 
     context 'when invalid (trying to import a previously used file)' do
-      let!(:import) { Import.create(prisoners_file: prisoners_file) }
+      let!(:import) { Import.create(prisoners_file: prisoners_file, aliases_file: aliases_file) }
 
       it 'does not create an import record' do
         expect(Import.count).to be 1
@@ -36,7 +36,8 @@ RSpec.describe Import, type: :model do
       end
 
       it 'has a validation error' do
-        expect(import.errors.messages).to include(base: ['Prisoners file has already been uploaded'])
+        expect(import.errors.messages).
+          to include(base: ['Prisoners file has already been uploaded', 'Aliases file has already been uploaded'])
       end
     end
   end
