@@ -15,5 +15,11 @@ drop_and_create)
     bundle exec rake db:drop db:setup db:seed
     ;;
 esac
+
+whenever --update-crontab
+
+/usr/bin/redis-server --daemonize yes
+bundle exec sidekiq -d -L log/sideqik.log
+
 ruby bin/rails server -d --binding 0.0.0.0
 tail -f /usr/src/app/log/*
