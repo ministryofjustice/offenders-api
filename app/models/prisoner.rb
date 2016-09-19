@@ -40,6 +40,21 @@ class Prisoner < ActiveRecord::Base
     end
   end
 
+  swagger_schema :PrisonerInput do
+    allOf do
+      schema do
+        key :'$ref', :Prisoner
+      end
+      schema do
+        key :required, [:noms_id, :given_name, :surname, :date_of_birth, :gender]
+        property :id do
+          key :type, :string
+          key :format, :uuid
+        end
+      end
+    end
+  end
+
   has_paper_trail
 
   has_many :aliases, dependent: :destroy

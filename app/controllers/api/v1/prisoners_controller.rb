@@ -53,6 +53,39 @@ module Api
             end
           end
         end
+
+        operation :post do
+          key :description, 'Creates a new prisoner'
+          key :operationId, 'addPrisoner'
+          key :produces, [
+            'application/json'
+          ]
+          key :tags, [
+            'prisoner'
+          ]
+          parameter do
+            key :name, :prisoner
+            key :in, :body
+            key :description, 'Prisoner to add'
+            key :required, true
+            schema do
+              key :'$ref', :PrisonerInput
+            end
+          end
+          response 200 do
+            key :description, 'prisoner response'
+            schema do
+              key :'$ref', :Prisoner
+            end
+          end
+          response :default do
+            key :description, 'unexpected error'
+            schema do
+              key :'$ref', :ErrorModel
+            end
+          end
+
+        end
       end
 
       swagger_path '/prisoners/search' do
@@ -175,6 +208,34 @@ module Api
         @prisoner = Prisoner.find_by!(noms_id: params[:id].upcase)
 
         render json: @prisoner
+      end
+
+      def create
+        @prisoner = Prisoner.new(prisoner_params)
+
+        if @prisoner.save
+          render json: { id: @prisoner.id }, status: :created
+        else
+          render json: { error: @prisoner.errors }, status: 422
+        end
+      end
+
+      private
+
+      def prisoner_params
+        params.require(:prisoner).permit(
+          :noms_id,
+          :given_name,
+          :middle_names,
+          :surname,
+          :title,
+          :suffix,
+          :date_of_birth,
+          :gender,
+          :pnc_number,
+          :nationality_code,
+          :cro_number
+        )
       end
     end
   end

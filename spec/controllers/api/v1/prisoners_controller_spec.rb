@@ -116,6 +116,53 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
           to include prisoner.as_json(except: %w[suffix date_of_birth created_at updated_at])
       end
     end
+
+    describe 'POST #create' do
+      let(:params) do
+        {
+          given_name: 'John',
+          surname: 'Smith',
+          offender_id: '134',
+          noms_id: 'A1234ZZ',
+          date_of_birth: '19711010',
+          gender: 'M'
+        }
+      end
+
+      context 'when valid' do
+        before { post :create, prisoner: params }
+
+        it 'creates a new Prisoner record' do
+          expect(Prisoner.count).to be 1
+        end
+
+        it 'returns status 201/created' do
+          expect(response.status).to be 201
+        end
+
+        it 'returns the id of the created record' do
+          expect(response.body).to eq({ id: Prisoner.first.id }.to_json)
+        end
+      end
+
+      context 'when invalid' do
+        before { params.delete(:gender); post :create, prisoner: params }
+
+        it 'does not create a Prisoner record' do
+          expect(Prisoner.count).to be 0
+        end
+
+        it 'returns status 422/unprocessable entity' do
+          expect(response.status).to be 422
+        end
+
+        it 'returns error for missing attribute' do
+          expect(JSON.parse(response.body)).to eq(
+            { 'error' => { 'gender' => ['can\'t be blank'] } }
+          )
+        end
+      end
+    end
   end
 
   context 'when unauthenticated' do
@@ -145,6 +192,22 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
 
     describe 'GET #noms' do
       before { get :noms, id: 'A1234BC' }
+
+      it 'returns status 401' do
+        expect(response.status).to be 401
+      end
+    end
+
+    describe 'POST #create' do
+      before { post :create, prisoner: {
+          given_name: 'John',
+          surname: 'Smith',
+          offender_id: '134',
+          noms_id: 'A1234ZZ',
+          date_of_birth: '19711010',
+          gender: 'M'
+        }
+      }
 
       it 'returns status 401' do
         expect(response.status).to be 401
