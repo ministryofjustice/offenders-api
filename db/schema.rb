@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(version: 20160803144245) do
     t.string   "pnc_number"
     t.string   "nationality_code"
     t.string   "cro_number"
+    t.string   "establishment_code"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
