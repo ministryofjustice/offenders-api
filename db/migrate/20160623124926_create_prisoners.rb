@@ -12,6 +12,7 @@ class CreatePrisoners < ActiveRecord::Migration
       t.string  :pnc_number, index: true
       t.string  :nationality_code
       t.string  :cro_number
+      t.string  :establishment_code
 
       t.timestamps
     end

@@ -38,6 +38,9 @@ class Prisoner < ActiveRecord::Base
     property :cro_number do
       key :type, :string
     end
+    property :establishment_code do
+      key :type, :string
+    end
   end
 
   swagger_schema :PrisonerInput do
