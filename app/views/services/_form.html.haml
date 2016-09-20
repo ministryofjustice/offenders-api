@@ -1,9 +1,0 @@
-= GovukElementsErrorsHelper.error_summary @service,
-  'There were problems submitting this form', ''
-
-= form_for @service, url: services_path, as: :service do |f|
-  = f.text_field :name
-
-  = f.text_field :redirect_uri
-
-  = f.submit 'Add', class: 'button'

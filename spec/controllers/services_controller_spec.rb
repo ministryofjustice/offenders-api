@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe ServicesController, type: :controller do
+  let(:params) { { 'name' => 'NOMIS', 'redirect_uri' => 'https://nomis.com' } }
+
   context 'when admin' do
     let(:user) { create(:user, :admin) }
 
@@ -9,11 +11,11 @@ RSpec.describe ServicesController, type: :controller do
     describe 'GET #index' do
       before { get :index }
 
-      it 'should return status 200' do
+      it 'returns status 200' do
         expect(response.status).to be 200
       end
 
-      it 'should render the index template' do
+      it 'renders the index template' do
         expect(response).to render_template(:index)
       end
     end
@@ -23,11 +25,11 @@ RSpec.describe ServicesController, type: :controller do
 
       before { get :show, id: application }
 
-      it 'should return status 200' do
+      it 'returns status 200' do
         expect(response.status).to be 200
       end
 
-      it 'should render the show template' do
+      it 'renders the show template' do
         expect(response).to render_template(:show)
       end
     end
@@ -35,11 +37,11 @@ RSpec.describe ServicesController, type: :controller do
     describe 'GET #new' do
       before { get :new }
 
-      it 'should return status 200' do
+      it 'returns status 200' do
         expect(response.status).to be 200
       end
 
-      it 'should render the new template' do
+      it 'renders the new template' do
         expect(response).to render_template(:new)
       end
     end
@@ -49,22 +51,88 @@ RSpec.describe ServicesController, type: :controller do
 
       before { get :edit, id: application }
 
-      it 'should return status 200' do
+      it 'returns status 200' do
         expect(response.status).to be 200
       end
 
-      it 'should render the index template' do
+      it 'renders the edit template' do
         expect(response).to render_template(:edit)
       end
     end
 
     describe 'POST #create' do
+      context 'when valid' do
+        before { post :create, service: params }
+
+        it 'creates a new Doorkeeper::Application' do
+          expect(Doorkeeper::Application.count).to be 1
+        end
+
+        it 'redirects to index' do
+          expect(response).to redirect_to(services_url)
+        end
+      end
+
+      context 'when invalid' do
+        before { params.delete('name'); post :create, service: params }
+
+        it 'does not create a Doorkeeper::Application' do
+          expect(Doorkeeper::Application.count).to be 0
+        end
+
+        it 'renders the new template' do
+          expect(response).to render_template(:new)
+        end
+      end
     end
 
     describe 'PATCH/PUT #update' do
+      let(:application) { create(:application, name: 'service_name') }
+
+      context 'when valid' do
+        before do
+          patch :update, id: application, service: params
+        end
+
+        it 'updates a new Doorkeeper::Application' do
+          expect(Doorkeeper::Application.first.name).to eq 'NOMIS'
+        end
+
+        it 'redirects to index' do
+          expect(response).to redirect_to(services_url)
+        end
+      end
+
+      context 'when invalid' do
+        before do
+          params['name'] = ''
+          patch :update, id: application, service: params
+        end
+
+        it 'does not update a Doorkeeper::Application' do
+          expect(Doorkeeper::Application.first.name).to eq 'service_name'
+        end
+
+        it 'renders the edit template' do
+          expect(response).to render_template(:edit)
+        end
+      end
     end
 
     describe 'DELETE #destroy' do
+      let(:application) { create(:application) }
+
+      before do
+        delete :destroy, id: application
+      end
+
+      it 'deletes a Doorkeeper::Application' do
+        expect(Doorkeeper::Application.count).to eq 0
+      end
+
+      it 'redirects to index' do
+        expect(response).to redirect_to(services_url)
+      end
     end
   end
 
@@ -76,7 +144,7 @@ RSpec.describe ServicesController, type: :controller do
     describe 'GET #index' do
       before { get :index }
 
-      it 'should redirect to root' do
+      it 'redirects to root' do
         expect(response).to redirect_to(root_url)
       end
     end
@@ -86,7 +154,7 @@ RSpec.describe ServicesController, type: :controller do
 
       before { get :show, id: application }
 
-      it 'should redirect to root' do
+      it 'redirects to root' do
         expect(response).to redirect_to(root_url)
       end
     end
@@ -94,7 +162,7 @@ RSpec.describe ServicesController, type: :controller do
     describe 'GET #new' do
       before { get :new }
 
-      it 'should redirect to root' do
+      it 'redirects to root' do
         expect(response).to redirect_to(root_url)
       end
     end
@@ -104,18 +172,37 @@ RSpec.describe ServicesController, type: :controller do
 
       before { get :edit, id: application }
 
-      it 'should redirect to root' do
+      it 'redirects to root' do
         expect(response).to redirect_to(root_url)
       end
     end
 
     describe 'POST #create' do
+      before { post :create, service: params }
+
+      it 'redirects to root' do
+        expect(response).to redirect_to(root_url)
+      end
     end
 
     describe 'PATCH/PUT #update' do
+      let(:application) { create(:application) }
+
+      before { patch :update, id: application, service: params }
+
+      it 'redirects to root' do
+        expect(response).to redirect_to(root_url)
+      end
     end
 
     describe 'DELETE #destroy' do
+      let(:application) { create(:application) }
+
+      before { delete :destroy, id: application }
+
+      it 'redirects to root' do
+        expect(response).to redirect_to(root_url)
+      end
     end
   end
 end
