@@ -30,6 +30,8 @@ RSpec.describe ImportsController, type: :controller do
     end
 
     context 'when valid' do
+      before { allow(ProcessImportJob).to receive(:perform_later) }
+
       it 'creates an import' do
         expect {
           post :create, import_params
