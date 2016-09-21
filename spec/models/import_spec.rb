@@ -13,11 +13,11 @@ RSpec.describe Import, type: :model do
     before { subject.save! }
 
     context 'when valid' do
-      it 'should save the Import' do
+      it 'saves the Import' do
         expect(Import.count).to be 1
       end
 
-      it 'should create 2 upload records with the MD5 hash' do
+      it 'creates 2 upload records with the MD5 hash' do
         expect(Upload.count).to be 2
         expect(Upload.first.md5).to_not be_blank
         expect(Upload.last.md5).to_not be_blank
@@ -27,15 +27,15 @@ RSpec.describe Import, type: :model do
     context 'when invalid (trying to import a previously used file)' do
       let!(:import) { Import.create(prisoners_file: prisoners_file) }
 
-      it 'should not create an import record' do
+      it 'does not create an import record' do
         expect(Import.count).to be 1
       end
 
-      it 'should not create upload records' do
+      it 'does not create upload records' do
         expect(Upload.count).to be 2
       end
 
-      it 'should have a validation error' do
+      it 'has a validation error' do
         expect(import.errors.messages).to include(base: ['Prisoners file has already been uploaded'])
       end
     end
