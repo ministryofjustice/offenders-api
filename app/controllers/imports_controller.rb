@@ -8,7 +8,7 @@ class ImportsController < ApplicationController
     @last_import = Import.last
     @import = Import.new(import_params)
     if @import.save
-      ImportProcessor.perform_async(@import.id)
+      ProcessImportJob.perform_later @import
       redirect_to new_import_path
     else
       render :new
