@@ -24,6 +24,7 @@ RSpec.describe ParseCsv do
           expect(prisoner_A1234BC.pnc_number).to eq('05/123456A')
           expect(prisoner_A1234BC.nationality_code).to eq('BRIT')
           expect(prisoner_A1234BC.cro_number).to eq('123456/01A')
+          expect(prisoner_A1234BC.establishment_code).to eq('LEI')
         end
       end
 
@@ -50,6 +51,7 @@ RSpec.describe ParseCsv do
           expect(prisoner_A1234BC.pnc_number).to eq('05/123456A')
           expect(prisoner_A1234BC.nationality_code).to eq('BRIT')
           expect(prisoner_A1234BC.cro_number).to eq('123456/01A')
+          expect(prisoner_A1234BC.establishment_code).to eq('LEI')
         end
       end
     end
