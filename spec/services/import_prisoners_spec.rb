@@ -28,7 +28,7 @@ RSpec.describe ImportPrisoners do
 
     context 'when failing' do
       before do
-        expect(ParseCsv).to receive(:call).and_raise(Exception)
+        expect(ParseCsv).to receive(:call).and_raise(StandardError)
       end
 
       it 'marks the import failed' do

@@ -1,4 +1,4 @@
-class HeartbeatController  < ApplicationController
+class HeartbeatController < ApplicationController
   def ping
     json = {
       'version_number'  => ENV['VERSION_NUMBER'] || "Not Available",
@@ -24,10 +24,8 @@ class HeartbeatController  < ApplicationController
   private
 
   def database_alive?
-    begin
-      ActiveRecord::Base.connection.active?
-    rescue PG::ConnectionBad
-      false
-    end
+    ActiveRecord::Base.connection.active?
+  rescue PG::ConnectionBad
+    false
   end
 end

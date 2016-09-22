@@ -6,7 +6,7 @@ module Api
 
     before_action :doorkeeper_authorize!
 
-    def doorkeeper_unauthorized_render_options(error: nil)
+    def doorkeeper_unauthorized_render_options(*)
       { json: { error: "Not authorised" } }
     end
   end
