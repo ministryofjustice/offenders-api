@@ -1,2 +1,2 @@
-"NOMS Number","Date of Birth","Offender Given Name 1","Offender Given Name 2","Offender Surname","Salutation","Gender Code","PNC ID","Nationality Code","Ethnic Code","Ethnic Description","Sexual Orientation Code","Sexual Orientation Description","Criminal Records Office number","establishment_code"
+NOMS_NUMBER,DATE_OF_BIRTH,GIVEN_NAME_1,GIVEN_NAME_2,GIVEN_NAME_3,SURNAME,SALUTATION,GENDER_CODE,PNC_ID,NATIONALITY_CODE,ETHNIC_CODE,ETHNIC_DESCRIPTION,SEXUAL_ORIENTATION_CODE,SEXUAL_ORIENATION_DESCRIPTION,CRIMINAL_RECORDS_OFFICE_NUMBER,ESTABLISHMENT_CODE
 "","1941/05/24 00:00:00","","","","","","","","","","",""

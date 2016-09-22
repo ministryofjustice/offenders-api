@@ -1,3 +1,3 @@
-"NOMS Number","Alias Surname","Alias Given Name 1","Alias Given Name 2","Alias Date of Birth","Alias Gender","Alias or Working Name?"
-"A1234BC","WHITE","JOHN","","1991/07/17 00:00:00","Male","Alias"
-"A1234BC","BLACK","ROB","","1991/07/17 00:00:00","Not Known / Not Recorded","Alias"
+NOMS_NUMBER,GIVEN_NAME_1,GIVEN_NAME_2,GIVEN_NAME_3,SURNAME,DATE_OF_BIRTH,GENDER_CODE
+"A1234BC","JOHN","WESLEY","BOBBY","HARDIN","1991/07/17 00:00:00","M"
+"A1234BC","ROB","BLACK","MAMBA","SPARLOW","1991/07/17 00:00:00","NS"
