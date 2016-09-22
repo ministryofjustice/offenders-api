@@ -16,7 +16,8 @@ module ParseCsv
     "Ethnic Description",
     "Sexual Orientation Code",
     "Sexual Orientation Description",
-    "Criminal Records Office number"
+    "Criminal Records Office number",
+    "establishment_code"
   ]
 
   ALIASES_HEADERS = [
@@ -83,7 +84,8 @@ module ParseCsv
         gender: row['Gender Code'],
         pnc_number: row['PNC ID'],
         nationality_code: row['Nationality Code'],
-        cro_number: row['Criminal Records Office number']
+        cro_number: row['Criminal Records Office number'],
+        establishment_code: row['establishment_code']
       }
     end
 
