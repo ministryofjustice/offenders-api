@@ -2,31 +2,15 @@ module ParseCsv
   class ParsingError < StandardError; end
   class MalformedHeaderError < StandardError; end
 
-  PRISONERS_HEADERS = [
-    "NOMS Number",
-    "Date of Birth",
-    "Offender Given Name 1",
-    "Offender Given Name 2",
-    "Offender Surname",
-    "Salutation",
-    "Gender Code",
-    "PNC ID",
-    "Nationality Code",
-    "Ethnic Code",
-    "Ethnic Description",
-    "Sexual Orientation Code",
-    "Sexual Orientation Description",
-    "Criminal Records Office number",
-    "establishment_code"
+  PRISONERS_HEADERS = %w[
+    NOMS_NUMBER DATE_OF_BIRTH GIVEN_NAME_1 GIVEN_NAME_2 GIVEN_NAME_3 SURNAME SALUTATION
+    GENDER_CODE PNC_ID NATIONALITY_CODE ETHNIC_CODE ETHNIC_DESCRIPTION
+    SEXUAL_ORIENTATION_CODE SEXUAL_ORIENATION_DESCRIPTION
+    CRIMINAL_RECORDS_OFFICE_NUMBER ESTABLISHMENT_CODE
   ]
 
-  ALIASES_HEADERS = [
-    "NOMS Number",
-    "Alias Surname",
-    "Alias Given Name 1",
-    "Alias Given Name 2",
-    "Alias Date of Birth",
-    "Alias Gender","Alias or Working Name?"
+  ALIASES_HEADERS = %w[
+    NOMS_NUMBER GIVEN_NAME_1 GIVEN_NAME_2 GIVEN_NAME_3 SURNAME DATE_OF_BIRTH GENDER_CODE
   ]
 
   module_function
@@ -60,7 +44,7 @@ module ParseCsv
     end
 
     def update_or_create_prisoner(row)
-      prisoner = Prisoner.find_by(noms_id: row['NOMS Number'])
+      prisoner = Prisoner.find_by(noms_id: row['NOMS_NUMBER'])
       if prisoner
         prisoner.update_attributes(prisoner_attributes_from(row))
       else
@@ -69,42 +53,38 @@ module ParseCsv
     end
 
     def create_alias(row)
-      prisoner = Prisoner.find_by!(noms_id: row['NOMS Number'])
+      prisoner = Prisoner.find_by!(noms_id: row['NOMS_NUMBER'])
       prisoner.aliases.create!(alias_attributes_from(row))
     end
 
     def prisoner_attributes_from(row)
       {
-        noms_id: row['NOMS Number'],
-        given_name: row['Offender Given Name 1'],
-        middle_names: row['Offender Given Name 2'],
-        surname: row['Offender Surname'],
-        title: row['Salutation'],
-        date_of_birth: Date.parse(row['Date of Birth']),
-        gender: row['Gender Code'],
-        pnc_number: row['PNC ID'],
-        nationality_code: row['Nationality Code'],
-        cro_number: row['Criminal Records Office number'],
-        establishment_code: row['establishment_code']
+        noms_id: row['NOMS_NUMBER'],
+        given_name: row['GIVEN_NAME_1'],
+        middle_names: middle_names(row['GIVEN_NAME_2'], row['GIVEN_NAME_3']),
+        surname: row['SURNAME'],
+        title: row['SALUTATION'],
+        date_of_birth: Date.parse(row['DATE_OF_BIRTH']),
+        gender: row['GENDER_CODE'],
+        pnc_number: row['PNC_ID'],
+        nationality_code: row['NATIONALITY_CODE'],
+        cro_number: row['CRIMINAL_RECORDS_OFFICE_NUMBER'],
+        establishment_code: row['ESTABLISHMENT_CODE']
       }
     end
 
     def alias_attributes_from(row)
       {
-        given_name: row['Alias Given Name 1'],
-        middle_names: row['Alias Given Name 2'],
-        surname: row['Alias Surname'],
-        gender: alias_gender(row['Alias Gender']),
-        date_of_birth: Date.parse(row['Alias Date of Birth'])
+        given_name: row['GIVEN_NAME_1'],
+        middle_names: middle_names(row['GIVEN_NAME_2'], row['GIVEN_NAME_3']),
+        surname: row['SURNAME'],
+        gender: row['GENDER_CODE'],
+        date_of_birth: Date.parse(row['DATE_OF_BIRTH'])
       }
     end
+  end
 
-    def alias_gender(value)
-      if %w[ Male Female ].include? value
-        value.first
-      else
-        'NS'
-      end
-    end
+  def middle_names(second_name, third_name)
+    [second_name, third_name].reject(&:blank?).join(', ')
   end
 end

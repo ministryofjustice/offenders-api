@@ -16,7 +16,7 @@ RSpec.describe ParseCsv do
           prisoner_A1234BC = Prisoner.find_by!(noms_id: 'A1234BC')
 
           expect(prisoner_A1234BC.given_name).to eq('BOB')
-          expect(prisoner_A1234BC.middle_names).to eq('ROBERT')
+          expect(prisoner_A1234BC.middle_names).to eq('FRANKIE, LEE')
           expect(prisoner_A1234BC.surname).to eq('DYLAN')
           expect(prisoner_A1234BC.title).to eq('MR')
           expect(prisoner_A1234BC.date_of_birth).to eq(Date.civil(1941, 5, 24))
@@ -43,7 +43,7 @@ RSpec.describe ParseCsv do
           prisoner_A1234BC = Prisoner.find_by!(noms_id: 'A1234BC')
 
           expect(prisoner_A1234BC.given_name).to eq('BOB')
-          expect(prisoner_A1234BC.middle_names).to eq('ROBERT')
+          expect(prisoner_A1234BC.middle_names).to eq('FRANKIE, LEE')
           expect(prisoner_A1234BC.surname).to eq('DYLAN')
           expect(prisoner_A1234BC.title).to eq('MR')
           expect(prisoner_A1234BC.date_of_birth).to eq(Date.civil(1941, 5, 24))
@@ -73,7 +73,8 @@ RSpec.describe ParseCsv do
           first_alias = Prisoner.find_by!(noms_id: 'A1234BC').aliases.first
 
           expect(first_alias.given_name).to eq('JOHN')
-          expect(first_alias.surname).to eq('WHITE')
+          expect(first_alias.middle_names).to eq('WESLEY, BOBBY')
+          expect(first_alias.surname).to eq('HARDIN')
           expect(first_alias.gender).to eq('M')
           expect(first_alias.date_of_birth).to eq(Date.civil(1991, 7, 17))
         end
