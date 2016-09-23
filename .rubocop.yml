@@ -1,0 +1,66 @@
+AllCops:
+  # Exclude anything that isn't really part of our code.
+  # rails_helper is excluded because it's full of solecisms, but it's mostly
+  # generated code and copy-and-pasted snipets from READMEs.
+  Exclude:
+    - 'vendor/**/*'
+    - 'db/**/*'
+    - 'bin/**/*'
+    - '**/*.gemspec'
+    - '**/Rakefile'
+    - 'spec/**/*'
+    - 'config/**/*'
+    - 'app/models/forms/base.rb' # this is just too horrible
+    - 'app/controllers/application_controller.rb'
+
+# Just a preference to use %w[] over %w()
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%i': '[]'
+    '%w': '[]'
+    '%W': '[]'
+    '%': '{}'
+
+# Prefer sensible naming to comments everywhere.
+Documentation:
+  Description: Document classes and non-namespace modules.
+  Enabled: false
+
+# Just indent parameters by two spaces. It's less volatile if methods change,
+# and there's less busy work lining things up.
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+
+# Don't worry about the complexity of spec methods
+Metrics/AbcSize:
+  Max: 20
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/MethodLength:
+  Max: 15
+
+StringLiterals:
+  Enabled: false
+
+# Allow ===. It's useful.
+Style/CaseEquality:
+  Enabled: false
+
+# Chain methods with trailing dots.
+Style/DotPosition:
+  EnforcedStyle: trailing
+
+# No-one in this team uses a fixed-width terminal
+Metrics/LineLength:
+  Max: 120
+
+# It's not really clearer to replace every if with a return if.
+Style/GuardClause:
+  Enabled: false
+
+Style/PredicateName:
+  Enabled: false
+
+Style/MultilineOperationIndentation:
+  EnforcedStyle: indented

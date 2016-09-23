@@ -27,7 +27,7 @@ class ApidocsController < ActionController::Base
     Prisoner,
     Alias,
     ErrorModel,
-    self,
+    self
   ].freeze
 
   def index

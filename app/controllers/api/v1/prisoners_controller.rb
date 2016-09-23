@@ -1,5 +1,6 @@
 module Api
   module V1
+    # rubocop:disable Metrics/ClassLength
     class PrisonersController < Api::ApplicationController
       include Swagger::Blocks
 
@@ -84,7 +85,6 @@ module Api
               key :'$ref', :ErrorModel
             end
           end
-
         end
       end
 
@@ -186,7 +186,12 @@ module Api
       def index
         @prisoners = Prisoner.page(params[:page]).per(params[:per_page])
 
-        updated_after = Time.parse(params[:updated_after]) rescue nil
+        updated_after =
+          begin
+            Time.parse(params[:updated_after])
+          rescue ArgumentError, TypeError
+            nil
+          end
         @prisoners = @prisoners.updated_after(updated_after) if updated_after
 
         render json: @prisoners
