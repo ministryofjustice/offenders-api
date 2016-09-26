@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  ROLES = %w[ admin staff ]
+  ROLES = %w[admin staff].freeze
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
