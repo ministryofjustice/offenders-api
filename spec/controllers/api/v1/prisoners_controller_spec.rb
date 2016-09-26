@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::PrisonersController, type: :controller do
-
   let!(:application) { create(:application) }
   let!(:token)       { create(:access_token, application: application) }
 
@@ -163,6 +162,50 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
         end
       end
     end
+
+    describe 'PATCH #update' do
+      let!(:prisoner) { create(:prisoner, noms_id: 'A1234BC', date_of_birth: Date.parse('19801010')) }
+
+      context 'when valid' do
+        before do
+          patch :update, id: prisoner, prisoner: { noms_id: 'B1234BC' }
+          prisoner.reload
+        end
+
+        it 'updates the prisoner record' do
+          expect(prisoner.noms_id).to eq('B1234BC')
+        end
+
+        it 'returns status "success"' do
+          expect(response.status).to be 200
+        end
+
+        it 'returns "true"' do
+          expect(response.body).to eq("{\"success\":true}")
+        end
+      end
+
+      context 'when invalid' do
+        before do
+          patch :update, id: prisoner, prisoner: { noms_id: 'B1234BC', gender: '' }
+          prisoner.reload
+        end
+
+        it 'does not update the prisoner record' do
+          expect(prisoner.noms_id).to eq('A1234BC')
+        end
+
+        it 'returns status "unprocessable entity"' do
+          expect(response.status).to be 422
+        end
+
+        it 'returns JSON error' do
+          expect(JSON.parse(response.body)).to eq(
+            { 'error' => { 'gender' => ['can\'t be blank'] } }
+          )
+        end
+      end
+    end
   end
 
   context 'when unauthenticated' do
@@ -208,6 +251,25 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
           gender: 'M'
         }
       }
+
+      it 'returns status 401' do
+        expect(response.status).to be 401
+      end
+    end
+
+    describe 'PATCH #update' do
+      let(:prisoner) { create(:prisoner) }
+
+      before do
+        post :update, id: prisoner.id, prisoner: {
+          given_name: 'John',
+          surname: 'Smith',
+          offender_id: '134',
+          noms_id: 'A1234ZZ',
+          date_of_birth: '19711010',
+          gender: 'M'
+        }
+      end
 
       it 'returns status 401' do
         expect(response.status).to be 401
