@@ -28,7 +28,7 @@ group :production, :devunicorn do
 end
 
 group :development do
-  gem 'rubocop', require: false
+  gem 'rubocop', '0.42', require: false
   gem 'web-console', '~> 2.0'
 end
 

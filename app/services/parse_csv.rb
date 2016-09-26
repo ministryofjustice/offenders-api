@@ -7,11 +7,11 @@ module ParseCsv
     GENDER_CODE PNC_ID NATIONALITY_CODE ETHNIC_CODE ETHNIC_DESCRIPTION
     SEXUAL_ORIENTATION_CODE SEXUAL_ORIENATION_DESCRIPTION
     CRIMINAL_RECORDS_OFFICE_NUMBER ESTABLISHMENT_CODE
-  ]
+  ].freeze
 
   ALIASES_HEADERS = %w[
     NOMS_NUMBER GIVEN_NAME_1 GIVEN_NAME_2 GIVEN_NAME_3 SURNAME DATE_OF_BIRTH GENDER_CODE
-  ]
+  ].freeze
 
   module_function
 
@@ -36,7 +36,7 @@ module ParseCsv
       elsif headers == ALIASES_HEADERS
         create_alias(row)
       else
-        fail MalformedHeaderError
+        raise MalformedHeaderError
       end
     rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound, ArgumentError
       file_name = (headers == PRISONERS_HEADERS ? 'prisoners' : 'aliases')

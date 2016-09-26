@@ -64,3 +64,6 @@ Style/PredicateName:
 
 Style/MultilineOperationIndentation:
   EnforcedStyle: indented
+
+Style/FrozenStringLiteralComment:
+  Enabled: false

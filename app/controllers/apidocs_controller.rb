@@ -15,7 +15,7 @@ class ApidocsController < ActionController::Base
       key :name, 'prisoner'
       key :description, 'Prisoners operations'
     end
-    key :host, "#{ENV['HTTP_HOST']}"
+    key :host, ENV['HTTP_HOST']
     key :basePath, '/api'
     key :consumes, ['application/json']
     key :produces, ['application/json']
