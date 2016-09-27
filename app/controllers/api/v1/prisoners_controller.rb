@@ -151,6 +151,46 @@ module Api
             end
           end
         end
+
+        operation :patch do
+          key :description, 'Updates a prisoner'
+          key :operationId, 'updatePrisoner'
+          key :produces, [
+            'application/json'
+          ]
+          key :tags, [
+            'prisoner'
+          ]
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :description, 'ID of prisoner to update'
+            key :required, true
+            key :type, :string
+            key :format, :uuid
+          end
+          parameter do
+            key :name, :prisoner
+            key :in, :body
+            key :description, 'Prisoner to update'
+            key :required, true
+            schema do
+              key :'$ref', :PrisonerInput
+            end
+          end
+          response 200 do
+            key :description, 'prisoner response'
+            schema do
+              key :'$ref', :Prisoner
+            end
+          end
+          response :default do
+            key :description, 'unexpected error'
+            schema do
+              key :'$ref', :ErrorModel
+            end
+          end
+        end
       end
 
       swagger_path '/prisoners/noms/{id}' do
@@ -220,6 +260,16 @@ module Api
 
         if @prisoner.save
           render json: { id: @prisoner.id }, status: :created
+        else
+          render json: { error: @prisoner.errors }, status: 422
+        end
+      end
+
+      def update
+        @prisoner = Prisoner.find(params[:id])
+
+        if @prisoner.update(prisoner_params)
+          render json: { success: true }, status: 200
         else
           render json: { error: @prisoner.errors }, status: 422
         end
