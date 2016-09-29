@@ -75,4 +75,48 @@ RSpec.describe Prisoner, type: :model do
       end
     end
   end
+
+  describe '#update_aliases' do
+    let(:alias_attrs) do
+      [
+        {
+          "given_name" => 'ROBERT',
+          "middle_names" => 'JAMES DAN',
+          "surname" => 'BLACK',
+          "title" => 'MR',
+          "suffix" => 'DR',
+          "date_of_birth" => '19801010',
+          "gender" => 'M'
+        },
+        {
+          "given_name" => 'STEVEN',
+          "middle_names" => 'TOM PAUL',
+          "surname" => 'LITTLE',
+          "title" => 'MR',
+          "suffix" => 'DR',
+          "date_of_birth" => '19780503',
+          "gender" => 'M'
+        }
+      ]
+    end
+
+    before do
+      create(:alias, prisoner: subject, given_name: 'GIVEN_NAME')
+      subject.update_aliases(alias_attrs)
+    end
+
+    it 'deletes all previous aliases' do
+      expect(Alias.where(given_name: 'GIVEN_NAME')).to be_empty
+    end
+
+    it 'sets the new aliases' do
+      excepted_attrs = %w[id created_at updated_at date_of_birth]
+      first_alias_attrs = subject.aliases.first.attributes.except(*excepted_attrs)
+      last_alias_attrs = subject.aliases.last.attributes.except(*excepted_attrs)
+      expect(first_alias_attrs).to include alias_attrs.first.except(*excepted_attrs)
+      expect(last_alias_attrs).to include alias_attrs.last.except(*excepted_attrs)
+      expect(subject.aliases.first.date_of_birth).to eq Date.parse(alias_attrs.first["date_of_birth"])
+      expect(subject.aliases.last.date_of_birth).to eq Date.parse(alias_attrs.last["date_of_birth"])
+    end
+  end
 end

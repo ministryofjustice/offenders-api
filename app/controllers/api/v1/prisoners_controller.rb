@@ -256,9 +256,10 @@ module Api
       end
 
       def create
-        @prisoner = Prisoner.new(prisoner_params)
+        @prisoner = Prisoner.new(prisoner_params.except(:aliases))
 
         if @prisoner.save
+          @prisoner.update_aliases(prisoner_params[:aliases])
           render json: { id: @prisoner.id }, status: :created
         else
           render json: { error: @prisoner.errors }, status: 422
@@ -268,7 +269,8 @@ module Api
       def update
         @prisoner = Prisoner.find(params[:id])
 
-        if @prisoner.update(prisoner_params)
+        if @prisoner.update(prisoner_params.except(:aliases))
+          @prisoner.update_aliases(prisoner_params[:aliases])
           render json: { success: true }, status: 200
         else
           render json: { error: @prisoner.errors }, status: 422
@@ -287,9 +289,11 @@ module Api
           :suffix,
           :date_of_birth,
           :gender,
-          :pnc_number,
           :nationality_code,
-          :cro_number
+          :pnc_number,
+          :cro_number,
+          :establishment_code,
+          aliases: [:given_name, :middle_names, :surname, :title, :suffix, :gender, :date_of_birth]
         )
       end
     end
