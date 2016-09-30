@@ -79,4 +79,11 @@ class Prisoner < ActiveRecord::Base
 
     where(noms_id: noms_ids, date_of_birth: dates_of_birth)
   end
+
+  def update_aliases(aliases_params)
+    transaction do
+      aliases.delete_all
+      aliases.create(aliases_params)
+    end
+  end
 end

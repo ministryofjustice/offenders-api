@@ -34,8 +34,8 @@ end
 
 group :development, :test do
   gem 'awesome_print'
-  gem 'byebug'
-  gem 'rspec-rails', '~> 3.4'
+  gem 'pry-byebug'
+  gem 'pry-rails'
 end
 
 group :test do
@@ -43,6 +43,7 @@ group :test do
   gem 'database_cleaner',   '~> 1.5.3'
   gem 'factory_girl_rails', '~> 4.5.0'
   gem 'rspec-mocks',        '~> 3.4.1'
+  gem 'rspec-rails',        '~> 3.4'
   gem 'shoulda-matchers',   '~> 2.8.0', require: false
   gem 'simplecov', require: false
 end
