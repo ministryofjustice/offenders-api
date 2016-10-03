@@ -74,7 +74,10 @@ RSpec.describe ServicesController, type: :controller do
       end
 
       context 'when invalid' do
-        before { params.delete('name'); post :create, service: params }
+        before do
+          params.delete('name')
+          post :create, service: params
+        end
 
         it 'does not create a Doorkeeper::Application' do
           expect(Doorkeeper::Application.count).to be 0

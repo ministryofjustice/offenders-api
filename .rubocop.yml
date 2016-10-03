@@ -3,15 +3,9 @@ AllCops:
   # rails_helper is excluded because it's full of solecisms, but it's mostly
   # generated code and copy-and-pasted snipets from READMEs.
   Exclude:
-    - 'vendor/**/*'
     - 'db/**/*'
-    - 'bin/**/*'
-    - '**/*.gemspec'
-    - '**/Rakefile'
-    - 'spec/**/*'
     - 'config/**/*'
-    - 'app/models/forms/base.rb' # this is just too horrible
-    - 'app/controllers/application_controller.rb'
+    - 'vendor/**/*'
 
 # Just a preference to use %w[] over %w()
 Style/PercentLiteralDelimiters:
@@ -31,20 +25,10 @@ Documentation:
 Style/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 
-# Don't worry about the complexity of spec methods
-Metrics/AbcSize:
-  Max: 20
-  Exclude:
-    - 'spec/**/*'
-
 Metrics/MethodLength:
   Max: 15
 
 StringLiterals:
-  Enabled: false
-
-# Allow ===. It's useful.
-Style/CaseEquality:
   Enabled: false
 
 # Chain methods with trailing dots.
@@ -58,12 +42,6 @@ Metrics/LineLength:
 # It's not really clearer to replace every if with a return if.
 Style/GuardClause:
   Enabled: false
-
-Style/PredicateName:
-  Enabled: false
-
-Style/MultilineOperationIndentation:
-  EnforcedStyle: indented
 
 Style/FrozenStringLiteralComment:
   Enabled: false
