@@ -67,9 +67,6 @@ RSpec.describe HeartbeatController, type: :controller do
     context 'when everything is ok' do
       before do
         allow(ActiveRecord::Base.connection).to receive(:active?).and_return(true)
-
-        connection = double('connection', info: {})
-
         get :healthcheck
       end
 

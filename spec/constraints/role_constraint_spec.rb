@@ -14,7 +14,6 @@ RSpec.describe RoleConstraint do
       allow(env).to receive(:user).and_return(user)
     end
 
-
     context 'when role matches' do
       it 'returns true' do
         expect(subject.matches?(request)).to be true

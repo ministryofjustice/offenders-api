@@ -57,11 +57,11 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
       it 'paginates records' do
         create_list(:prisoner, 3)
 
-        get :index, { page: '1', per_page: '2' }
+        get :index, page: '1', per_page: '2'
 
         expect(JSON.parse(response.body).size).to eq 2
 
-        get :index, { page: '2', per_page: '2' }
+        get :index, page: '2', per_page: '2'
 
         expect(JSON.parse(response.body).size).to eq 1
       end
@@ -70,7 +70,7 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
         create(:prisoner, updated_at: 1.year.ago)
         create(:prisoner, updated_at: 5.days.ago)
 
-        get :index, { updated_after: 10.days.ago }
+        get :index, updated_after: 10.days.ago
 
         expect(JSON.parse(response.body).size).to eq 1
       end
@@ -181,7 +181,10 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
       end
 
       context 'when invalid' do
-        before { params.delete("gender"); post :create, prisoner: params }
+        before do
+          params.delete("gender")
+          post :create, prisoner: params
+        end
 
         it 'does not create a prisoner record' do
           expect(Prisoner.count).to be 0
@@ -193,7 +196,7 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
 
         it 'returns error for missing attribute' do
           expect(JSON.parse(response.body)).to eq(
-            { 'error' => { 'gender' => ['can\'t be blank'] } }
+            'error' => { 'gender' => ['can\'t be blank'] }
           )
         end
       end
@@ -248,7 +251,7 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
 
         it 'returns JSON error' do
           expect(JSON.parse(response.body)).to eq(
-            { 'error' => { 'gender' => ['can\'t be blank'] } }
+            'error' => { 'gender' => ['can\'t be blank'] }
           )
         end
       end
