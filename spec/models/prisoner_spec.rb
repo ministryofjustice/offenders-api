@@ -13,64 +13,97 @@ RSpec.describe Prisoner, type: :model do
   it { is_expected.to validate_presence_of(:gender) }
 
   describe '.search' do
-    let(:params) do
-      nil
-    end
-
     let!(:prisoner_1) do
-      create(:prisoner, noms_id: 'AA123', date_of_birth: Date.parse('19750201'))
+      create(:prisoner, noms_id: 'A1234BC', date_of_birth: Date.parse('19750201'),
+                        given_name: 'DARREN', middle_names: 'MARK JOHN', surname: 'WHITE')
     end
 
     let!(:prisoner_2) do
-      create(:prisoner, noms_id: 'AB123', date_of_birth: Date.parse('19750201'))
+      create(:prisoner, noms_id: 'A9876ZX', date_of_birth: Date.parse('19771127'),
+                        given_name: 'JUSTIN', middle_names: 'JAKE PAUL', surname: 'BLACK')
     end
 
     let!(:prisoner_3) do
-      create(:prisoner, noms_id: 'AC123', date_of_birth: Date.parse('19650201'))
+      create(:prisoner, noms_id: 'A5678JK', date_of_birth: Date.parse('19800718'),
+                        given_name: 'ALANIS', middle_names: 'JANIS SOPHIE', surname: 'PURPLE')
     end
 
-    context 'params not present' do
-      it 'returns an empty set' do
-        expect(Prisoner.search(params)).to eq([])
-      end
+    let!(:alias_1) do
+      create(:alias, prisoner: prisoner_1, given_name: 'TONY', middle_names: 'FRANK ROBERT', surname: 'BROWN')
     end
 
-    context 'params present' do
-      context 'no matching records exist' do
+    context 'dob_noms search' do
+      context 'when query matches' do
         let(:params) do
-          [
-            { noms_id: 'CC123', date_of_birth: Date.parse('19750201') }
-          ]
+          {
+            dob_noms: [
+              { noms_id: 'A1234BC', date_of_birth: Date.parse('19750201') },
+              { noms_id: 'A5678JK', date_of_birth: Date.parse('19800718') },
+              { noms_id: 'A6543RE', date_of_birth: Date.parse('19771127') }
+            ]
+          }
         end
 
         it 'returns matching records' do
-          expect(Prisoner.search(params)).to match_array([])
+          expect(Prisoner.search(params)).to eq [prisoner_1, prisoner_3]
         end
       end
 
-      context 'searching for multiple records' do
+      context 'when query does not match' do
         let(:params) do
-          [
-            { noms_id: 'AA123', date_of_birth: Date.parse('19750201') },
-            { noms_id: 'AC123', date_of_birth: Date.parse('19650201') },
-            { noms_id: 'AZ123', date_of_birth: Date.parse('19650201') }
-          ]
+          {
+            dob_noms: [
+              { noms_id: 'CC123', date_of_birth: Date.parse('19750201') }
+            ]
+          }
         end
+
+        it 'returns an empty array' do
+          expect(Prisoner.search(params)).to eq []
+        end
+      end
+    end
+
+    context 'name search' do
+      context 'when query matches' do
+        let(:params) { { given_name: 'darr', surname: 'whi' } }
 
         it 'returns matching records' do
-          expect(Prisoner.search(params)).to match_array([prisoner_1, prisoner_3])
+          expect(Prisoner.search(params)).to eq [prisoner_1]
         end
       end
 
-      context 'searching for single record' do
-        let(:params) do
-          [
-            { noms_id: 'AC123', date_of_birth: Date.parse('19650201') }
-          ]
-        end
+      context 'when query matches an alias' do
+        let(:params) { { middle_names: 'rob', surname: 'bro' } }
 
-        it 'returns matching record' do
-          expect(Prisoner.search(params)).to match_array([prisoner_3])
+        it 'returns matching records' do
+          expect(Prisoner.search(params)).to eq [prisoner_1]
+        end
+      end
+
+      context 'when query does not match' do
+        let(:params) { { given_name: 'luke' } }
+
+        it 'returns an empty array' do
+          expect(Prisoner.search(params)).to eq []
+        end
+      end
+    end
+
+    context 'noms_id search' do
+      context 'when query matches' do
+        let(:params) { { noms_id: 'A9876ZX' } }
+
+        it 'returns matching records' do
+          expect(Prisoner.search(params)).to eq [prisoner_2]
+        end
+      end
+
+      context 'when query does not match' do
+        let(:params) { { noms_id: 'X1234FG' } }
+
+        it 'returns an empty array' do
+          expect(Prisoner.search(params)).to eq []
         end
       end
     end

@@ -70,14 +70,33 @@ class Prisoner < ActiveRecord::Base
 
   scope :updated_after, -> (time) { where("updated_at > ?", time) }
 
-  def self.search(query)
-    return none if query.nil?
+  class << self
+    def search(params)
+      if params[:dob_noms]
+        values = params.delete(:dob_noms).map(&:values)
+        params[:noms_id] = values.map(&:first)
+        params[:date_of_birth] = values.map(&:last)
+      end
 
-    values = query.map(&:values)
-    noms_ids = values.map(&:first)
-    dates_of_birth = values.map(&:last)
+      if params[:given_name] || params[:middle_names] || params[:surname]
+        name_query(params)
+      else
+        where(params)
+      end
+    end
 
-    where(noms_id: noms_ids, date_of_birth: dates_of_birth)
+    private
+
+    def name_query(params)
+      results = joins("LEFT JOIN aliases ON prisoners.id = aliases.prisoner_id")
+      %i[given_name middle_names surname].each do |field|
+        if params[field]
+          results =
+            results.where("prisoners.#{field} ILIKE :term OR aliases.#{field} ILIKE :term", term: "%#{params[field]}%")
+        end
+      end
+      results
+    end
   end
 
   def update_aliases(aliases_params)
