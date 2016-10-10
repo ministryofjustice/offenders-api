@@ -88,41 +88,6 @@ module Api
         end
       end
 
-      swagger_path '/prisoners/search' do
-        operation :get do
-          key :description, 'Returns all prisoners matching the given noms_ids and dates of birth'
-          key :operationId, 'searchPrisoners'
-          key :produces, [
-            'application/json'
-          ]
-          key :tags, [
-            'prisoner'
-          ]
-          parameter do
-            key :name, :query
-            key :in, :query
-            key :description, 'array of noms_id, date_of_birth hashes'
-            key :required, false
-            key :type, :array
-          end
-          response 200 do
-            key :description, 'A list of prisoners'
-            schema do
-              key :type, :array
-              items do
-                key :'$ref', :Prisoner
-              end
-            end
-          end
-          response :default do
-            key :description, 'unexpected error'
-            schema do
-              key :'$ref', :ErrorModel
-            end
-          end
-        end
-      end
-
       swagger_path '/prisoners/{id}' do
         operation :get do
           key :description, 'Returns a single prisoner if the user has access'
@@ -193,25 +158,58 @@ module Api
         end
       end
 
-      swagger_path '/prisoners/noms/{id}' do
+      swagger_path '/prisoners/search' do
         operation :get do
-          key :description, 'Returns a single prisoner if the user has access'
-          key :operationId, 'findPrisonerByNomsId'
+          key :description, 'Returns all prisoners matching the given noms_ids and dates of birth'
+          key :operationId, 'searchPrisoners'
+          key :produces, [
+            'application/json'
+          ]
           key :tags, [
             'prisoner'
           ]
           parameter do
-            key :name, :id
-            key :in, :path
-            key :description, 'Noms ID of prisoner to fetch'
-            key :required, true
+            key :name, :query
+            key :in, :query
+            key :description, 'array of noms_id, date_of_birth hashes'
+            key :required, false
+            key :type, :array
+          end
+          parameter do
+            key :name, :given_name
+            key :in, :query
+            key :description, 'given name'
+            key :required, false
             key :type, :string
-            key :format, :uuid
+          end
+          parameter do
+            key :name, :middle_names
+            key :in, :query
+            key :description, 'middle names'
+            key :required, false
+            key :type, :string
+          end
+          parameter do
+            key :name, :surname
+            key :in, :query
+            key :description, 'surname'
+            key :required, false
+            key :type, :string
+          end
+          parameter do
+            key :name, :noms_id
+            key :in, :query
+            key :description, 'NOMS ID'
+            key :required, false
+            key :type, :string
           end
           response 200 do
-            key :description, 'prisoner response'
+            key :description, 'A list of prisoners'
             schema do
-              key :'$ref', :Prisoner
+              key :type, :array
+              items do
+                key :'$ref', :Prisoner
+              end
             end
           end
           response :default do
@@ -238,19 +236,13 @@ module Api
       end
 
       def search
-        @prisoners = Prisoner.search(params[:query])
+        @prisoners = Prisoner.search(search_params).page(params[:page]).per(params[:per_page])
 
         render json: @prisoners
       end
 
       def show
         @prisoner = Prisoner.find(params[:id])
-
-        render json: @prisoner
-      end
-
-      def noms
-        @prisoner = Prisoner.find_by!(noms_id: params[:id].upcase)
 
         render json: @prisoner
       end
@@ -294,6 +286,19 @@ module Api
           :cro_number,
           :establishment_code,
           aliases: [:given_name, :middle_names, :surname, :title, :suffix, :gender, :date_of_birth]
+        )
+      end
+
+      def search_params
+        params.permit(
+          :noms_id,
+          :given_name,
+          :middle_names,
+          :surname,
+          # :pnc_number,
+          # :cro_number,
+          # :establishment_code,
+          dob_noms: [:noms_id, :date_of_birth]
         )
       end
     end

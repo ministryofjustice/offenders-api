@@ -77,48 +77,97 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
     end
 
     describe 'GET #search' do
-      let(:query) { nil }
-
       let!(:prisoner_1) do
-        create(:prisoner, noms_id: 'AA123', date_of_birth: Date.parse('19750201'))
+        create(:prisoner, noms_id: 'AA123', date_of_birth: Date.parse('19750201'),
+                          given_name: 'DARREN', middle_names: 'MARK JOHN', surname: 'WHITE')
       end
 
       let!(:prisoner_2) do
-        create(:prisoner, noms_id: 'AB123', date_of_birth: Date.parse('19750201'))
+        create(:prisoner, noms_id: 'AB123', date_of_birth: Date.parse('19750201'),
+                          given_name: 'JUSTIN', middle_names: 'JAKE PAUL', surname: 'BLACK')
       end
 
-      before do
-        get :search, query: query
+      let!(:alias_1) do
+        create(:alias, prisoner: prisoner_1, given_name: 'TONY', middle_names: 'FRANK ROBERT', surname: 'BROWN')
       end
 
-      context 'with no query present' do
-        it 'returns an empty set' do
-          expect(response.body).to eq('[]')
+      context 'searching for date of birth - NOMS ID pairs' do
+        context 'when query matches' do
+          let(:search_params) { { dob_noms: [{ noms_id: 'AA123', date_of_birth: Date.parse('19750201') }] } }
+
+          before { get :search, search_params }
+
+          it 'returns collection of prisoner records matching query' do
+            expect(JSON.parse(response.body).map { |p| p['id'] }).
+              to match_array([prisoner_1['id']])
+          end
+        end
+
+        context 'when query does not match' do
+          let(:search_params) { { dob_noms: [{ noms_id: 'AA123', date_of_birth: Date.parse('19650201') }] } }
+
+          before { get :search, search_params }
+
+          it 'returns an empty set' do
+            expect(response.body).to eq('[]')
+          end
         end
       end
 
-      context 'when query matches' do
-        let(:query) do
-          [
-            { noms_id: 'AA123', date_of_birth: Date.parse('19750201') }
-          ]
+      context 'searching for NOMS ID' do
+        context 'when query matches' do
+          let(:search_params) { { noms_id: 'AA123' } }
+
+          before { get :search, search_params }
+
+          it 'returns collection of prisoner records matching query' do
+            expect(JSON.parse(response.body).map { |p| p['id'] }).
+              to match_array([prisoner_1['id']])
+          end
         end
 
-        it 'returns collection of prisoner records matching query' do
-          expect(JSON.parse(response.body).map { |p| p['id'] }).
-            to match_array([prisoner_1['id']])
+        context 'when query does not match' do
+          let(:search_params) { { noms_id: 'XX123' } }
+
+          before { get :search, search_params }
+
+          it 'returns an empty set' do
+            expect(response.body).to eq('[]')
+          end
         end
       end
 
-      context 'when query does not match' do
-        let(:query) do
-          [
-            { noms_id: 'AA123', date_of_birth: Date.parse('19650201') }
-          ]
+      context 'searching for given_name' do
+        context 'when query matches' do
+          let(:search_params) { { given_name: 'darr', surname: 'whi' } }
+
+          before { get :search, search_params }
+
+          it 'returns collection of prisoner records matching query' do
+            expect(JSON.parse(response.body).map { |p| p['id'] }).
+              to match_array([prisoner_1['id']])
+          end
         end
 
-        it 'returns an empty set' do
-          expect(response.body).to eq('[]')
+        context 'when query matches an alias' do
+          let(:search_params) { { given_name: 'ton', surname: 'bro' } }
+
+          before { get :search, search_params }
+
+          it 'returns collection of prisoner records matching query' do
+            expect(JSON.parse(response.body).map { |p| p['id'] }).
+              to match_array([prisoner_1['id']])
+          end
+        end
+
+        context 'when query does not match' do
+          let(:search_params) { { given_name: 'luke' } }
+
+          before { get :search, search_params }
+
+          it 'returns an empty set' do
+            expect(response.body).to eq('[]')
+          end
         end
       end
     end
@@ -127,21 +176,6 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
       let(:prisoner) { create(:prisoner) }
 
       before { get :show, id: prisoner }
-
-      it 'returns status 200' do
-        expect(response.status).to be 200
-      end
-
-      it 'returns JSON represenation of prisoner record' do
-        expect(JSON.parse(response.body).as_json).
-          to include prisoner.as_json(except: %w[suffix date_of_birth created_at updated_at])
-      end
-    end
-
-    describe 'GET #noms' do
-      let(:prisoner) { create(:prisoner, noms_id: 'A1234BC') }
-
-      before { get :noms, id: prisoner.noms_id }
 
       it 'returns status 200' do
         expect(response.status).to be 200
@@ -277,14 +311,6 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
 
     describe 'GET #show' do
       before { get :show, id: 1 }
-
-      it 'returns status 401' do
-        expect(response.status).to be 401
-      end
-    end
-
-    describe 'GET #noms' do
-      before { get :noms, id: 'A1234BC' }
 
       it 'returns status 401' do
         expect(response.status).to be 401

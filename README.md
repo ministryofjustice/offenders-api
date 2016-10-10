@@ -32,9 +32,8 @@ e.g:
 
 ```
 http://localhost:3000/api/prisoners?page=1&per_page=10&access_token=<ACCESS TOKEN>
-http://localhost:3000/api/prisoners/search?query[][noms_id]=B4758WB&query[][date_of_birth]=1982-11-05&query[][noms_id]=B7023AT&query[][date_of_birth]=1949-04-04&access_token=<ACCESS TOKEN>
+http://localhost:3000/api/prisoners/search?surname=smith&access_token=<ACCESS TOKEN>
 http://localhost:3000/api/prisoners/<PRISONER ID>?access_token=<ACCESS TOKEN>
-http://localhost:3000/api/prisoners/noms/<NOMS ID>?access_token=<ACCESS TOKEN>
 ```
 
 You can find a prisoner ID by opening the Rails console, e.g:
