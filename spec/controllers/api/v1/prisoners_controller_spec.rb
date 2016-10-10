@@ -78,45 +78,20 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
 
     describe 'GET #search' do
       let!(:prisoner_1) do
-        create(:prisoner, noms_id: 'AA123', date_of_birth: Date.parse('19750201'),
-                          given_name: 'DARREN', middle_names: 'MARK JOHN', surname: 'WHITE')
+        create(:prisoner, noms_id: 'A1234BC', given_name: 'DARREN', middle_names: 'MARK JOHN', surname: 'WHITE')
       end
 
       let!(:prisoner_2) do
-        create(:prisoner, noms_id: 'AB123', date_of_birth: Date.parse('19750201'),
-                          given_name: 'JUSTIN', middle_names: 'JAKE PAUL', surname: 'BLACK')
+        create(:prisoner, noms_id: 'AB123', given_name: 'JUSTIN', middle_names: 'JAKE PAUL', surname: 'BLACK')
       end
 
       let!(:alias_1) do
         create(:alias, prisoner: prisoner_1, given_name: 'TONY', middle_names: 'FRANK ROBERT', surname: 'BROWN')
       end
 
-      context 'searching for date of birth - NOMS ID pairs' do
-        context 'when query matches' do
-          let(:search_params) { { dob_noms: [{ noms_id: 'AA123', date_of_birth: Date.parse('19750201') }] } }
-
-          before { get :search, search_params }
-
-          it 'returns collection of prisoner records matching query' do
-            expect(JSON.parse(response.body).map { |p| p['id'] }).
-              to match_array([prisoner_1['id']])
-          end
-        end
-
-        context 'when query does not match' do
-          let(:search_params) { { dob_noms: [{ noms_id: 'AA123', date_of_birth: Date.parse('19650201') }] } }
-
-          before { get :search, search_params }
-
-          it 'returns an empty set' do
-            expect(response.body).to eq('[]')
-          end
-        end
-      end
-
       context 'searching for NOMS ID' do
         context 'when query matches' do
-          let(:search_params) { { noms_id: 'AA123' } }
+          let(:search_params) { { noms_id: 'A1234BC' } }
 
           before { get :search, search_params }
 
@@ -127,7 +102,7 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
         end
 
         context 'when query does not match' do
-          let(:search_params) { { noms_id: 'XX123' } }
+          let(:search_params) { { noms_id: 'A9876XY' } }
 
           before { get :search, search_params }
 
@@ -137,7 +112,7 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
         end
       end
 
-      context 'searching for given_name' do
+      context 'name search' do
         context 'when query matches' do
           let(:search_params) { { given_name: 'darr', surname: 'whi' } }
 

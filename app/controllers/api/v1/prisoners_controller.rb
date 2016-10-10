@@ -8,12 +8,8 @@ module Api
         operation :get do
           key :description, 'Returns all prisoners from the system that the user has access to'
           key :operationId, 'findPrisoners'
-          key :produces, [
-            'application/json'
-          ]
-          key :tags, [
-            'prisoner'
-          ]
+          key :produces, ['application/json']
+          key :tags, ['prisoner']
           parameter do
             key :name, :page
             key :in, :query
@@ -58,12 +54,8 @@ module Api
         operation :post do
           key :description, 'Creates a new prisoner'
           key :operationId, 'addPrisoner'
-          key :produces, [
-            'application/json'
-          ]
-          key :tags, [
-            'prisoner'
-          ]
+          key :produces, ['application/json']
+          key :tags, ['prisoner']
           parameter do
             key :name, :prisoner
             key :in, :body
@@ -92,9 +84,7 @@ module Api
         operation :get do
           key :description, 'Returns a single prisoner if the user has access'
           key :operationId, 'findPrisonerById'
-          key :tags, [
-            'prisoner'
-          ]
+          key :tags, ['prisoner']
           parameter do
             key :name, :id
             key :in, :path
@@ -120,12 +110,8 @@ module Api
         operation :patch do
           key :description, 'Updates a prisoner'
           key :operationId, 'updatePrisoner'
-          key :produces, [
-            'application/json'
-          ]
-          key :tags, [
-            'prisoner'
-          ]
+          key :produces, ['application/json']
+          key :tags, ['prisoner']
           parameter do
             key :name, :id
             key :in, :path
@@ -162,19 +148,8 @@ module Api
         operation :get do
           key :description, 'Returns all prisoners matching the given noms_ids and dates of birth'
           key :operationId, 'searchPrisoners'
-          key :produces, [
-            'application/json'
-          ]
-          key :tags, [
-            'prisoner'
-          ]
-          parameter do
-            key :name, :query
-            key :in, :query
-            key :description, 'array of noms_id, date_of_birth hashes'
-            key :required, false
-            key :type, :array
-          end
+          key :produces, ['application/json']
+          key :tags, ['prisoner']
           parameter do
             key :name, :given_name
             key :in, :query
@@ -202,6 +177,22 @@ module Api
             key :description, 'NOMS ID'
             key :required, false
             key :type, :string
+          end
+          parameter do
+            key :name, :page
+            key :in, :query
+            key :description, 'page to return'
+            key :required, false
+            key :type, :integer
+            key :format, :int32
+          end
+          parameter do
+            key :name, :per_page
+            key :in, :query
+            key :description, 'per page number of results to return'
+            key :required, false
+            key :type, :integer
+            key :format, :int32
           end
           response 200 do
             key :description, 'A list of prisoners'
@@ -294,11 +285,11 @@ module Api
           :noms_id,
           :given_name,
           :middle_names,
-          :surname,
+          :surname
+          # :date_of_birth,
           # :pnc_number,
           # :cro_number,
           # :establishment_code,
-          dob_noms: [:noms_id, :date_of_birth]
         )
       end
     end

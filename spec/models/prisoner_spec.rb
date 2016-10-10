@@ -14,54 +14,19 @@ RSpec.describe Prisoner, type: :model do
 
   describe '.search' do
     let!(:prisoner_1) do
-      create(:prisoner, noms_id: 'A1234BC', date_of_birth: Date.parse('19750201'),
-                        given_name: 'DARREN', middle_names: 'MARK JOHN', surname: 'WHITE')
+      create(:prisoner, noms_id: 'A1234BC', given_name: 'DARREN', middle_names: 'MARK JOHN', surname: 'WHITE')
     end
 
     let!(:prisoner_2) do
-      create(:prisoner, noms_id: 'A9876ZX', date_of_birth: Date.parse('19771127'),
-                        given_name: 'JUSTIN', middle_names: 'JAKE PAUL', surname: 'BLACK')
+      create(:prisoner, noms_id: 'A9876ZX', given_name: 'JUSTIN', middle_names: 'JAKE PAUL', surname: 'BLACK')
     end
 
     let!(:prisoner_3) do
-      create(:prisoner, noms_id: 'A5678JK', date_of_birth: Date.parse('19800718'),
-                        given_name: 'ALANIS', middle_names: 'JANIS SOPHIE', surname: 'PURPLE')
+      create(:prisoner, noms_id: 'A5678JK', given_name: 'ALANIS', middle_names: 'JANIS SOPHIE', surname: 'PURPLE')
     end
 
     let!(:alias_1) do
-      create(:alias, prisoner: prisoner_1, given_name: 'TONY', middle_names: 'FRANK ROBERT', surname: 'BROWN')
-    end
-
-    context 'dob_noms search' do
-      context 'when query matches' do
-        let(:params) do
-          {
-            dob_noms: [
-              { noms_id: 'A1234BC', date_of_birth: Date.parse('19750201') },
-              { noms_id: 'A5678JK', date_of_birth: Date.parse('19800718') },
-              { noms_id: 'A6543RE', date_of_birth: Date.parse('19771127') }
-            ]
-          }
-        end
-
-        it 'returns matching records' do
-          expect(Prisoner.search(params)).to eq [prisoner_1, prisoner_3]
-        end
-      end
-
-      context 'when query does not match' do
-        let(:params) do
-          {
-            dob_noms: [
-              { noms_id: 'CC123', date_of_birth: Date.parse('19750201') }
-            ]
-          }
-        end
-
-        it 'returns an empty array' do
-          expect(Prisoner.search(params)).to eq []
-        end
-      end
+      create(:alias, prisoner: prisoner_3, given_name: 'TONY', middle_names: 'FRANK ROBERT', surname: 'BROWN')
     end
 
     context 'name search' do
@@ -77,7 +42,7 @@ RSpec.describe Prisoner, type: :model do
         let(:params) { { middle_names: 'rob', surname: 'bro' } }
 
         it 'returns matching records' do
-          expect(Prisoner.search(params)).to eq [prisoner_1]
+          expect(Prisoner.search(params)).to eq [prisoner_3]
         end
       end
 
