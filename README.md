@@ -26,13 +26,13 @@ Password: password123
 
 Select one of the sample applications and click "Get access token." The returned JSON contains the access token.
 
-Once the access token has been obtained you can make requests to `/api/prisoners` (to get a list of all prisoners), `/api/prisoners/search` with a `query` param to search prisoners, `/api/prisoners/<ID>` to get a specific prisoner, and `/api/prisoners/noms/<NOMS ID>` to get the the prisoner with the specified NOMS ID. The access token should be passed either in the header or as a request params.
+Once the access token has been obtained you can make requests to `/api/prisoners` (to get a list of all prisoners), `/api/prisoners/search` with params to search prisoners, `/api/prisoners/<ID>` to get a specific prisoner. The access token should be passed either in the header or as a request params.
 
 e.g:
 
 ```
 http://localhost:3000/api/prisoners?page=1&per_page=10&access_token=<ACCESS TOKEN>
-http://localhost:3000/api/prisoners/search?surname=smith&access_token=<ACCESS TOKEN>
+http://localhost:3000/api/prisoners/search?noms_id=A1403AE&surname=smith&access_token=<ACCESS TOKEN>
 http://localhost:3000/api/prisoners/<PRISONER ID>?access_token=<ACCESS TOKEN>
 ```
 

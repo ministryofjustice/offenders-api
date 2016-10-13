@@ -71,18 +71,17 @@ class Prisoner < ActiveRecord::Base
   scope :updated_after, -> (time) { where("updated_at > ?", time) }
 
   def self.search(params)
+    results = unscoped
     if params[:given_name] || params[:middle_names] || params[:surname]
-      results = joins("LEFT JOIN aliases ON prisoners.id = aliases.prisoner_id")
+      results = results.joins("LEFT JOIN aliases ON prisoners.id = aliases.prisoner_id")
       %i[given_name middle_names surname].each do |field|
-        if params[field]
-          results =
-            results.where("prisoners.#{field} ILIKE :term OR aliases.#{field} ILIKE :term", term: "%#{params[field]}%")
-        end
+        next unless params[field]
+        term = params.delete(field)
+        results =
+          results.where("prisoners.#{field} ILIKE :term OR aliases.#{field} ILIKE :term", term: "%#{term}%")
       end
-      results
-    else
-      where(params)
     end
+    results.where(params)
   end
 
   def update_aliases(aliases_params)

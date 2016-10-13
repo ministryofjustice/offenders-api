@@ -13,16 +13,22 @@ RSpec.describe Prisoner, type: :model do
   it { is_expected.to validate_presence_of(:gender) }
 
   describe '.search' do
-    let!(:prisoner_1) do
-      create(:prisoner, noms_id: 'A1234BC', given_name: 'DARREN', middle_names: 'MARK JOHN', surname: 'WHITE')
+    let(:prisoner_1) do
+      create(:prisoner, given_name: 'DARREN', middle_names: 'MARK JOHN', surname: 'WHITE',
+                        noms_id: 'A1234BC', date_of_birth: '19850317', establishment_code: 'LEI',
+                        pnc_number: '38/525271A', cro_number: '056339/17X')
     end
 
-    let!(:prisoner_2) do
-      create(:prisoner, noms_id: 'A9876ZX', given_name: 'JUSTIN', middle_names: 'JAKE PAUL', surname: 'BLACK')
+    let(:prisoner_2) do
+      create(:prisoner, given_name: 'JUSTIN', middle_names: 'JAKE PAUL', surname: 'BLACK',
+                        noms_id: 'A9876ZX', date_of_birth: '19791025', establishment_code: 'BMI',
+                        pnc_number: '57/215383B', cro_number: '066231/68H')
     end
 
-    let!(:prisoner_3) do
-      create(:prisoner, noms_id: 'A5678JK', given_name: 'ALANIS', middle_names: 'JANIS SOPHIE', surname: 'PURPLE')
+    let(:prisoner_3) do
+      create(:prisoner, given_name: 'ALANIS', middle_names: 'JANIS SOPHIE', surname: 'PURPLE',
+                        noms_id: 'A5678JK', date_of_birth: '19661230', establishment_code: 'OUT',
+                        pnc_number: '99/135626A', cro_number: '102593/44J')
     end
 
     let!(:alias_1) do
@@ -66,6 +72,116 @@ RSpec.describe Prisoner, type: :model do
 
       context 'when query does not match' do
         let(:params) { { noms_id: 'X1234FG' } }
+
+        it 'returns an empty array' do
+          expect(Prisoner.search(params)).to eq []
+        end
+      end
+    end
+
+    context 'date_of_birth search' do
+      context 'when query matches' do
+        let(:params) { { date_of_birth: '19661230' } }
+
+        it 'returns matching records' do
+          expect(Prisoner.search(params)).to eq [prisoner_3]
+        end
+      end
+
+      context 'when query does not match' do
+        let(:params) { { date_of_birth: '19710309' } }
+
+        it 'returns an empty array' do
+          expect(Prisoner.search(params)).to eq []
+        end
+      end
+    end
+
+    context 'pnc_number search' do
+      context 'when query matches' do
+        let(:params) { { pnc_number: '38/525271A' } }
+
+        it 'returns matching records' do
+          expect(Prisoner.search(params)).to eq [prisoner_1]
+        end
+      end
+
+      context 'when query does not match' do
+        let(:params) { { pnc_number: '76/127718Z' } }
+
+        it 'returns an empty array' do
+          expect(Prisoner.search(params)).to eq []
+        end
+      end
+    end
+
+    context 'cro_number search' do
+      context 'when query matches' do
+        let(:params) { { cro_number: '066231/68H' } }
+
+        it 'returns matching records' do
+          expect(Prisoner.search(params)).to eq [prisoner_2]
+        end
+      end
+
+      context 'when query does not match' do
+        let(:params) { { cro_number: '319618/23G' } }
+
+        it 'returns an empty array' do
+          expect(Prisoner.search(params)).to eq []
+        end
+      end
+    end
+
+    context 'establishment_code search' do
+      context 'when query matches' do
+        let(:params) { { establishment_code: 'OUT' } }
+
+        it 'returns matching records' do
+          expect(Prisoner.search(params)).to eq [prisoner_3]
+        end
+      end
+
+      context 'when query does not match' do
+        let(:params) { { establishment_code: 'BXI' } }
+
+        it 'returns an empty array' do
+          expect(Prisoner.search(params)).to eq []
+        end
+      end
+    end
+
+    context 'multiple fields search' do
+      context 'when query matches' do
+        let(:params) do
+          {
+            given_name: 'dar',
+            surname: 'whi',
+            noms_id: 'A1234BC',
+            date_of_birth: '19850317',
+            establishment_code: 'LEI',
+            pnc_number: '38/525271A',
+            cro_number: '056339/17X'
+          }
+        end
+
+        it 'returns matching records' do
+          expect(Prisoner.search(params)).to eq [prisoner_1]
+        end
+      end
+
+      context 'when query does not match' do
+        let(:params) do
+          {
+            given_name: 'jan',
+            middle_names: 'rob',
+            noms_id: 'A8765IO',
+            date_of_birth: '19720911',
+            establishment_code: 'LEI',
+            pnc_number: '38/525271A',
+            cro_number: '056339/17X'
+          }
+        end
 
         it 'returns an empty array' do
           expect(Prisoner.search(params)).to eq []
