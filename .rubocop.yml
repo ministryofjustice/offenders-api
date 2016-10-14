@@ -7,23 +7,10 @@ AllCops:
     - 'config/**/*'
     - 'vendor/**/*'
 
-# Just a preference to use %w[] over %w()
-Style/PercentLiteralDelimiters:
-  PreferredDelimiters:
-    '%i': '[]'
-    '%w': '[]'
-    '%W': '[]'
-    '%': '{}'
-
 # Prefer sensible naming to comments everywhere.
 Documentation:
   Description: Document classes and non-namespace modules.
   Enabled: false
-
-# Just indent parameters by two spaces. It's less volatile if methods change,
-# and there's less busy work lining things up.
-Style/AlignParameters:
-  EnforcedStyle: with_fixed_indentation
 
 Metrics/MethodLength:
   Max: 15
@@ -31,17 +18,9 @@ Metrics/MethodLength:
 StringLiterals:
   Enabled: false
 
-# Chain methods with trailing dots.
-Style/DotPosition:
-  EnforcedStyle: trailing
-
 # No-one in this team uses a fixed-width terminal
 Metrics/LineLength:
   Max: 120
-
-# It's not really clearer to replace every if with a return if.
-Style/GuardClause:
-  Enabled: false
 
 Style/FrozenStringLiteralComment:
   Enabled: false

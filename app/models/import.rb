@@ -17,14 +17,12 @@ class Import < ActiveRecord::Base
   end
 
   def prisoners_file_uniqueness
-    if Upload.where(md5: prisoners_file.md5).any?
-      errors[:base] << 'Prisoners file has already been uploaded'
-    end
+    return unless Upload.where(md5: prisoners_file.md5).any?
+    errors[:base] << 'Prisoners file has already been uploaded'
   end
 
   def aliases_file_uniqueness
-    if Upload.where(md5: aliases_file.md5).any?
-      errors[:base] << 'Aliases file has already been uploaded'
-    end
+    return unless Upload.where(md5: aliases_file.md5).any?
+    errors[:base] << 'Aliases file has already been uploaded'
   end
 end

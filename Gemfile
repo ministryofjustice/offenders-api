@@ -28,8 +28,8 @@ group :production, :devunicorn do
 end
 
 group :development do
-  gem 'rubocop', '0.42', require: false
-  gem 'web-console', '~> 2.0'
+  gem 'rubocop', require: false
+  gem 'web-console'
 end
 
 group :development, :test do
@@ -40,10 +40,10 @@ end
 
 group :test do
   gem 'codeclimate-test-reporter', require: nil
-  gem 'database_cleaner',   '~> 1.5.3'
-  gem 'factory_girl_rails', '~> 4.5.0'
-  gem 'rspec-mocks',        '~> 3.4.1'
-  gem 'rspec-rails',        '~> 3.4'
+  gem 'database_cleaner'
+  gem 'factory_girl_rails'
+  gem 'rspec-mocks'
+  gem 'rspec-rails'
   gem 'shoulda-matchers',   '~> 2.8.0', require: false
   gem 'simplecov', require: false
 end

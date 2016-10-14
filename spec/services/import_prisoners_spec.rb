@@ -37,8 +37,8 @@ RSpec.describe ImportPrisoners do
       end
 
       it 'sends an email' do
-        expect { ImportPrisoners.call(import) }.
-          to change(ActionMailer::Base.deliveries, :count).by(1)
+        expect { ImportPrisoners.call(import) }
+          .to change(ActionMailer::Base.deliveries, :count).by(1)
       end
     end
   end

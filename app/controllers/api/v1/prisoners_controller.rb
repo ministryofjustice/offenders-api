@@ -1,6 +1,7 @@
 module Api
   module V1
     # rubocop:disable Metrics/ClassLength
+    # rubocop:disable Metrics/BlockLength
     class PrisonersController < Api::ApplicationController
       include Swagger::Blocks
 
