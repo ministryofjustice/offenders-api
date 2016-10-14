@@ -6,14 +6,14 @@ module Api
 
       swagger_path '/prisoners' do
         operation :get do
-          key :description, 'Returns all prisoners from the system that the user has access to'
+          key :description, 'Returns a paginated list of prisoners'
           key :operationId, 'findPrisoners'
           key :produces, ['application/json']
           key :tags, ['prisoner']
           parameter do
             key :name, :page
             key :in, :query
-            key :description, 'page to return'
+            key :description, 'Page to return'
             key :required, false
             key :type, :integer
             key :format, :int32
@@ -21,7 +21,7 @@ module Api
           parameter do
             key :name, :per_page
             key :in, :query
-            key :description, 'per page number of results to return'
+            key :description, 'Per page number of results'
             key :required, false
             key :type, :integer
             key :format, :int32
@@ -29,7 +29,7 @@ module Api
           parameter do
             key :name, :updated_after
             key :in, :query
-            key :description, 'records updated after timestamp to return'
+            key :description, 'Prisoners updated after given timestamp'
             key :required, false
             key :type, :string
             key :format, 'date-time'
@@ -82,7 +82,7 @@ module Api
 
       swagger_path '/prisoners/{id}' do
         operation :get do
-          key :description, 'Returns a single prisoner if the user has access'
+          key :description, 'Returns prisoner with given ID'
           key :operationId, 'findPrisonerById'
           key :tags, ['prisoner']
           parameter do
@@ -146,30 +146,38 @@ module Api
 
       swagger_path '/prisoners/search' do
         operation :get do
-          key :description, 'Returns all prisoners matching the given noms_ids and dates of birth'
+          key :description, 'Returns a paginated list of prisoners matching the given search parameters'
           key :operationId, 'searchPrisoners'
           key :produces, ['application/json']
           key :tags, ['prisoner']
           parameter do
             key :name, :given_name
             key :in, :query
-            key :description, 'given name'
+            key :description, 'Given name'
             key :required, false
             key :type, :string
           end
           parameter do
             key :name, :middle_names
             key :in, :query
-            key :description, 'middle names'
+            key :description, 'Middle names'
             key :required, false
             key :type, :string
           end
           parameter do
             key :name, :surname
             key :in, :query
-            key :description, 'surname'
+            key :description, 'Surname'
             key :required, false
             key :type, :string
+          end
+          parameter do
+            key :name, :date_of_birth
+            key :in, :query
+            key :description, 'Date of birth'
+            key :required, false
+            key :type, :string
+            key :format, 'date'
           end
           parameter do
             key :name, :noms_id
@@ -179,9 +187,30 @@ module Api
             key :type, :string
           end
           parameter do
+            key :name, :pnc_number
+            key :in, :query
+            key :description, 'PNC number'
+            key :required, false
+            key :type, :string
+          end
+          parameter do
+            key :name, :cro_number
+            key :in, :query
+            key :description, 'CRO number'
+            key :required, false
+            key :type, :string
+          end
+          parameter do
+            key :name, :establishment_code
+            key :in, :query
+            key :description, 'Establishment code'
+            key :required, false
+            key :type, :string
+          end
+          parameter do
             key :name, :page
             key :in, :query
-            key :description, 'page to return'
+            key :description, 'Page to return'
             key :required, false
             key :type, :integer
             key :format, :int32
@@ -189,7 +218,7 @@ module Api
           parameter do
             key :name, :per_page
             key :in, :query
-            key :description, 'per page number of results to return'
+            key :description, 'Per page number of results'
             key :required, false
             key :type, :integer
             key :format, :int32
@@ -285,11 +314,11 @@ module Api
           :noms_id,
           :given_name,
           :middle_names,
-          :surname
-          # :date_of_birth,
-          # :pnc_number,
-          # :cro_number,
-          # :establishment_code,
+          :surname,
+          :date_of_birth,
+          :pnc_number,
+          :cro_number,
+          :establishment_code
         )
       end
     end
