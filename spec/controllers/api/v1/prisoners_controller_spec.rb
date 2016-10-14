@@ -39,7 +39,7 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
       ]
     }
   end
-  let(:excepted_attrs) { %w[id created_at updated_at date_of_birth aliases] }
+  let(:excepted_attrs) { %w(id created_at updated_at date_of_birth aliases) }
 
   context 'when authenticated' do
     before { request.headers['HTTP_AUTHORIZATION'] = "Bearer #{token.token}" }
@@ -50,8 +50,8 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
 
         get :index
 
-        expect(JSON.parse(response.body).map { |h| h['id'] }).
-          to match_array(Prisoner.all.pluck(:id))
+        expect(JSON.parse(response.body).map { |h| h['id'] })
+          .to match_array(Prisoner.all.pluck(:id))
       end
 
       it 'paginates records' do
@@ -96,8 +96,8 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
           before { get :search, search_params }
 
           it 'returns collection of prisoner records matching query' do
-            expect(JSON.parse(response.body).map { |p| p['id'] }).
-              to match_array([prisoner_1['id']])
+            expect(JSON.parse(response.body).map { |p| p['id'] })
+              .to match_array([prisoner_1['id']])
           end
         end
 
@@ -119,8 +119,8 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
           before { get :search, search_params }
 
           it 'returns collection of prisoner records matching query' do
-            expect(JSON.parse(response.body).map { |p| p['id'] }).
-              to match_array([prisoner_1['id']])
+            expect(JSON.parse(response.body).map { |p| p['id'] })
+              .to match_array([prisoner_1['id']])
           end
         end
 
@@ -130,8 +130,8 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
           before { get :search, search_params }
 
           it 'returns collection of prisoner records matching query' do
-            expect(JSON.parse(response.body).map { |p| p['id'] }).
-              to match_array([prisoner_1['id']])
+            expect(JSON.parse(response.body).map { |p| p['id'] })
+              .to match_array([prisoner_1['id']])
           end
         end
 
@@ -157,8 +157,8 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
       end
 
       it 'returns JSON represenation of prisoner record' do
-        expect(JSON.parse(response.body).as_json).
-          to include prisoner.as_json(except: %w[suffix date_of_birth created_at updated_at])
+        expect(JSON.parse(response.body).as_json)
+          .to include prisoner.as_json(except: %w(suffix date_of_birth created_at updated_at))
       end
     end
 

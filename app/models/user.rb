@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  ROLES = %w[admin staff].freeze
+  ROLES = %w(admin staff).freeze
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -7,9 +7,9 @@ class User < ActiveRecord::Base
 
   validates :role, presence: true, inclusion: { in: ROLES }
 
-  ROLES.each do |role|
-    define_method "#{role}?" do
-      self.role == role
+  ROLES.each do |user_role|
+    define_method "#{user_role}?" do
+      role == user_role
     end
   end
 end

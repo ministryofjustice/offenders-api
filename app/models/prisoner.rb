@@ -1,6 +1,7 @@
 class Prisoner < ActiveRecord::Base
   include Swagger::Blocks
 
+  # rubocop:disable Metrics/BlockLength
   swagger_schema :Prisoner do
     key :required, [:id, :noms_id, :given_name, :surname, :date_of_birth, :gender]
     property :id do
@@ -74,7 +75,7 @@ class Prisoner < ActiveRecord::Base
     results = unscoped
     if params[:given_name] || params[:middle_names] || params[:surname]
       results = results.joins("LEFT JOIN aliases ON prisoners.id = aliases.prisoner_id")
-      %i[given_name middle_names surname].each do |field|
+      %i(given_name middle_names surname).each do |field|
         next unless params[field]
         term = params.delete(field)
         results =

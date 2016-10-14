@@ -82,8 +82,8 @@ RSpec.describe ParseCsv do
 
       context 'when there is not an existing prisoner' do
         it 'throws an error with the line number' do
-          expect { described_class.call(csv_data) }.
-            to raise_error(ParseCsv::ParsingError)
+          expect { described_class.call(csv_data) }
+            .to raise_error(ParseCsv::ParsingError)
         end
       end
     end
@@ -93,8 +93,8 @@ RSpec.describe ParseCsv do
         let(:csv_data) { fixture_file_upload('files/prisoners_with_invalid_headers.csv', 'text/csv') }
 
         it 'throws a MalformedHeaderError' do
-          expect { described_class.call(csv_data) }.
-            to raise_error(ParseCsv::MalformedHeaderError)
+          expect { described_class.call(csv_data) }
+            .to raise_error(ParseCsv::MalformedHeaderError)
         end
       end
 
@@ -102,8 +102,8 @@ RSpec.describe ParseCsv do
         let(:csv_data) { fixture_file_upload('files/prisoners_with_invalid_content.csv', 'text/csv') }
 
         it 'throws an error with the line number' do
-          expect { described_class.call(csv_data) }.
-            to raise_error(ParseCsv::ParsingError)
+          expect { described_class.call(csv_data) }
+            .to raise_error(ParseCsv::ParsingError)
         end
       end
     end

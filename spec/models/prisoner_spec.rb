@@ -224,7 +224,7 @@ RSpec.describe Prisoner, type: :model do
     end
 
     it 'sets the new aliases' do
-      excepted_attrs = %w[id created_at updated_at date_of_birth]
+      excepted_attrs = %w(id created_at updated_at date_of_birth)
       first_alias_attrs = subject.aliases.first.attributes.except(*excepted_attrs)
       last_alias_attrs = subject.aliases.last.attributes.except(*excepted_attrs)
       expect(first_alias_attrs).to include alias_attrs.first.except(*excepted_attrs)
