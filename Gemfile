@@ -23,11 +23,12 @@ gem 'swagger_engine'
 gem 'uglifier'
 gem 'whenever', require: false
 
-group :production, :devunicorn do
+group :production do
   gem 'unicorn-rails', '2.2.0'
 end
 
 group :development do
+  gem 'capistrano', '~> 3.6'
   gem 'rubocop', require: false
   gem 'web-console'
 end
