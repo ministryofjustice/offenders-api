@@ -8,6 +8,8 @@ set :application, 'prisoners_api'
 set :repo_url, 'git@github.com:ministryofjustice/prisoners-api.git'
 set :user, 'himal'
 set :deploy_to, "/home/#{fetch(:user)}/apps/#{fetch(:application)}"
+set :rbenv_type, :user
+set :rbenv_ruby, '2.3.0'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
