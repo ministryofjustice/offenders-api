@@ -7,7 +7,7 @@ set :rails_env, 'production'
 set :application, 'prisoners_api'
 set :repo_url, 'git@github.com:ministryofjustice/prisoners-api.git'
 set :user, 'himal'
-set :deploy_to, "/home/himal/apps/prisoners_api"
+set :deploy_to, "/home/#{fetch(:user)}/apps/#{fetch(:application)}"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
@@ -34,6 +34,9 @@ set :branch, 'azure-deploy'
 
 # Default value for linked_dirs is []
 # append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/system'
+
+set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system', 'public/uploads')
+set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml')
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }

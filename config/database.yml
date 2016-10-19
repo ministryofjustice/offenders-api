@@ -17,8 +17,10 @@ test: &test
   database: 'prisonsers_api_test'
 
 production:
-  <<: *default
-  database: <%= ENV['PRISONERS_API_DATABASE'] %>
-
-cucumber:
-  <<: *test
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  host: localhost
+  database: prisoners_api
+  username: prisoners_api
+  password: <%= ENV['PRISONERS_API_DATABASE_PASSWORD'] %>
