@@ -15,9 +15,6 @@ Documentation:
 Metrics/MethodLength:
   Max: 15
 
-StringLiterals:
-  Enabled: false
-
 # No-one in this team uses a fixed-width terminal
 Metrics/LineLength:
   Max: 120

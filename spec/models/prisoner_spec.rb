@@ -194,22 +194,22 @@ RSpec.describe Prisoner, type: :model do
     let(:alias_attrs) do
       [
         {
-          "given_name" => 'ROBERT',
-          "middle_names" => 'JAMES DAN',
-          "surname" => 'BLACK',
-          "title" => 'MR',
-          "suffix" => 'DR',
-          "date_of_birth" => '19801010',
-          "gender" => 'M'
+          'given_name' => 'ROBERT',
+          'middle_names' => 'JAMES DAN',
+          'surname' => 'BLACK',
+          'title' => 'MR',
+          'suffix' => 'DR',
+          'date_of_birth' => '19801010',
+          'gender' => 'M'
         },
         {
-          "given_name" => 'STEVEN',
-          "middle_names" => 'TOM PAUL',
-          "surname" => 'LITTLE',
-          "title" => 'MR',
-          "suffix" => 'DR',
-          "date_of_birth" => '19780503',
-          "gender" => 'M'
+          'given_name' => 'STEVEN',
+          'middle_names' => 'TOM PAUL',
+          'surname' => 'LITTLE',
+          'title' => 'MR',
+          'suffix' => 'DR',
+          'date_of_birth' => '19780503',
+          'gender' => 'M'
         }
       ]
     end
@@ -229,8 +229,8 @@ RSpec.describe Prisoner, type: :model do
       last_alias_attrs = subject.aliases.last.attributes.except(*excepted_attrs)
       expect(first_alias_attrs).to include alias_attrs.first.except(*excepted_attrs)
       expect(last_alias_attrs).to include alias_attrs.last.except(*excepted_attrs)
-      expect(subject.aliases.first.date_of_birth).to eq Date.parse(alias_attrs.first["date_of_birth"])
-      expect(subject.aliases.last.date_of_birth).to eq Date.parse(alias_attrs.last["date_of_birth"])
+      expect(subject.aliases.first.date_of_birth).to eq Date.parse(alias_attrs.first['date_of_birth'])
+      expect(subject.aliases.last.date_of_birth).to eq Date.parse(alias_attrs.last['date_of_birth'])
     end
   end
 end
