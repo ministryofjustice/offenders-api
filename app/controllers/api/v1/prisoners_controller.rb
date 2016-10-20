@@ -244,13 +244,6 @@ module Api
 
       def index
         @prisoners = Prisoner.page(params[:page]).per(params[:per_page])
-
-        updated_after =
-          begin
-            Time.parse(params[:updated_after])
-          rescue ArgumentError, TypeError
-            nil
-          end
         @prisoners = @prisoners.updated_after(updated_after) if updated_after
 
         render json: @prisoners
@@ -321,6 +314,12 @@ module Api
           :cro_number,
           :establishment_code
         )
+      end
+
+      def updated_after
+        @_updated_after ||= Time.parse(params[:updated_after])
+      rescue ArgumentError, TypeError
+        nil
       end
     end
   end

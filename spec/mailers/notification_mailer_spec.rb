@@ -1,14 +1,14 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe NotificationMailer, type: :mailer do
   describe '#import_failed' do
     let(:import) { instance_double('Import') }
-    let(:mailer) { described_class.import_failed(import, "Error parsing line 1234").deliver_now }
+    let(:mailer) { described_class.import_failed(import, 'Error parsing line 1234').deliver_now }
 
     before(:each) do
       allow(import).to receive(:created_at).and_return(Time.now)
-      allow(import).to receive(:prisoners_file).and_return("file_path")
-      allow(import).to receive(:aliases_file).and_return("file_path")
+      allow(import).to receive(:prisoners_file).and_return('file_path')
+      allow(import).to receive(:aliases_file).and_return('file_path')
     end
 
     it 'renders the subject' do

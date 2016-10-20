@@ -69,12 +69,12 @@ class Prisoner < ActiveRecord::Base
   validates :date_of_birth, presence: true
   validates :gender, presence: true
 
-  scope :updated_after, -> (time) { where("updated_at > ?", time) }
+  scope :updated_after, -> (time) { where('updated_at > ?', time) }
 
   def self.search(params)
     results = unscoped
     if params[:given_name] || params[:middle_names] || params[:surname]
-      results = results.joins("LEFT JOIN aliases ON prisoners.id = aliases.prisoner_id")
+      results = results.joins('LEFT JOIN aliases ON prisoners.id = aliases.prisoner_id')
       %i(given_name middle_names surname).each do |field|
         next unless params[field]
         term = params.delete(field)
