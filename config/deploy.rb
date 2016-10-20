@@ -2,6 +2,7 @@
 lock '3.6.1'
 
 server '51.140.163.42', user: 'himal', roles: %w{app db web}
+set :deploy_user, 'himal'
 set :domain, '51.140.163.42'
 set :rails_env, 'production'
 set :application, 'prisoners_api'

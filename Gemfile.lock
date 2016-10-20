@@ -305,6 +305,7 @@ DEPENDENCIES
   active_model_serializers
   awesome_print
   capistrano (~> 3.6)
+  capistrano-bundler
   capistrano-rails (~> 1.1)
   capistrano-rbenv (~> 2.0)
   carrierwave
