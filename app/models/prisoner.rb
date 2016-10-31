@@ -86,6 +86,7 @@ class Prisoner < ActiveRecord::Base
   end
 
   def update_aliases(aliases_params)
+    return unless aliases_params
     transaction do
       aliases.delete_all
       aliases.create(aliases_params)
