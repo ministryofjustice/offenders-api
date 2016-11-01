@@ -181,6 +181,13 @@ module Api
             key :format, 'date'
           end
           parameter do
+            key :name, :gender
+            key :in, :query
+            key :description, 'Gender'
+            key :required, false
+            key :type, :string
+          end
+          parameter do
             key :name, :noms_id
             key :in, :query
             key :description, 'NOMS ID'
@@ -310,6 +317,7 @@ module Api
           :middle_names,
           :surname,
           :date_of_birth,
+          :gender,
           :pnc_number,
           :cro_number,
           :establishment_code
