@@ -13,26 +13,30 @@ RSpec.describe Prisoner, type: :model do
   it { is_expected.to validate_presence_of(:gender) }
 
   describe '.search' do
-    let(:prisoner_1) do
+    let!(:prisoner_1) do
       create(:prisoner, given_name: 'DARREN', middle_names: 'MARK JOHN', surname: 'WHITE',
                         noms_id: 'A1234BC', date_of_birth: '19850317', establishment_code: 'LEI',
                         pnc_number: '38/525271A', cro_number: '056339/17X')
     end
 
-    let(:prisoner_2) do
+    let!(:prisoner_2) do
       create(:prisoner, given_name: 'JUSTIN', middle_names: 'JAKE PAUL', surname: 'BLACK',
                         noms_id: 'A9876ZX', date_of_birth: '19791025', establishment_code: 'BMI',
                         pnc_number: '57/215383B', cro_number: '066231/68H')
     end
 
-    let(:prisoner_3) do
+    let!(:prisoner_3) do
       create(:prisoner, given_name: 'ALANIS', middle_names: 'JANIS SOPHIE', surname: 'PURPLE',
                         noms_id: 'A5678JK', date_of_birth: '19661230', establishment_code: 'OUT',
                         pnc_number: '99/135626A', cro_number: '102593/44J')
     end
 
     let!(:alias_1) do
-      create(:alias, prisoner: prisoner_3, given_name: 'TONY', middle_names: 'FRANK ROBERT', surname: 'BROWN')
+      create(:alias, prisoner: prisoner_3, given_name: 'ALANIS', middle_names: 'LENA ROBERTA', surname: 'BROWN')
+    end
+
+    let!(:alias_2) do
+      create(:alias, prisoner: prisoner_3, given_name: 'DEBBY', middle_names: 'LAURA MARTA', surname: 'BROWN')
     end
 
     context 'name search' do
@@ -48,6 +52,14 @@ RSpec.describe Prisoner, type: :model do
         let(:params) { { middle_names: 'rob', surname: 'bro' } }
 
         it 'returns matching records' do
+          expect(Prisoner.search(params)).to eq [prisoner_3]
+        end
+      end
+
+      context 'when query matches a prisoner and an alias' do
+        let(:params) { { given_name: 'ala' } }
+
+        it 'does not return duplicates' do
           expect(Prisoner.search(params)).to eq [prisoner_3]
         end
       end
