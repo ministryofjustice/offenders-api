@@ -15,20 +15,20 @@ RSpec.describe Prisoner, type: :model do
   describe '.search' do
     let!(:prisoner_1) do
       create(:prisoner, given_name: 'DARREN', middle_names: 'MARK JOHN', surname: 'WHITE',
-                        noms_id: 'A1234BC', date_of_birth: '19850317', establishment_code: 'LEI',
-                        pnc_number: '38/525271A', cro_number: '056339/17X')
+                        noms_id: 'A1234BC', date_of_birth: '19850317', gender: 'M',
+                        establishment_code: 'LEI', pnc_number: '38/525271A', cro_number: '056339/17X')
     end
 
     let!(:prisoner_2) do
       create(:prisoner, given_name: 'JUSTIN', middle_names: 'JAKE PAUL', surname: 'BLACK',
-                        noms_id: 'A9876ZX', date_of_birth: '19791025', establishment_code: 'BMI',
-                        pnc_number: '57/215383B', cro_number: '066231/68H')
+                        noms_id: 'A9876ZX', date_of_birth: '19791025', gender: 'M',
+                        establishment_code: 'BMI', pnc_number: '57/215383B', cro_number: '066231/68H')
     end
 
     let!(:prisoner_3) do
       create(:prisoner, given_name: 'ALANIS', middle_names: 'JANIS SOPHIE', surname: 'PURPLE',
-                        noms_id: 'A5678JK', date_of_birth: '19661230', establishment_code: 'OUT',
-                        pnc_number: '99/135626A', cro_number: '102593/44J')
+                        noms_id: 'A5678JK', date_of_birth: '19661230', gender: 'F',
+                        establishment_code: 'OUT', pnc_number: '99/135626A', cro_number: '102593/44J')
     end
 
     let!(:alias_1) do
@@ -163,6 +163,24 @@ RSpec.describe Prisoner, type: :model do
       end
     end
 
+    context 'gender search' do
+      context 'when query matches' do
+        let(:params) { { gender: 'F' } }
+
+        it 'returns matching records' do
+          expect(Prisoner.search(params)).to eq [prisoner_3]
+        end
+      end
+
+      context 'when query does not match' do
+        let(:params) { { gender: 'NS' } }
+
+        it 'returns an empty array' do
+          expect(Prisoner.search(params)).to eq []
+        end
+      end
+    end
+
     context 'multiple fields search' do
       context 'when query matches' do
         let(:params) do
@@ -171,6 +189,7 @@ RSpec.describe Prisoner, type: :model do
             surname: 'whi',
             noms_id: 'A1234BC',
             date_of_birth: '19850317',
+            gender: 'M',
             establishment_code: 'LEI',
             pnc_number: '38/525271A',
             cro_number: '056339/17X'
@@ -189,6 +208,7 @@ RSpec.describe Prisoner, type: :model do
             middle_names: 'rob',
             noms_id: 'A8765IO',
             date_of_birth: '19720911',
+            gender: 'M',
             establishment_code: 'LEI',
             pnc_number: '38/525271A',
             cro_number: '056339/17X'
