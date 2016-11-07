@@ -23,6 +23,9 @@ class Prisoner < ActiveRecord::Base
     property :surname do
       key :type, :string
     end
+    property :suffix do
+      key :type, :string
+    end
     property :date_of_birth do
       key :type, :string
       key :format, :date

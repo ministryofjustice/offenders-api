@@ -158,7 +158,7 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
 
       it 'returns JSON represenation of prisoner record' do
         expect(JSON.parse(response.body).as_json)
-          .to include prisoner.as_json(except: %w(suffix date_of_birth created_at updated_at))
+          .to include prisoner.as_json(except: %w(date_of_birth created_at updated_at))
       end
     end
 

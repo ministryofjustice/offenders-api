@@ -1,3 +1,3 @@
 class AliasSerializer < ActiveModel::Serializer
-  attributes :given_name, :middle_names, :surname, :date_of_birth, :gender
+  attributes :title, :given_name, :middle_names, :surname, :suffix, :date_of_birth, :gender
 end
