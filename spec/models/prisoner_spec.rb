@@ -220,6 +220,12 @@ RSpec.describe Prisoner, type: :model do
         end
       end
     end
+
+    context 'ordering' do
+      it 'orders record by surname, given_name, middle_names' do
+        expect(Prisoner.search({})).to eq [prisoner_2, prisoner_3, prisoner_1]
+      end
+    end
   end
 
   describe '#update_aliases' do

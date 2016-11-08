@@ -74,6 +74,17 @@ RSpec.describe Api::V1::PrisonersController, type: :controller do
 
         expect(JSON.parse(response.body).size).to eq 1
       end
+
+      it 'orders records by surname, given_name, middle_names' do
+        prisoner_one = create(:prisoner, surname: 'PURPLE')
+        prisoner_two = create(:prisoner, surname: 'BLACK')
+        prisoner_three = create(:prisoner, surname: 'WHITE')
+
+        get :index, updated_after: 10.days.ago
+
+        expect(JSON.parse(response.body).map { |h| h['id'] })
+          .to eq([prisoner_two.id, prisoner_one.id, prisoner_three.id])
+      end
     end
 
     describe 'GET #search' do
