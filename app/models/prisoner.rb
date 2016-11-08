@@ -86,7 +86,7 @@ class Prisoner < ActiveRecord::Base
           results.where("prisoners.#{field} ILIKE :term OR aliases.#{field} ILIKE :term", term: "%#{term}%")
       end
     end
-    results.where(options)
+    results.where(options).order(:surname, :given_name, :middle_names)
   end
 
   def update_aliases(aliases_params)

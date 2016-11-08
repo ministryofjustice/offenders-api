@@ -250,7 +250,7 @@ module Api
       end
 
       def index
-        @prisoners = Prisoner.page(params[:page]).per(params[:per_page])
+        @prisoners = Prisoner.order(:surname, :given_name, :middle_names).page(params[:page]).per(params[:per_page])
         @prisoners = @prisoners.updated_after(updated_after) if updated_after
 
         render json: @prisoners
