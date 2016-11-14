@@ -30,6 +30,12 @@ class Alias < ActiveRecord::Base
     property :gender do
       key :type, :string
     end
+    property :pnc_number do
+      key :type, :string
+    end
+    property :cro_number do
+      key :type, :string
+    end
   end
 
   has_paper_trail

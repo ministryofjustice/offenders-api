@@ -32,15 +32,22 @@ RSpec.describe Prisoner, type: :model do
     end
 
     let!(:alias_1) do
-      create(:alias, prisoner: prisoner_3, given_name: 'ALANIS', middle_names: 'LENA ROBERTA', surname: 'BROWN')
+      create(:alias, prisoner: prisoner_3, given_name: 'ALANIS', middle_names: 'LENA ROBERTA', surname: 'BROWN',
+                     gender: 'M', date_of_birth: '19650807', pnc_number: '74/832963V', cro_number: '195942/38G')
     end
 
     let!(:alias_2) do
-      create(:alias, prisoner: prisoner_3, given_name: 'DEBBY', middle_names: 'LAURA MARTA', surname: 'BROWN')
+      create(:alias, prisoner: prisoner_3, given_name: 'DEBBY', middle_names: 'LAURA MARTA', surname: 'BROWN',
+                     gender: 'M', date_of_birth: '19691128', pnc_number: '99/135626A', cro_number: '639816/39Y')
+    end
+
+    let!(:alias_3) do
+      create(:alias, prisoner: prisoner_1, given_name: 'JONAS', middle_names: 'JULIUS', surname: 'CEASAR',
+                     gender: 'F', date_of_birth: '19541009', pnc_number: '74/836893N', cro_number: '741860/84F')
     end
 
     context 'name search' do
-      context 'when query matches' do
+      context 'when query matches a prisoner' do
         let(:params) { { given_name: 'darr', surname: 'whi' } }
 
         it 'returns matching records' do
@@ -92,8 +99,16 @@ RSpec.describe Prisoner, type: :model do
     end
 
     context 'date_of_birth search' do
-      context 'when query matches' do
+      context 'when query matches a prisoner' do
         let(:params) { { date_of_birth: '19661230' } }
+
+        it 'returns matching records' do
+          expect(Prisoner.search(params)).to eq [prisoner_3]
+        end
+      end
+
+      context 'when query matches an alias' do
+        let(:params) { { date_of_birth: '19691128' } }
 
         it 'returns matching records' do
           expect(Prisoner.search(params)).to eq [prisoner_3]
@@ -110,11 +125,19 @@ RSpec.describe Prisoner, type: :model do
     end
 
     context 'pnc_number search' do
-      context 'when query matches' do
+      context 'when query matches a prisoner' do
         let(:params) { { pnc_number: '38/525271A' } }
 
         it 'returns matching records' do
           expect(Prisoner.search(params)).to eq [prisoner_1]
+        end
+      end
+
+      context 'when query matches an alias' do
+        let(:params) { { pnc_number: '74/832963V' } }
+
+        it 'returns matching records' do
+          expect(Prisoner.search(params)).to eq [prisoner_3]
         end
       end
 
@@ -128,11 +151,19 @@ RSpec.describe Prisoner, type: :model do
     end
 
     context 'cro_number search' do
-      context 'when query matches' do
+      context 'when query matches a prisoner' do
         let(:params) { { cro_number: '066231/68H' } }
 
         it 'returns matching records' do
           expect(Prisoner.search(params)).to eq [prisoner_2]
+        end
+      end
+
+      context 'when query matches an alias' do
+        let(:params) { { cro_number: '639816/39Y' } }
+
+        it 'returns matching records' do
+          expect(Prisoner.search(params)).to eq [prisoner_3]
         end
       end
 
@@ -164,11 +195,19 @@ RSpec.describe Prisoner, type: :model do
     end
 
     context 'gender search' do
-      context 'when query matches' do
+      context 'when query matches a prisoner' do
         let(:params) { { gender: 'F' } }
 
         it 'returns matching records' do
-          expect(Prisoner.search(params)).to eq [prisoner_3]
+          expect(Prisoner.search(params)).to eq [prisoner_3, prisoner_1]
+        end
+      end
+
+      context 'when query matches an alias' do
+        let(:params) { { gender: 'M' } }
+
+        it 'returns matching records' do
+          expect(Prisoner.search(params)).to eq [prisoner_2, prisoner_3, prisoner_1]
         end
       end
 

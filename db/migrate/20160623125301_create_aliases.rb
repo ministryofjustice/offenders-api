@@ -8,8 +8,10 @@ class CreateAliases < ActiveRecord::Migration
       t.string :middle_names
       t.string :surname, index: true
       t.string :suffix
+      t.date   :date_of_birth
       t.string :gender
-      t.date :date_of_birth
+      t.string :pnc_number, index: true
+      t.string :cro_number, index: true
     end
   end
 end
