@@ -24,11 +24,15 @@ ActiveRecord::Schema.define(version: 20160803144245) do
     t.string "middle_names"
     t.string "surname"
     t.string "suffix"
-    t.string "gender"
     t.date   "date_of_birth"
+    t.string "gender"
+    t.string "pnc_number"
+    t.string "cro_number"
   end
 
+  add_index "aliases", ["cro_number"], name: "index_aliases_on_cro_number", using: :btree
   add_index "aliases", ["given_name"], name: "index_aliases_on_given_name", using: :btree
+  add_index "aliases", ["pnc_number"], name: "index_aliases_on_pnc_number", using: :btree
   add_index "aliases", ["prisoner_id"], name: "index_aliases_on_prisoner_id", using: :btree
   add_index "aliases", ["surname"], name: "index_aliases_on_surname", using: :btree
 
@@ -82,23 +86,26 @@ ActiveRecord::Schema.define(version: 20160803144245) do
 
   create_table "prisoners", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string   "noms_id"
+    t.string   "title"
     t.string   "given_name"
     t.string   "middle_names"
     t.string   "surname"
-    t.string   "title"
     t.string   "suffix"
     t.date     "date_of_birth"
     t.string   "gender"
-    t.string   "pnc_number"
     t.string   "nationality_code"
-    t.string   "cro_number"
     t.string   "establishment_code"
+    t.string   "pnc_number"
+    t.string   "cro_number"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "prisoners", ["cro_number"], name: "index_prisoners_on_cro_number", using: :btree
+  add_index "prisoners", ["given_name"], name: "index_prisoners_on_given_name", using: :btree
   add_index "prisoners", ["noms_id"], name: "index_prisoners_on_noms_id", using: :btree
   add_index "prisoners", ["pnc_number"], name: "index_prisoners_on_pnc_number", using: :btree
+  add_index "prisoners", ["surname"], name: "index_prisoners_on_surname", using: :btree
 
   create_table "uploads", force: :cascade do |t|
     t.string   "md5"
