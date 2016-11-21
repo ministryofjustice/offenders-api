@@ -86,16 +86,6 @@ class Prisoner < ActiveRecord::Base
       value = params.delete(field)
       results = results.where("prisoners.#{field} = :value OR aliases.#{field} = :value", value: value)
     end
-    %i(date_of_birth_from date_of_birth_to).each do |field|
-      next unless params[field]
-      value = params.delete(field).to_date
-      operator = case field
-                 when :date_of_birth_from then '>='
-                 when :date_of_birth_to then '<='
-                 end
-      results =
-        results.where("prisoners.date_of_birth #{operator} :value OR aliases.date_of_birth #{operator} :value", value: value)
-    end
     results.where(params).order(:surname, :given_name, :middle_names)
   end
 
