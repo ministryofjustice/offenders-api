@@ -124,32 +124,6 @@ RSpec.describe Prisoner, type: :model do
       end
     end
 
-    context 'date_of_birth range search' do
-      context 'when query matches a prisoner' do
-        let(:params) { { date_of_birth_from: '19780101', date_of_birth_to: '19800101' } }
-
-        it 'returns matching records' do
-          expect(Prisoner.search(params)).to eq [prisoner_2]
-        end
-      end
-
-      # context 'when query matches an alias' do
-      #   let(:params) { { date_of_birth: '19691128' } }
-      #
-      #   it 'returns matching records' do
-      #     expect(Prisoner.search(params)).to eq [prisoner_3]
-      #   end
-      # end
-      #
-      # context 'when query does not match' do
-      #   let(:params) { { date_of_birth: '19710309' } }
-      #
-      #   it 'returns an empty array' do
-      #     expect(Prisoner.search(params)).to eq []
-      #   end
-      # end
-    end
-
     context 'pnc_number search' do
       context 'when query matches a prisoner' do
         let(:params) { { pnc_number: '38/525271A' } }
