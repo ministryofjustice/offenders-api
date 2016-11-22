@@ -1,14 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe Import, type: :model do
-  it { is_expected.to validate_presence_of(:prisoners_file) }
-  it { is_expected.to validate_presence_of(:aliases_file) }
+  it { is_expected.to validate_presence_of(:offenders_file) }
+  it { is_expected.to validate_presence_of(:identities_file) }
 
-  let(:prisoners_file) { fixture_file_upload('files/prisoners.csv', 'text/csv') }
-  let(:aliases_file) { fixture_file_upload('files/aliases.csv', 'text/csv') }
+  let(:offenders_file) { fixture_file_upload('files/offenders.csv', 'text/csv') }
+  let(:identities_file) { fixture_file_upload('files/identities.csv', 'text/csv') }
 
   describe 'creating a new import' do
-    subject { Import.new(prisoners_file: prisoners_file, aliases_file: aliases_file) }
+    subject { Import.new(offenders_file: offenders_file, identities_file: identities_file) }
 
     before { subject.save! }
 
@@ -25,7 +25,7 @@ RSpec.describe Import, type: :model do
     end
 
     context 'when invalid (trying to import a previously used file)' do
-      let!(:import) { Import.create(prisoners_file: prisoners_file) }
+      let!(:import) { Import.create(offenders_file: offenders_file) }
 
       it 'does not create an import record' do
         expect(Import.count).to be 1
@@ -36,7 +36,7 @@ RSpec.describe Import, type: :model do
       end
 
       it 'has a validation error' do
-        expect(import.errors.messages).to include(base: ['Prisoners file has already been uploaded'])
+        expect(import.errors.messages).to include(base: ['Offenders file has already been uploaded'])
       end
     end
   end

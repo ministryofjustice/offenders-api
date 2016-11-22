@@ -1,7 +1,8 @@
-class CreateAliases < ActiveRecord::Migration
+class CreateIdentities < ActiveRecord::Migration
   def change
-    create_table :aliases do |t|
-      t.uuid :prisoner_id, index: true, foreign_key: true
+    create_table :identities, id: :uuid do |t|
+      t.uuid :offender_id, index: true, foreign_key: true
+      t.string :nomis_offender_id, index: true
 
       t.string :title
       t.string :given_name, index: true

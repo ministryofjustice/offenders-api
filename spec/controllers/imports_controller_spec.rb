@@ -18,13 +18,13 @@ RSpec.describe ImportsController, type: :controller do
   end
 
   describe 'POST #create' do
-    let(:prisoners_file) { fixture_file_upload('files/prisoners.csv', 'text/csv') }
-    let(:aliases_file) { fixture_file_upload('files/aliases.csv', 'text/csv') }
+    let(:offenders_file) { fixture_file_upload('files/offenders.csv', 'text/csv') }
+    let(:identities_file) { fixture_file_upload('files/identities.csv', 'text/csv') }
     let(:import_params) do
       {
         import: {
-          prisoners_file: prisoners_file,
-          aliases_file: aliases_file
+          offenders_file: offenders_file,
+          identities_file: identities_file
         }
       }
     end
@@ -44,7 +44,7 @@ RSpec.describe ImportsController, type: :controller do
     end
 
     context 'when not valid' do
-      before { import_params[:import][:prisoners_file] = '' }
+      before { import_params[:import][:offenders_file] = '' }
 
       it 'does not create an import' do
         expect { post :create, import_params }

@@ -6,14 +6,14 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module PrisonersApi
+module OffendersApi
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
-    config.app_title = 'Prisoners API'
-    config.proposition_title = 'Prisoners API'
+    config.app_title = 'Offenders API'
+    config.proposition_title = 'Offenders API'
     config.phase = 'beta'
     config.product_type = 'service'
     config.feedback_url = ''

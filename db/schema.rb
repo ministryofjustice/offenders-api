@@ -17,8 +17,9 @@ ActiveRecord::Schema.define(version: 20160803144245) do
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
-  create_table "aliases", force: :cascade do |t|
-    t.uuid   "prisoner_id"
+  create_table "identities", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.uuid   "offender_id"
+    t.string "nomis_offender_id"
     t.string "title"
     t.string "given_name"
     t.string "middle_names"
@@ -30,16 +31,17 @@ ActiveRecord::Schema.define(version: 20160803144245) do
     t.string "cro_number"
   end
 
-  add_index "aliases", ["cro_number"], name: "index_aliases_on_cro_number", using: :btree
-  add_index "aliases", ["given_name"], name: "index_aliases_on_given_name", using: :btree
-  add_index "aliases", ["pnc_number"], name: "index_aliases_on_pnc_number", using: :btree
-  add_index "aliases", ["prisoner_id"], name: "index_aliases_on_prisoner_id", using: :btree
-  add_index "aliases", ["surname"], name: "index_aliases_on_surname", using: :btree
+  add_index "identities", ["cro_number"], name: "index_identities_on_cro_number", using: :btree
+  add_index "identities", ["given_name"], name: "index_identities_on_given_name", using: :btree
+  add_index "identities", ["nomis_offender_id"], name: "index_identities_on_nomis_offender_id", using: :btree
+  add_index "identities", ["offender_id"], name: "index_identities_on_offender_id", using: :btree
+  add_index "identities", ["pnc_number"], name: "index_identities_on_pnc_number", using: :btree
+  add_index "identities", ["surname"], name: "index_identities_on_surname", using: :btree
 
   create_table "imports", force: :cascade do |t|
-    t.string   "prisoners_file"
-    t.string   "aliases_file"
-    t.string   "status",         default: "in_progress"
+    t.string   "offenders_file"
+    t.string   "identities_file"
+    t.string   "status",          default: "in_progress"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -84,28 +86,17 @@ ActiveRecord::Schema.define(version: 20160803144245) do
 
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
-  create_table "prisoners", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+  create_table "offenders", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.uuid     "current_identity_id"
     t.string   "noms_id"
-    t.string   "title"
-    t.string   "given_name"
-    t.string   "middle_names"
-    t.string   "surname"
-    t.string   "suffix"
-    t.date     "date_of_birth"
-    t.string   "gender"
     t.string   "nationality_code"
     t.string   "establishment_code"
-    t.string   "pnc_number"
-    t.string   "cro_number"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "prisoners", ["cro_number"], name: "index_prisoners_on_cro_number", using: :btree
-  add_index "prisoners", ["given_name"], name: "index_prisoners_on_given_name", using: :btree
-  add_index "prisoners", ["noms_id"], name: "index_prisoners_on_noms_id", using: :btree
-  add_index "prisoners", ["pnc_number"], name: "index_prisoners_on_pnc_number", using: :btree
-  add_index "prisoners", ["surname"], name: "index_prisoners_on_surname", using: :btree
+  add_index "offenders", ["current_identity_id"], name: "index_offenders_on_current_identity_id", using: :btree
+  add_index "offenders", ["noms_id"], name: "index_offenders_on_noms_id", using: :btree
 
   create_table "uploads", force: :cascade do |t|
     t.string   "md5"
