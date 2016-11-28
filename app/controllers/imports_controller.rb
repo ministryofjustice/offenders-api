@@ -18,6 +18,6 @@ class ImportsController < ApplicationController
   private
 
   def import_params
-    params.require(:import).permit(:prisoners_file, :aliases_file)
+    params.require(:import).permit(:offenders_file, :identities_file)
   end
 end

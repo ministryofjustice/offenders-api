@@ -1,8 +1,8 @@
-class Alias < ActiveRecord::Base
+class Identity < ActiveRecord::Base
   include Swagger::Blocks
 
   # rubocop:disable Metrics/BlockLength
-  swagger_schema :Alias do
+  swagger_schema :Identity do
     key :required, [:id, :given_name, :surname, :date_of_birth, :gender]
     property :id do
       key :type, :integer
@@ -40,10 +40,16 @@ class Alias < ActiveRecord::Base
 
   has_paper_trail
 
-  belongs_to :prisoner
+  belongs_to :offender
 
   validates :given_name, presence: true
   validates :surname, presence: true
   validates :date_of_birth, presence: true
   validates :gender, presence: true
+
+  delegate :noms_id, :nationality_code, :establishment_code, to: :offender
+
+  def self.search(params)
+    joins(:offender).where(params)
+  end
 end

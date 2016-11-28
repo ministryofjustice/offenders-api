@@ -16,7 +16,7 @@
   .header-proposition
     .content
       %nav{ class: "proposition-menu" }
-        = link_to 'Prisoners API', root_path, id: 'proposition-name'
+        = link_to 'Offenders API', root_path, id: 'proposition-name'
         - if user_signed_in?
           .sign-out
             = button_to 'Sign out', destroy_user_session_path, method: :delete, class: 'styled-as-link'

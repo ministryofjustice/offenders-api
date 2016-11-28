@@ -2,9 +2,9 @@
 [![Code Climate](https://codeclimate.com/github/ministryofjustice/prisoners_api/badges/gpa.svg)](https://codeclimate.com/github/ministryofjustice/prisoners_api)
 [![Test Coverage](https://codeclimate.com/github/ministryofjustice/prisoners_api/badges/coverage.svg)](https://codeclimate.com/github/ministryofjustice/prisoners_api/coverage)
 
-# Prisoners API
+# Offenders API
 
-Initial Prisoners API microservice Rails app. Set up with Doorkeeper OAuth2 provider for [two-legged](https://github.com/doorkeeper-gem/doorkeeper/wiki/Client-Credentials-flow) auth.
+Initial Offenders API microservice Rails app. Set up with Doorkeeper OAuth2 provider for [two-legged](https://github.com/doorkeeper-gem/doorkeeper/wiki/Client-Credentials-flow) auth.
 
 Instructions:
 
@@ -26,21 +26,21 @@ Password: password123
 
 Select one of the sample applications and click "Get access token." The returned JSON contains the access token.
 
-Once the access token has been obtained you can make requests to `/api/prisoners` (to get a list of all prisoners), `/api/prisoners/search` with params to search prisoners, `/api/prisoners/<ID>` to get a specific prisoner. The access token should be passed either in the header or as a request params.
+Once the access token has been obtained you can make requests to `/api/offenders` (to get a list of all offenders), `/api/offenders/search` with params to search offenders, `/api/offenders/<ID>` to get a specific offender. The access token should be passed either in the header or as a request params.
 
 e.g:
 
 ```
-http://localhost:3000/api/prisoners?page=1&per_page=10&access_token=<ACCESS TOKEN>
-http://localhost:3000/api/prisoners/search?noms_id=A1403AE&surname=smith&access_token=<ACCESS TOKEN>
-http://localhost:3000/api/prisoners/<PRISONER ID>?access_token=<ACCESS TOKEN>
+http://localhost:3000/api/offenders?page=1&per_page=10&access_token=<ACCESS TOKEN>
+http://localhost:3000/api/offenders/search?noms_id=A1403AE&surname=smith&access_token=<ACCESS TOKEN>
+http://localhost:3000/api/offenders/<PRISONER ID>?access_token=<ACCESS TOKEN>
 ```
 
-You can find a prisoner ID by opening the Rails console, e.g:
+You can find a offender ID by opening the Rails console, e.g:
 
 ```
 $ rails c
-2.3.0 :001 > Prisoner.first.id
+2.3.0 :001 > Offender.first.id
  => "0029d940-a835-418a-af7d-37e7cd6edd10"
 ```
 
@@ -50,10 +50,10 @@ You can access the Swagger documentation at:
 http://localhost:3000/api-docs
 ```
 
-To create a prisoner record using Curl:
+To create a offender record using Curl:
 
 ```
-curl -v -H "Authorization: Bearer <ACCESS TOKEN>" -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{ "prisoner" : { "noms_id" : "1234", "given_name" : "John", "surname" : "Smith", "date_of_birth" : "19800101", "gender" : "M" } }'  http://localhost:3000/api/prisoners
+curl -v -H "Authorization: Bearer <ACCESS TOKEN>" -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{ "offender" : { "noms_id" : "1234", "given_name" : "John", "surname" : "Smith", "date_of_birth" : "19800101", "gender" : "M" } }'  http://localhost:3000/api/offenders
 ```
 
 An accept header containing the API version can be passed, currently this defaults to version 1 if nothing is passed.

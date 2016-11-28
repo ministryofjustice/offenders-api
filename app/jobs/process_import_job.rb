@@ -2,6 +2,6 @@ class ProcessImportJob < ActiveJob::Base
   queue_as :default
 
   def perform(import)
-    ImportPrisoners.call(import)
+    ImportOffenders.call(import)
   end
 end

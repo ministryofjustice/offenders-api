@@ -20,44 +20,44 @@ module ParseCsv
 
     csv = CSV.parse(data, headers: true)
 
-    Alias.delete_all if csv.headers == ALIASES_HEADERS
+    Identity.delete_all if csv.headers == ALIASES_HEADERS
 
     csv.each_with_index do |row, line_number|
-      import_prisoner_or_alias(csv.headers, row, line_number + 1)
+      import_offender_or_identity(csv.headers, row, line_number + 1)
     end
   end
 
   class << self
     private
 
-    def import_prisoner_or_alias(headers, row, line_number)
+    def import_offender_or_identity(headers, row, line_number)
       if headers == PRISONERS_HEADERS
-        update_or_create_prisoner(row)
+        update_or_create_offender(row)
       elsif headers == ALIASES_HEADERS
-        create_alias(row)
+        create_identity(row)
       else
         raise MalformedHeaderError
       end
     rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound, ArgumentError
-      file_name = (headers == PRISONERS_HEADERS ? 'prisoners' : 'aliases')
+      file_name = (headers == PRISONERS_HEADERS ? 'offenders' : 'identities')
       raise(ParsingError, "Error parsing line #{line_number} on #{file_name} file")
     end
 
-    def update_or_create_prisoner(row)
-      prisoner = Prisoner.find_by(noms_id: row['NOMS_NUMBER'])
-      if prisoner
-        prisoner.update_attributes(prisoner_attributes_from(row))
+    def update_or_create_offender(row)
+      offender = Offender.find_by(noms_id: row['NOMS_NUMBER'])
+      if offender
+        offender.update_attributes(offender_attributes_from(row))
       else
-        Prisoner.create!(prisoner_attributes_from(row))
+        Offender.create!(offender_attributes_from(row))
       end
     end
 
-    def create_alias(row)
-      prisoner = Prisoner.find_by!(noms_id: row['NOMS_NUMBER'])
-      prisoner.aliases.create!(alias_attributes_from(row))
+    def create_identity(row)
+      offender = Offender.find_by!(noms_id: row['NOMS_NUMBER'])
+      offender.identities.create!(identity_attributes_from(row))
     end
 
-    def prisoner_attributes_from(row)
+    def offender_attributes_from(row)
       {
         noms_id: row['NOMS_NUMBER'],
         given_name: row['GIVEN_NAME_1'],
@@ -73,7 +73,7 @@ module ParseCsv
       }
     end
 
-    def alias_attributes_from(row)
+    def identity_attributes_from(row)
       {
         given_name: row['GIVEN_NAME_1'],
         middle_names: middle_names(row['GIVEN_NAME_2'], row['GIVEN_NAME_3']),

@@ -5,15 +5,15 @@ class ApidocsController < ActionController::Base
     key :swagger, '2.0'
     info do
       key :version, '1.0.0'
-      key :title, 'Prisoners API'
-      key :description, 'Single source of truth for prisoner information'
+      key :title, 'Offenders API'
+      key :description, 'Single source of truth for offender information'
       contact do
         key :name, 'single-offender-identity@digital.justice.gov.uk'
       end
     end
     tag do
-      key :name, 'prisoner'
-      key :description, 'Prisoners operations'
+      key :name, 'offender'
+      key :description, 'Offenders operations'
     end
     key :host, ENV['HTTP_HOST']
     key :basePath, '/api'
@@ -23,9 +23,9 @@ class ApidocsController < ActionController::Base
 
   # A list of all classes that have swagger_* declarations.
   SWAGGERED_CLASSES = [
-    Api::V1::PrisonersController,
-    Prisoner,
-    Alias,
+    Api::V1::OffendersController,
+    Offender,
+    Identity,
     ErrorModel,
     self
   ].freeze

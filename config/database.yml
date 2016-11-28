@@ -10,7 +10,7 @@ default: &default
 
 development:
   <<: *default
-  database: prisoners_api_development
+  database: offenders_api_development
 
 test: &test
   <<: *default

@@ -1,28 +1,28 @@
 class Import < ActiveRecord::Base
-  mount_uploader :prisoners_file, FileUploader
-  mount_uploader :aliases_file, FileUploader
+  mount_uploader :offenders_file, FileUploader
+  mount_uploader :identities_file, FileUploader
 
-  validates :prisoners_file, presence: true
-  validates :aliases_file, presence: true
-  validate :prisoners_file_uniqueness
-  validate :aliases_file_uniqueness
+  validates :offenders_file, presence: true
+  validates :identities_file, presence: true
+  validate :offenders_file_uniqueness
+  validate :identities_file_uniqueness
 
   after_create :create_uploads
 
   private
 
   def create_uploads
-    Upload.create(md5: prisoners_file.md5)
-    Upload.create(md5: aliases_file.md5)
+    Upload.create(md5: offenders_file.md5)
+    Upload.create(md5: identities_file.md5)
   end
 
-  def prisoners_file_uniqueness
-    return unless Upload.where(md5: prisoners_file.md5).any?
-    errors[:base] << 'Prisoners file has already been uploaded'
+  def offenders_file_uniqueness
+    return unless Upload.where(md5: offenders_file.md5).any?
+    errors[:base] << 'Offenders file has already been uploaded'
   end
 
-  def aliases_file_uniqueness
-    return unless Upload.where(md5: aliases_file.md5).any?
-    errors[:base] << 'Aliases file has already been uploaded'
+  def identities_file_uniqueness
+    return unless Upload.where(md5: identities_file.md5).any?
+    errors[:base] << 'Identities file has already been uploaded'
   end
 end

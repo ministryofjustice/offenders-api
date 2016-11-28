@@ -2,15 +2,15 @@ module Api
   module V1
     # rubocop:disable Metrics/ClassLength
     # rubocop:disable Metrics/BlockLength
-    class PrisonersController < Api::ApplicationController
+    class IdentitiesController < Api::ApplicationController
       include Swagger::Blocks
 
-      swagger_path '/prisoners' do
+      swagger_path '/identities' do
         operation :get do
-          key :description, 'Returns a paginated list of prisoners'
-          key :operationId, 'findPrisoners'
+          key :description, 'Returns a paginated list of identities'
+          key :operationId, 'findIdentities'
           key :produces, ['application/json']
-          key :tags, ['prisoner']
+          key :tags, ['identity']
           parameter do
             key :name, :page
             key :in, :query
@@ -30,17 +30,17 @@ module Api
           parameter do
             key :name, :updated_after
             key :in, :query
-            key :description, 'Prisoners updated after given timestamp'
+            key :description, 'Identities updated after given timestamp'
             key :required, false
             key :type, :string
             key :format, 'date-time'
           end
           response 200 do
-            key :description, 'A list of prisoners'
+            key :description, 'A list of identities'
             schema do
               key :type, :array
               items do
-                key :'$ref', :Prisoner
+                key :'$ref', :Identity
               end
             end
           end
@@ -53,23 +53,23 @@ module Api
         end
 
         operation :post do
-          key :description, 'Creates a new prisoner'
-          key :operationId, 'addPrisoner'
+          key :description, 'Creates a new identity'
+          key :operationId, 'addIdentity'
           key :produces, ['application/json']
-          key :tags, ['prisoner']
+          key :tags, ['identity']
           parameter do
-            key :name, :prisoner
+            key :name, :identity
             key :in, :body
-            key :description, 'Prisoner to add'
+            key :description, 'Identity to add'
             key :required, true
             schema do
-              key :'$ref', :PrisonerInput
+              key :'$ref', :IdentityInput
             end
           end
           response 200 do
-            key :description, 'prisoner response'
+            key :description, 'identity response'
             schema do
-              key :'$ref', :Prisoner
+              key :'$ref', :Identity
             end
           end
           response :default do
@@ -81,23 +81,23 @@ module Api
         end
       end
 
-      swagger_path '/prisoners/{id}' do
+      swagger_path '/identities/{id}' do
         operation :get do
-          key :description, 'Returns prisoner with given ID'
-          key :operationId, 'findPrisonerById'
-          key :tags, ['prisoner']
+          key :description, 'Returns identity with given ID'
+          key :operationId, 'findIdentityById'
+          key :tags, ['identity']
           parameter do
             key :name, :id
             key :in, :path
-            key :description, 'ID of prisoner to fetch'
+            key :description, 'ID of identity to fetch'
             key :required, true
             key :type, :string
             key :format, :uuid
           end
           response 200 do
-            key :description, 'prisoner response'
+            key :description, 'identity response'
             schema do
-              key :'$ref', :Prisoner
+              key :'$ref', :Identity
             end
           end
           response :default do
@@ -109,31 +109,31 @@ module Api
         end
 
         operation :patch do
-          key :description, 'Updates a prisoner'
-          key :operationId, 'updatePrisoner'
+          key :description, 'Updates a identity'
+          key :operationId, 'updateIdentity'
           key :produces, ['application/json']
-          key :tags, ['prisoner']
+          key :tags, ['identity']
           parameter do
             key :name, :id
             key :in, :path
-            key :description, 'ID of prisoner to update'
+            key :description, 'ID of identity to update'
             key :required, true
             key :type, :string
             key :format, :uuid
           end
           parameter do
-            key :name, :prisoner
+            key :name, :identity
             key :in, :body
-            key :description, 'Prisoner to update'
+            key :description, 'Identity to update'
             key :required, true
             schema do
-              key :'$ref', :PrisonerInput
+              key :'$ref', :IdentityInput
             end
           end
           response 200 do
-            key :description, 'prisoner response'
+            key :description, 'identity response'
             schema do
-              key :'$ref', :Prisoner
+              key :'$ref', :Identity
             end
           end
           response :default do
@@ -145,12 +145,12 @@ module Api
         end
       end
 
-      swagger_path '/prisoners/search' do
+      swagger_path '/identities/search' do
         operation :get do
-          key :description, 'Returns a paginated list of prisoners matching the given search parameters'
-          key :operationId, 'searchPrisoners'
+          key :description, 'Returns a paginated list of identities matching the given search parameters'
+          key :operationId, 'searchIdentities'
           key :produces, ['application/json']
-          key :tags, ['prisoner']
+          key :tags, ['identity']
           parameter do
             key :name, :given_name
             key :in, :query
@@ -232,11 +232,11 @@ module Api
             key :format, :int32
           end
           response 200 do
-            key :description, 'A list of prisoners'
+            key :description, 'A list of identities'
             schema do
               key :type, :array
               items do
-                key :'$ref', :Prisoner
+                key :'$ref', :Identity
               end
             end
           end
@@ -250,68 +250,79 @@ module Api
       end
 
       def index
-        @prisoners = Prisoner.order(:surname, :given_name, :middle_names).page(params[:page]).per(params[:per_page])
-        @prisoners = @prisoners.updated_after(updated_after) if updated_after
+        @identities = Identity.order(:surname, :given_name, :middle_names).page(params[:page]).per(params[:per_page])
 
-        render json: @prisoners
+        render json: @identities
       end
 
       def search
-        @prisoners = Prisoner.search(search_params).page(params[:page]).per(params[:per_page])
+        @identities = Identity.search(search_params).page(params[:page]).per(params[:per_page])
 
-        render json: @prisoners
+        render json: @identities
       end
 
       def show
-        @prisoner = Prisoner.find(params[:id])
+        @identity = Identity.find(params[:id])
 
-        render json: @prisoner
+        render json: @identity
       end
 
       def create
-        @prisoner = Prisoner.new(prisoner_params.except(:aliases))
-
-        if @prisoner.save
-          @prisoner.update_aliases(prisoner_params[:aliases])
-          render json: { id: @prisoner.id }, status: :created
+        if offender.valid?
+          create_identity
         else
-          render json: { error: @prisoner.errors }, status: 422
+          render json: { error: @offender.errors }, status: 422
         end
       end
 
       def update
-        @prisoner = Prisoner.find(params[:id])
+        @identity = Identity.find(params[:id])
 
-        if @prisoner.update(prisoner_params.except(:aliases))
-          @prisoner.update_aliases(prisoner_params[:aliases])
+        if @identity.update(identity_params)
           render json: { success: true }, status: 200
         else
-          render json: { error: @prisoner.errors }, status: 422
+          render json: { error: @identity.errors }, status: 422
         end
       end
 
       private
 
-      def prisoner_params
-        params.require(:prisoner).permit(
-          :noms_id,
-          :given_name,
-          :middle_names,
-          :surname,
-          :title,
-          :suffix,
-          :date_of_birth,
-          :gender,
-          :nationality_code,
-          :pnc_number,
-          :cro_number,
-          :establishment_code,
-          aliases: [:given_name, :middle_names, :surname, :title, :suffix, :gender, :date_of_birth]
+      def offender
+        offender_params = identity_params.extract!(:noms_id, :nationality_code, :establishment_code)
+        @offender ||=
+          if identity_params[:offender_id]
+            Offender.find(identity_params[:offender_id])
+          else
+            Offender.create(offender_params)
+          end
+      end
+
+      def create_identity
+        @identity = offender.identities.build(identity_params.except(:noms_id, :nationality_code, :establishment_code))
+        if @identity.save
+          update_offender
+          render json: { id: @identity.id, offender_id: offender.id }, status: :created
+        else
+          render json: { error: @identity.errors }, status: 422
+        end
+      end
+
+      def update_offender
+        offender.update_attribute(:current_identity, @identity) unless identity_params[:offender_id]
+      end
+
+      def identity_params
+        params.require(:identity).permit(
+          :offender_id, :nomis_offender_id, :noms_id,
+          :given_name, :middle_names, :surname, :title, :suffix,
+          :date_of_birth, :gender, :nationality_code,
+          :pnc_number, :cro_number, :establishment_code
         )
       end
 
       def search_params
         params.permit(
+          :offender_id,
           :noms_id,
           :given_name,
           :middle_names,
@@ -322,12 +333,6 @@ module Api
           :cro_number,
           :establishment_code
         )
-      end
-
-      def updated_after
-        @_updated_after ||= Time.parse(params[:updated_after])
-      rescue ArgumentError, TypeError
-        nil
       end
     end
   end
