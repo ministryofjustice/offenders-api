@@ -15,6 +15,10 @@ class ApidocsController < ActionController::Base
       key :name, 'offender'
       key :description, 'Offenders operations'
     end
+    tag do
+      key :name, 'identity'
+      key :description, 'Identities operations'
+    end
     key :host, ENV['HTTP_HOST']
     key :basePath, '/api'
     key :consumes, ['application/json']
@@ -24,6 +28,7 @@ class ApidocsController < ActionController::Base
   # A list of all classes that have swagger_* declarations.
   SWAGGERED_CLASSES = [
     Api::V1::OffendersController,
+    Api::V1::IdentitiesController,
     Offender,
     Identity,
     ErrorModel,
