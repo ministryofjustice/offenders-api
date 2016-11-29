@@ -278,17 +278,16 @@ module Api
       def update
         @identity = Identity.find(params[:id])
 
-        if @identity.update(identity_params)
+        if @identity.update(identity_params) && @identity.offender.update(offender_params)
           render json: { success: true }, status: 200
         else
-          render json: { error: @identity.errors }, status: 422
+          render json: { error: identity_or_offender_errors }, status: 422
         end
       end
 
       private
 
       def offender
-        offender_params = identity_params.extract!(:noms_id, :nationality_code, :establishment_code)
         @offender ||=
           if identity_params[:offender_id]
             Offender.find(identity_params[:offender_id])
@@ -298,25 +297,45 @@ module Api
       end
 
       def create_identity
-        @identity = offender.identities.build(identity_params.except(:noms_id, :nationality_code, :establishment_code))
+        @identity = offender.identities.build(identity_params)
         if @identity.save
-          update_offender
+          update_current_identity_of_offender
           render json: { id: @identity.id, offender_id: offender.id }, status: :created
         else
           render json: { error: @identity.errors }, status: 422
         end
       end
 
-      def update_offender
+      def update_current_identity_of_offender
         offender.update_attribute(:current_identity, @identity) unless identity_params[:offender_id]
+      end
+
+      def identity_or_offender_errors
+        return @identity.errors unless @identity.valid?
+        return @identity.offender.errors unless @identity.offender.valid?
+      end
+
+      def offender_params
+        params.require(:identity).permit(
+          :noms_id,
+          :nationality_code,
+          :establishment_code
+        )
       end
 
       def identity_params
         params.require(:identity).permit(
-          :offender_id, :nomis_offender_id, :noms_id,
-          :given_name, :middle_names, :surname, :title, :suffix,
-          :date_of_birth, :gender, :nationality_code,
-          :pnc_number, :cro_number, :establishment_code
+          :offender_id,
+          :nomis_offender_id,
+          :given_name,
+          :middle_names,
+          :surname,
+          :title,
+          :suffix,
+          :date_of_birth,
+          :gender,
+          :pnc_number,
+          :cro_number
         )
       end
 

@@ -36,6 +36,24 @@ class Identity < ActiveRecord::Base
     property :cro_number do
       key :type, :string
     end
+    property :noms_id do
+      key :type, :string
+    end
+  end
+
+  swagger_schema :IdentityInput do
+    allOf do
+      schema do
+        key :'$ref', :Identity
+      end
+      schema do
+        key :required, [:noms_id, :given_name, :surname, :date_of_birth, :gender]
+        property :id do
+          key :type, :string
+          key :format, :uuid
+        end
+      end
+    end
   end
 
   has_paper_trail
@@ -50,6 +68,17 @@ class Identity < ActiveRecord::Base
   delegate :noms_id, :nationality_code, :establishment_code, to: :offender
 
   def self.search(params)
-    joins(:offender).where(params)
+    results = joins(:offender)
+    %i(given_name middle_names surname).each do |field|
+      next unless params[field]
+      term = params.delete(field)
+      results = results.where("#{field} ILIKE :term", term: "%#{term}%")
+    end
+    %i(noms_id nationality_code establishment_code).each do |field|
+      next unless params[field]
+      value = params.delete(field)
+      results = results.where("offenders.#{field} = :value", value: value)
+    end
+    results.where(params).order(:surname, :given_name, :middle_names)
   end
 end
