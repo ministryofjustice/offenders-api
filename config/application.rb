@@ -12,6 +12,9 @@ module OffendersApi
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
+    config.autoload_paths << "#{Rails.root}/app/controllers/api/v1/schemas"
+    config.autoload_paths << "#{Rails.root}/app/models/schemas"
+
     config.app_title = 'Offenders API'
     config.proposition_title = 'Offenders API'
     config.phase = 'beta'
