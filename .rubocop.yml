@@ -3,6 +3,8 @@ AllCops:
   # rails_helper is excluded because it's full of solecisms, but it's mostly
   # generated code and copy-and-pasted snipets from READMEs.
   Exclude:
+    - 'app/controllers/api/v1/schemas/*'
+    - 'app/models/schemas/*'
     - 'db/**/*'
     - 'config/**/*'
     - 'vendor/**/*'
