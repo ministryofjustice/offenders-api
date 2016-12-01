@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20160803144245) do
 
   create_table "identities", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.uuid   "offender_id"
-    t.string "nomis_offender_id"
+    t.string "noms_offender_id"
     t.string "title"
     t.string "given_name"
     t.string "middle_names"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20160803144245) do
 
   add_index "identities", ["cro_number"], name: "index_identities_on_cro_number", using: :btree
   add_index "identities", ["given_name"], name: "index_identities_on_given_name", using: :btree
-  add_index "identities", ["nomis_offender_id"], name: "index_identities_on_nomis_offender_id", using: :btree
+  add_index "identities", ["noms_offender_id"], name: "index_identities_on_noms_offender_id", using: :btree
   add_index "identities", ["offender_id"], name: "index_identities_on_offender_id", using: :btree
   add_index "identities", ["pnc_number"], name: "index_identities_on_pnc_number", using: :btree
   add_index "identities", ["surname"], name: "index_identities_on_surname", using: :btree

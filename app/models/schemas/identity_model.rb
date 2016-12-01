@@ -11,7 +11,7 @@ module IdentityModel
           key :type, :string
           key :format, :uuid
         end
-        property :nomis_offender_id do
+        property :noms_offender_id do
           key :type, :string
         end
         property :noms_id do

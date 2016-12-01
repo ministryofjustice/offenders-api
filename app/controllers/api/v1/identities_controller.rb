@@ -26,7 +26,7 @@ module Api
         if offender.valid?
           create_identity
         else
-          render json: { error: @offender.errors }, status: 422
+          render json: { error: offender.errors }, status: 422
         end
       end
 
@@ -43,7 +43,7 @@ module Api
       private
 
       def offender
-        @offender ||=
+        @_offender ||=
           if identity_params[:offender_id]
             Offender.find(identity_params[:offender_id])
           else
@@ -81,7 +81,7 @@ module Api
       def identity_params
         params.require(:identity).permit(
           :offender_id,
-          :nomis_offender_id,
+          :noms_offender_id,
           :given_name,
           :middle_names,
           :surname,
