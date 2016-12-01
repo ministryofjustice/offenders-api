@@ -22,3 +22,5 @@ exclude_paths:
 - db/
 - spec/
 - vendor/
+- app/controllers/api/v1/schemas/
+- app/models/schemas/
