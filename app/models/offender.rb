@@ -15,17 +15,6 @@ class Offender < ActiveRecord::Base
            to: :current_identity, allow_nil: true
 
   def self.search(params)
-    results = distinct.joins(:identities)
-    %i(given_name middle_names surname).each do |field|
-      next unless params[field]
-      term = params.delete(field)
-      results = results.where("identities.#{field} ILIKE :term", term: "%#{term}%")
-    end
-    %i(gender date_of_birth pnc_number cro_number).each do |field|
-      next unless params[field]
-      value = params.delete(field)
-      results = results.where("identities.#{field} = :value", value: value)
-    end
-    results.where(params) # .order('identities.surname, identities.given_name, identities.middle_names')
+    distinct.joins(:identities).where(params).order(:noms_id)
   end
 end
