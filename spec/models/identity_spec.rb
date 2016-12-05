@@ -37,7 +37,7 @@ RSpec.describe Identity, type: :model do
 
     context 'name search' do
       context 'when query matches' do
-        let(:params) { { given_name: 'ala', surname: 'bro' } }
+        let(:params) { { given_name: 'ala', surname: 'brown' } }
 
         it 'returns matching records' do
           expect(Identity.search(params)).to eq [identity_1]
@@ -166,7 +166,7 @@ RSpec.describe Identity, type: :model do
         let(:params) do
           {
             given_name: 'jon',
-            surname: 'cea',
+            surname: 'ceasar',
             noms_id: 'A9876ZX',
             date_of_birth: '19541009',
             gender: 'F',
