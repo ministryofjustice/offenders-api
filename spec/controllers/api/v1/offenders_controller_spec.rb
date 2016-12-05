@@ -3,43 +3,6 @@ require 'rails_helper'
 RSpec.describe Api::V1::OffendersController, type: :controller do
   let!(:application) { create(:application) }
   let!(:token)       { create(:access_token, application: application) }
-  # let(:params) do
-  #   {
-  #     'noms_id' => 'A1234BC',
-  #     'given_name' => 'JOHN',
-  #     'middle_names' => 'FRANK MARK',
-  #     'surname' => 'SMITH',
-  #     'title' => 'MR',
-  #     'suffix' => 'DR',
-  #     'date_of_birth' => '19711010',
-  #     'gender' => 'M',
-  #     'nationality_code' => 'BRIT',
-  #     'pnc_number' => 'PNC123',
-  #     'cro_number' => 'CRO987',
-  #     'establishment_code' => 'LEI',
-  #     'identities' => [
-  #       {
-  #         'given_name' => 'ROBERT',
-  #         'middle_names' => 'JAMES DAN',
-  #         'surname' => 'BLACK',
-  #         'title' => 'MR',
-  #         'suffix' => 'DR',
-  #         'date_of_birth' => '19801010',
-  #         'gender' => 'M'
-  #       },
-  #       {
-  #         'given_name' => 'STEVEN',
-  #         'middle_names' => 'TOM PAUL',
-  #         'surname' => 'LITTLE',
-  #         'title' => 'MR',
-  #         'suffix' => 'DR',
-  #         'date_of_birth' => '19780503',
-  #         'gender' => 'M'
-  #       }
-  #     ]
-  #   }
-  # end
-  let(:excepted_attrs) { %w(id created_at updated_at date_of_birth identities) }
 
   context 'when authenticated' do
     before { request.headers['HTTP_AUTHORIZATION'] = "Bearer #{token.token}" }
@@ -82,15 +45,15 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
       end
 
       let!(:offender_2) do
-        create(:offender, noms_id: 'AB123')
+        create(:offender, noms_id: 'A9876XY')
       end
 
       let!(:identity_1) do
-        create(:identity, offender: offender_1, given_name: 'DARREN', middle_names: 'FRANK ROBERT', surname: 'WHITE')
+        create(:identity, offender: offender_1)
       end
 
       let!(:identity_2) do
-        create(:identity, offender: offender_2, given_name: 'TONY', middle_names: 'FRANK ROBERT', surname: 'BROWN')
+        create(:identity, offender: offender_2)
       end
 
       context 'searching for NOMS ID' do
@@ -106,30 +69,7 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
         end
 
         context 'when query does not match' do
-          let(:search_params) { { noms_id: 'A9876XY' } }
-
-          before { get :search, search_params }
-
-          it 'returns an empty set' do
-            expect(response.body).to eq('[]')
-          end
-        end
-      end
-
-      context 'name search' do
-        context 'when query matches' do
-          let(:search_params) { { given_name: 'darr', surname: 'whi' } }
-
-          before { get :search, search_params }
-
-          it 'returns collection of offender records matching query' do
-            expect(JSON.parse(response.body).map { |p| p['id'] })
-              .to match_array([offender_1['id']])
-          end
-        end
-
-        context 'when query does not match' do
-          let(:search_params) { { given_name: 'luke' } }
+          let(:search_params) { { noms_id: 'A4567FG' } }
 
           before { get :search, search_params }
 
@@ -154,110 +94,6 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
           .to include offender.as_json(except: %w(date_of_birth created_at updated_at current_identity_id))
       end
     end
-
-    # describe 'POST #create' do
-    #   context 'when valid' do
-    #     before { post :create, offender: params }
-    #
-    #     it 'creates a new offender record with given params' do
-    #       offender = Offender.first
-    #       offender_attrs = offender.attributes.except(*excepted_attrs)
-    #       expect(offender_attrs).to include(params.except(*excepted_attrs))
-    #       expect(offender.date_of_birth).to eq Date.parse(params['date_of_birth'])
-    #     end
-    #
-    #     it 'updates identities' do
-    #       first_identity_attrs = Offender.first.identities.first.attributes.except(*excepted_attrs)
-    #       last_identity_attrs = Offender.first.identities.last.attributes.except(*excepted_attrs)
-    #       expect(first_identity_attrs).to include params['identities'].first.except(*excepted_attrs)
-    #       expect(last_identity_attrs).to include params['identities'].last.except(*excepted_attrs)
-    #     end
-    #
-    #     it 'returns status 201/created' do
-    #       expect(response.status).to be 201
-    #     end
-    #
-    #     it 'returns the id of the created record' do
-    #       expect(response.body).to eq({ id: Offender.first.id }.to_json)
-    #     end
-    #   end
-    #
-    #   context 'when invalid' do
-    #     before do
-    #       params.delete('gender')
-    #       post :create, offender: params
-    #     end
-    #
-    #     it 'does not create a offender record' do
-    #       expect(Offender.count).to be 0
-    #     end
-    #
-    #     it 'returns status 422/unprocessable entity' do
-    #       expect(response.status).to be 422
-    #     end
-    #
-    #     it 'returns error for missing attribute' do
-    #       expect(JSON.parse(response.body)).to eq(
-    #         'error' => { 'gender' => ['can\'t be blank'] }
-    #       )
-    #     end
-    #   end
-    # end
-    #
-    # describe 'PATCH #update' do
-    #   let!(:offender) { create(:offender, noms_id: 'A1234XX') }
-    #
-    #   context 'when valid' do
-    #     before do
-    #       patch :update, id: offender, offender: params
-    #       offender.reload
-    #     end
-    #
-    #     it 'updates the offender record' do
-    #       offender_attrs = offender.attributes.except(*excepted_attrs)
-    #       expect(offender_attrs).to include(params.except(*excepted_attrs))
-    #       expect(offender.date_of_birth).to eq Date.parse(params['date_of_birth'])
-    #     end
-    #
-    #     it 'updates identities' do
-    #       first_identity_attrs = offender.identities.first.attributes.except(*excepted_attrs)
-    #       last_identity_attrs = offender.identities.last.attributes.except(*excepted_attrs)
-    #       expect(first_identity_attrs).to include params['identities'].first.except(*excepted_attrs)
-    #       expect(last_identity_attrs).to include params['identities'].last.except(*excepted_attrs)
-    #       expect(offender.identities.first.date_of_birth).to eq Date.parse(params['identities']first['date_of_birth'])
-    #       expect(offender.identities.last.date_of_birth).to eq Date.parse(params['identities'].last['date_of_birth'])
-    #     end
-    #
-    #     it 'returns status "success"' do
-    #       expect(response.status).to be 200
-    #     end
-    #
-    #     it 'returns success:true' do
-    #       expect(response.body).to eq('{"success":true}')
-    #     end
-    #   end
-    #
-    #   context 'when invalid' do
-    #     before do
-    #       patch :update, id: offender, offender: { noms_id: 'B1234BC', gender: '' }
-    #       offender.reload
-    #     end
-    #
-    #     it 'does not update the offender record' do
-    #       expect(offender.noms_id).to eq('A1234XX')
-    #     end
-    #
-    #     it 'returns status "unprocessable entity"' do
-    #       expect(response.status).to be 422
-    #     end
-    #
-    #     it 'returns JSON error' do
-    #       expect(JSON.parse(response.body)).to eq(
-    #         'error' => { 'gender' => ['can\'t be blank'] }
-    #       )
-    #     end
-    #   end
-    # end
   end
 
   context 'when unauthenticated' do
@@ -284,25 +120,5 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
         expect(response.status).to be 401
       end
     end
-
-    # describe 'POST #create' do
-    #   before { post :create, offender: params }
-    #
-    #   it 'returns status 401' do
-    #     expect(response.status).to be 401
-    #   end
-    # end
-    #
-    # describe 'PATCH #update' do
-    #   let(:offender) { create(:offender) }
-    #
-    #   before do
-    #     patch :update, id: offender.id, offender: params
-    #   end
-    #
-    #   it 'returns status 401' do
-    #     expect(response.status).to be 401
-    #   end
-    # end
   end
 end

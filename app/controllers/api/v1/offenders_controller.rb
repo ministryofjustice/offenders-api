@@ -23,60 +23,10 @@ module Api
         render json: @offender
       end
 
-      # def create
-      #   @offender = Offender.new(offender_params.except(:identities))
-      #
-      #   if @offender.save
-      #     @offender.update_identities(offender_params[:identities])
-      #     render json: { id: @offender.id }, status: :created
-      #   else
-      #     render json: { error: @offender.errors }, status: 422
-      #   end
-      # end
-      #
-      # def update
-      #   @offender = Offender.find(params[:id])
-      #
-      #   if @offender.update(offender_params.except(:identities))
-      #     @offender.update_identities(offender_params[:identities])
-      #     render json: { success: true }, status: 200
-      #   else
-      #     render json: { error: @offender.errors }, status: 422
-      #   end
-      # end
-
       private
 
-      # def offender_params
-      #   params.require(:offender).permit(
-      #     :noms_id,
-      #     :given_name,
-      #     :middle_names,
-      #     :surname,
-      #     :title,
-      #     :suffix,
-      #     :date_of_birth,
-      #     :gender,
-      #     :nationality_code,
-      #     :pnc_number,
-      #     :cro_number,
-      #     :establishment_code,
-      #     identities: [:given_name, :middle_names, :surname, :title, :suffix, :gender, :date_of_birth]
-      #   )
-      # end
-
       def search_params
-        params.permit(
-          :noms_id,
-          :given_name,
-          :middle_names,
-          :surname,
-          :date_of_birth,
-          :gender,
-          :pnc_number,
-          :cro_number,
-          :establishment_code
-        )
+        params.permit(:noms_id)
       end
 
       def updated_after
