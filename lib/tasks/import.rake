@@ -3,7 +3,6 @@ namespace :import do
   task retry: :environment do
     import = Import.last
     ParseCsv.call(import.offenders_file.read)
-    ParseCsv.call(import.identities_file.read)
     import.update_attribute(:status, :successful)
     Import.where('id != ?', import.id).destroy_all
   end
@@ -18,10 +17,7 @@ namespace :import do
 
   desc 'Import sample offender records'
   task sample: :environment do
-    file = Rails.root.join('lib', 'assets', 'data', 'offenders.csv')
-    ParseCsv.call(file.read)
-
-    file = Rails.root.join('lib', 'assets', 'data', 'identities.csv')
+    file = Rails.root.join('lib', 'assets', 'data', 'data.csv')
     ParseCsv.call(file.read)
   end
 
