@@ -3,7 +3,6 @@ module ImportOffenders
 
   def call(import)
     ParseCsv.call(import.offenders_file.read)
-    ParseCsv.call(import.identities_file.read)
     import.update_attribute(:status, :successful)
     Import.where('id != ?', import.id).destroy_all
   rescue StandardError => e

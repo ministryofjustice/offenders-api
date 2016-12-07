@@ -10,16 +10,12 @@
     %thead
       %tr
         %th
-          Offenders file
-        %th
-          Identities file
+          File
         %th
           Date
     %tbody
       %tr
         %td
           = last_import.offenders_file.file.filename
-        %td
-          = last_import.identities_file.file.filename
         %td
           = last_import.created_at.strftime('%d/%m/%Y %H:%M:%S')

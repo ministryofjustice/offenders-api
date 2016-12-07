@@ -18,13 +18,11 @@ RSpec.describe ImportsController, type: :controller do
   end
 
   describe 'POST #create' do
-    let(:offenders_file) { fixture_file_upload('files/offenders.csv', 'text/csv') }
-    let(:identities_file) { fixture_file_upload('files/identities.csv', 'text/csv') }
+    let(:offenders_file) { fixture_file_upload('files/data.csv', 'text/csv') }
     let(:import_params) do
       {
         import: {
-          offenders_file: offenders_file,
-          identities_file: identities_file
+          offenders_file: offenders_file
         }
       }
     end

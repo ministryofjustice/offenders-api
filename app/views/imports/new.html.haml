@@ -8,13 +8,9 @@
 
 = form_for @import, html: { multipart: true } do |f|
   = f.hidden_field :offenders_file
-  = f.hidden_field :identities_file
 
   .form-group
     != f.label :offenders_file, class: 'form-label'
     != f.file_field :offenders_file, class: 'form-control'
-  .form-group
-    != f.label :identities_file, class: 'form-label'
-    != f.file_field :identities_file, class: 'form-control'
 
   = f.submit 'Import', class: "button"
