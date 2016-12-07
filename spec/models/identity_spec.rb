@@ -89,6 +89,24 @@ RSpec.describe Identity, type: :model do
       end
     end
 
+    context 'date_of_birth in range search' do
+      context 'when query matches' do
+        let(:params) { { date_of_birth_from: '19680101', date_of_birth_to: '19700101' } }
+
+        it 'returns matching records' do
+          expect(Identity.search(params)).to eq [identity_2]
+        end
+      end
+
+      context 'when query does not match' do
+        let(:params) { { date_of_birth_from: '19720101', date_of_birth_to: '19740101' } }
+
+        it 'returns an empty array' do
+          expect(Identity.search(params)).to eq []
+        end
+      end
+    end
+
     context 'pnc_number search' do
       context 'when query matches' do
         let(:params) { { pnc_number: '38/836893N' } }

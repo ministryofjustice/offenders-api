@@ -15,7 +15,10 @@ Documentation:
   Enabled: false
 
 Metrics/MethodLength:
-  Max: 15
+  Max: 20
+
+CyclomaticComplexity:
+  Max: 7
 
 # No-one in this team uses a fixed-width terminal
 Metrics/LineLength:

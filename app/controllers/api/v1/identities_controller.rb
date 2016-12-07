@@ -102,6 +102,8 @@ module Api
           :middle_names,
           :surname,
           :date_of_birth,
+          :date_of_birth_from,
+          :date_of_birth_to,
           :gender,
           :pnc_number,
           :cro_number,

@@ -177,6 +177,22 @@ module IdentityResource
             key :format, 'date'
           end
           parameter do
+            key :name, :date_of_birth_from
+            key :in, :query
+            key :description, 'Date of birth from'
+            key :required, false
+            key :type, :string
+            key :format, 'date'
+          end
+          parameter do
+            key :name, :date_of_birth_to
+            key :in, :query
+            key :description, 'Date of birth to'
+            key :required, false
+            key :type, :string
+            key :format, 'date'
+          end
+          parameter do
             key :name, :gender
             key :in, :query
             key :description, 'Gender'
