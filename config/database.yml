@@ -4,9 +4,9 @@ default: &default
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: 5
-  host: <%= ENV['PRISONERS_API_DATABASE_HOST'] || 'localhost' %>
-  username: <%= ENV['PRISONERS_API_DATABASE_USERNAME'] %>
-  password: <%= ENV['PRISONERS_API_DATABASE_PASSWORD'] %>
+  host: <%= ENV['OFFENDERS_API_DATABASE_HOST'] || 'localhost' %>
+  username: <%= ENV['OFFENDERS_API_DATABASE_USERNAME'] %>
+  password: <%= ENV['OFFENDERS_API_DATABASE_PASSWORD'] %>
 
 development:
   <<: *default
@@ -14,11 +14,11 @@ development:
 
 test: &test
   <<: *default
-  database: 'prisonsers_api_test'
+  database: 'offenders_api_test'
 
 production:
   <<: *default
-  database: <%= ENV['PRISONERS_API_DATABASE'] %>
+  database: <%= ENV['OFFENDERS_API_DATABASE'] %>
 
 cucumber:
   <<: *test
