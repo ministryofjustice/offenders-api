@@ -48,6 +48,8 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    api_pagination_headers (2.1.1)
+      rails (>= 4.2.0)
     arel (6.0.3)
     ast (2.3.0)
     awesome_print (1.7.0)
@@ -282,6 +284,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
+  api_pagination_headers
   awesome_print
   carrierwave
   codeclimate-test-reporter

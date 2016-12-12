@@ -4,6 +4,8 @@ module Api
       include Swagger::Blocks
       include IdentityResource
 
+      after_action only: [:index, :search] { set_pagination_headers(:identities) }
+
       def index
         @identities = Identity.order(:surname, :given_name, :middle_names).page(params[:page]).per(params[:per_page])
 

@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 ruby '2.3.0'
 
 gem 'active_model_serializers'
+gem 'api_pagination_headers'
 gem 'carrierwave'
 gem 'devise'
 gem 'doorkeeper'

@@ -4,6 +4,8 @@ module Api
       include Swagger::Blocks
       include OffenderResource
 
+      after_action only: [:index, :search] { set_pagination_headers(:offenders) }
+
       def index
         @offenders = Offender.page(params[:page]).per(params[:per_page])
         @offenders = @offenders.updated_after(updated_after) if updated_after
