@@ -26,7 +26,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
     before { request.headers['HTTP_AUTHORIZATION'] = "Bearer #{token.token}" }
 
     describe 'GET #index' do
-      it 'returns collection of offender records' do
+      it 'returns collection of identity records' do
         create_list(:identity, 2)
 
         get :index
@@ -41,10 +41,14 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
         get :index, page: '1', per_page: '2'
 
         expect(JSON.parse(response.body).size).to eq 2
+      end
 
-        get :index, page: '2', per_page: '2'
+      it 'sets total count in response headers' do
+        create_list(:identity, 3)
 
-        expect(JSON.parse(response.body).size).to eq 1
+        get :index
+
+        expect(response.headers['Total-Count']).to eq '3'
       end
     end
 
@@ -119,6 +123,18 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
             expect(response.body).to eq('[]')
           end
         end
+      end
+
+      it 'paginates records' do
+        get :search, page: '1', per_page: '2'
+
+        expect(JSON.parse(response.body).size).to eq 2
+      end
+
+      it 'sets total count in response headers' do
+        get :search
+
+        expect(response.headers['Total-Count']).to eq '3'
       end
     end
 

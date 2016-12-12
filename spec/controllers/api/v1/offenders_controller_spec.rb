@@ -23,10 +23,14 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
         get :index, page: '1', per_page: '2'
 
         expect(JSON.parse(response.body).size).to eq 2
+      end
 
-        get :index, page: '2', per_page: '2'
+      it 'sets total count in response headers' do
+        create_list(:identity, 3)
 
-        expect(JSON.parse(response.body).size).to eq 1
+        get :index
+
+        expect(response.headers['Total-Count']).to eq '3'
       end
 
       it 'filters records updated after a timestamp' do
@@ -77,6 +81,18 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
             expect(response.body).to eq('[]')
           end
         end
+      end
+
+      it 'paginates records' do
+        get :index, page: '1', per_page: '1'
+
+        expect(JSON.parse(response.body).size).to eq 1
+      end
+
+      it 'sets total count in response headers' do
+        get :index
+
+        expect(response.headers['Total-Count']).to eq '2'
       end
     end
 
