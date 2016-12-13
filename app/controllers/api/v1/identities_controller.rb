@@ -19,9 +19,7 @@ module Api
       end
 
       def show
-        @identity = Identity.find(params[:id])
-
-        render json: @identity
+        render json: identity
       end
 
       def create
@@ -33,16 +31,26 @@ module Api
       end
 
       def update
-        @identity = Identity.find(params[:id])
-
-        if @identity.update(identity_params) && @identity.offender.update(offender_params)
+        if identity.update(identity_params) && identity.offender.update(offender_params)
           render json: { success: true }, status: 200
         else
           render json: { error: identity_or_offender_errors }, status: 422
         end
       end
 
+      def current
+        if identity.offender.update_attribute(:current_identity, identity)
+          render json: { success: true }, status: 200
+        else
+          render json: { success: false }, status: 422
+        end
+      end
+
       private
+
+      def identity
+        @_identity ||= Identity.find(params[:id])
+      end
 
       def offender
         @_offender ||=
@@ -68,16 +76,12 @@ module Api
       end
 
       def identity_or_offender_errors
-        return @identity.errors unless @identity.valid?
-        return @identity.offender.errors unless @identity.offender.valid?
+        return identity.errors unless identity.valid?
+        return identity.offender.errors unless identity.offender.valid?
       end
 
       def offender_params
-        params.require(:identity).permit(
-          :noms_id,
-          :nationality_code,
-          :establishment_code
-        )
+        params.require(:identity).permit(:noms_id, :nationality_code, :establishment_code)
       end
 
       def identity_params
