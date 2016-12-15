@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       end
       resources :identities, format: :json, except: [:new, :edit, :destroy] do
         get :search, on: :collection
+        patch :current, on: :member
       end
     end
   end

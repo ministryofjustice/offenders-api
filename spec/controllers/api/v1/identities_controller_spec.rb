@@ -331,6 +331,60 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
         end
       end
     end
+
+    describe 'PATCH #current' do
+      let!(:offender) { create(:offender) }
+      let!(:identity_one) { create(:identity, surname: 'BLACK', offender: offender) }
+      let!(:identity_two) { create(:identity, surname: 'BLACK', offender: offender) }
+
+      context 'success' do
+        before do
+          offender.update_attribute(:current_identity, identity_one)
+          patch :current, id: identity_two
+          offender.reload
+        end
+
+        it 'updates the offender current identity' do
+          expect(offender.current_identity).to eq identity_two
+        end
+
+        it 'returns status "success"' do
+          expect(response.status).to be 200
+        end
+
+        it 'returns success:true' do
+          expect(response.body).to eq('{"success":true}')
+        end
+      end
+
+      context 'failure' do
+        before do
+          offender.update_attribute(:current_identity, identity_one)
+
+          offender_double = instance_double(Offender)
+          identity_double = instance_double(Identity)
+          allow(Identity).to receive(:find).and_return(identity_double)
+          allow(identity_double).to receive(:offender).and_return(offender_double)
+          allow(offender_double).to receive(:update_attribute).and_return(false)
+
+          patch :current, id: identity_two
+
+          offender.reload
+        end
+
+        it 'updates the offender current identity' do
+          expect(offender.current_identity).to eq identity_one
+        end
+
+        it 'returns status 422' do
+          expect(response.status).to be 422
+        end
+
+        it 'returns success:false' do
+          expect(response.body).to eq('{"success":false}')
+        end
+      end
+    end
   end
 
   context 'when unauthenticated' do
