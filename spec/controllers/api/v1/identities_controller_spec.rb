@@ -27,7 +27,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
     describe 'GET #index' do
       it 'returns collection of identity records' do
-        create_list(:identity, 2)
+        create_list(:identity, 2, status: 'active')
 
         get :index
 
@@ -36,7 +36,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
       end
 
       it 'paginates records' do
-        create_list(:identity, 3)
+        create_list(:identity, 3, status: 'active')
 
         get :index, page: '1', per_page: '2'
 
@@ -44,7 +44,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
       end
 
       it 'sets total count in response headers' do
-        create_list(:identity, 3)
+        create_list(:identity, 3, status: 'active')
 
         get :index
 
@@ -63,19 +63,19 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
       let!(:identity_1) do
         create(:identity, offender: offender_1,
-                          given_name: 'ALANIS', middle_names: 'LENA ROBERTA', surname: 'BROWN',
+                          given_name: 'ALANIS', middle_names: 'LENA ROBERTA', surname: 'BROWN', status: 'active',
                           gender: 'M', date_of_birth: '19650807', pnc_number: '74/832963V', cro_number: '195942/38G')
       end
 
       let!(:identity_2) do
         create(:identity, offender: offender_1,
-                          given_name: 'DEBBY', middle_names: 'LAURA MARTA', surname: 'YELLOW',
+                          given_name: 'DEBBY', middle_names: 'LAURA MARTA', surname: 'YELLOW', status: 'active',
                           gender: 'M', date_of_birth: '19691128', pnc_number: '99/135626A', cro_number: '639816/39Y')
       end
 
       let!(:identity_3) do
         create(:identity, offender: offender_2,
-                          given_name: 'JONAS', middle_names: 'JULIUS', surname: 'CEASAR',
+                          given_name: 'JONAS', middle_names: 'JULIUS', surname: 'CEASAR', status: 'active',
                           gender: 'F', date_of_birth: '19541009', pnc_number: '38/836893N', cro_number: '741860/84F')
       end
 
@@ -149,7 +149,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
       it 'returns JSON represenation of identity record' do
         expect(JSON.parse(response.body).as_json)
-          .to include identity.as_json(except: %w(date_of_birth created_at updated_at))
+          .to include identity.as_json(except: %w(status date_of_birth created_at updated_at))
       end
     end
 

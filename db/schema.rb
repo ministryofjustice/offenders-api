@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160803144245) do
+ActiveRecord::Schema.define(version: 20161219120734) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 20160803144245) do
     t.string "gender"
     t.string "pnc_number"
     t.string "cro_number"
+    t.string "status",           default: "inactive"
   end
 
   add_index "identities", ["cro_number"], name: "index_identities_on_cro_number", using: :btree

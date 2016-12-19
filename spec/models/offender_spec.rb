@@ -9,6 +9,43 @@ RSpec.describe Offender, type: :model do
   it { is_expected.to validate_presence_of(:noms_id) }
   it { is_expected.to validate_uniqueness_of(:noms_id) }
 
+  describe 'scopes' do
+    let!(:offender_1) do
+      create(:offender, noms_id: 'A1234BC')
+    end
+
+    let!(:offender_2) do
+      create(:offender, noms_id: 'A9876ZX')
+    end
+
+    let!(:identity_1) do
+      create(:identity, offender: offender_1, status: 'active')
+    end
+
+    let!(:identity_2) do
+      create(:identity, offender: offender_2)
+    end
+
+    before do
+      offender_1.update_attribute :current_identity, identity_1
+      offender_2.update_attribute :current_identity, identity_2
+    end
+
+    context 'active' do
+      it 'scopes active offenders' do
+        expect(Offender.active.count).to be 1
+        expect(Offender.active.first).to eq offender_1
+      end
+    end
+
+    context 'inactive' do
+      it 'scopes active offenders' do
+        expect(Offender.inactive.count).to be 1
+        expect(Offender.inactive.first).to eq offender_2
+      end
+    end
+  end
+
   describe '.search' do
     let!(:offender_1) do
       create(:offender, noms_id: 'A1234BC')

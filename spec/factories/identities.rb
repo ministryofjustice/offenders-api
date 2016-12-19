@@ -5,5 +5,9 @@ FactoryGirl.define do
     surname 'Smith'
     date_of_birth '19781010'.to_date
     gender 'M'
+
+    trait :active do
+      status 'active'
+    end
   end
 end

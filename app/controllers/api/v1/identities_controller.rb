@@ -7,13 +7,14 @@ module Api
       after_action only: [:index, :search] { set_pagination_headers(:identities) }
 
       def index
-        @identities = Identity.order(:surname, :given_name, :middle_names).page(params[:page]).per(params[:per_page])
+        @identities = Identity.active.order(:surname, :given_name, :middle_names)
+        @identities = @identities.page(params[:page]).per(params[:per_page])
 
         render json: @identities
       end
 
       def search
-        @identities = Identity.search(search_params).page(params[:page]).per(params[:per_page])
+        @identities = Identity.active.search(search_params).page(params[:page]).per(params[:per_page])
 
         render json: @identities
       end
