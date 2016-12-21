@@ -39,6 +39,14 @@ module Api
         end
       end
 
+      def activate
+        if identity.update_attribute(:status, 'active')
+          render json: { success: true }, status: 200
+        else
+          render json: { success: false }, status: 422
+        end
+      end
+
       def current
         if identity.offender.update_attribute(:current_identity, identity)
           render json: { success: true }, status: 200

@@ -332,20 +332,17 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
       end
     end
 
-    describe 'PATCH #current' do
-      let!(:offender) { create(:offender) }
-      let!(:identity_one) { create(:identity, surname: 'BLACK', offender: offender) }
-      let!(:identity_two) { create(:identity, surname: 'BLACK', offender: offender) }
+    describe 'PATCH #activate' do
+      let(:identity) { create(:identity, status: 'inactive') }
 
       context 'success' do
         before do
-          offender.update_attribute(:current_identity, identity_one)
-          patch :current, id: identity_two
-          offender.reload
+          patch :activate, id: identity
+          identity.reload
         end
 
-        it 'updates the offender current identity' do
-          expect(offender.current_identity).to eq identity_two
+        it 'activates the identity' do
+          expect(identity.status).to eq 'active'
         end
 
         it 'returns status "success"' do
@@ -359,21 +356,70 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
       context 'failure' do
         before do
-          offender.update_attribute(:current_identity, identity_one)
+          identity_double = instance_double(Identity)
+          allow(Identity).to receive(:find).and_return(identity_double)
+          allow(identity_double).to receive(:update_attribute).and_return(false)
 
+          patch :activate, id: identity
+        end
+
+        it 'does not activate the identity' do
+          expect(Identity.last.status).to eq 'inactive'
+        end
+
+        it 'returns status 422' do
+          expect(response.status).to be 422
+        end
+
+        it 'returns success:false' do
+          expect(response.body).to eq('{"success":false}')
+        end
+      end
+    end
+
+    describe 'PATCH #current' do
+      let!(:offender) { create(:offender) }
+      let!(:identity_1) { create(:identity, surname: 'BLACK', offender: offender) }
+      let!(:identity_2) { create(:identity, surname: 'BLACK', offender: offender) }
+
+      before do
+        offender.update_attribute(:current_identity, identity_1)
+      end
+
+      context 'success' do
+        before do
+          patch :current, id: identity_2
+          offender.reload
+        end
+
+        it 'updates the offender current identity' do
+          expect(offender.current_identity).to eq identity_2
+        end
+
+        it 'returns status "success"' do
+          expect(response.status).to be 200
+        end
+
+        it 'returns success:true' do
+          expect(response.body).to eq('{"success":true}')
+        end
+      end
+
+      context 'failure' do
+        before do
           offender_double = instance_double(Offender)
           identity_double = instance_double(Identity)
           allow(Identity).to receive(:find).and_return(identity_double)
           allow(identity_double).to receive(:offender).and_return(offender_double)
           allow(offender_double).to receive(:update_attribute).and_return(false)
 
-          patch :current, id: identity_two
+          patch :current, id: identity_2
 
           offender.reload
         end
 
-        it 'updates the offender current identity' do
-          expect(offender.current_identity).to eq identity_one
+        it 'does not update the offender current identity' do
+          expect(offender.current_identity).to eq identity_1
         end
 
         it 'returns status 422' do
@@ -425,6 +471,30 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
       before do
         patch :update, id: identity.id, identity: params
+      end
+
+      it 'returns status 401' do
+        expect(response.status).to be 401
+      end
+    end
+
+    describe 'PATCH #activate' do
+      let(:identity) { create(:identity) }
+
+      before do
+        patch :activate, id: identity.id
+      end
+
+      it 'returns status 401' do
+        expect(response.status).to be 401
+      end
+    end
+
+    describe 'PATCH #current' do
+      let(:identity) { create(:identity) }
+
+      before do
+        patch :current, id: identity.id
       end
 
       it 'returns status 401' do

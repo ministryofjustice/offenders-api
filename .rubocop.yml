@@ -17,6 +17,9 @@ Documentation:
 Metrics/MethodLength:
   Max: 20
 
+Metrics/ClassLength:
+  Max: 120
+
 CyclomaticComplexity:
   Max: 7
 
