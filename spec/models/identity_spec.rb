@@ -7,6 +7,39 @@ RSpec.describe Identity, type: :model do
   it { is_expected.to validate_presence_of(:surname) }
   it { is_expected.to validate_presence_of(:date_of_birth) }
   it { is_expected.to validate_presence_of(:gender) }
+  it { is_expected.to validate_inclusion_of(:status).in_array(%w(inactive active)) }
+
+  describe 'scopes' do
+    let!(:offender_1) do
+      create(:offender, noms_id: 'A1234BC')
+    end
+
+    let!(:offender_2) do
+      create(:offender, noms_id: 'A9876ZX')
+    end
+
+    let!(:identity_1) do
+      create(:identity, offender: offender_1, status: 'active')
+    end
+
+    let!(:identity_2) do
+      create(:identity, offender: offender_2)
+    end
+
+    context 'active' do
+      it 'scopes active offenders' do
+        expect(Identity.active.count).to be 1
+        expect(Identity.active.first).to eq identity_1
+      end
+    end
+
+    context 'inactive' do
+      it 'scopes active offenders' do
+        expect(Identity.inactive.count).to be 1
+        expect(Identity.inactive.first).to eq identity_2
+      end
+    end
+  end
 
   describe '.search' do
     let!(:offender_1) do

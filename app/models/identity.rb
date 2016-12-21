@@ -2,6 +2,8 @@ class Identity < ActiveRecord::Base
   include Swagger::Blocks
   include IdentityModel
 
+  STATUSES = %w(inactive active).freeze
+
   has_paper_trail
 
   belongs_to :offender, touch: true
@@ -11,6 +13,10 @@ class Identity < ActiveRecord::Base
   validates :surname, presence: true
   validates :date_of_birth, presence: true
   validates :gender, presence: true
+  validates :status, inclusion: { in: STATUSES }
+
+  scope :active, -> { where("status = 'active'") }
+  scope :inactive, -> { where("status = 'inactive'") }
 
   delegate :noms_id, :nationality_code, :establishment_code, to: :offender
 
