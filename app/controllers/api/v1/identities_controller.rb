@@ -39,8 +39,16 @@ module Api
         end
       end
 
+      def destroy
+        if identity.soft_delete!
+          render json: { success: true }, status: 200
+        else
+          render json: { success: false }, status: 422
+        end
+      end
+
       def activate
-        if identity.update_attribute(:status, 'active')
+        if identity.make_active!
           render json: { success: true }, status: 200
         else
           render json: { success: false }, status: 422

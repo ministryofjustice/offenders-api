@@ -7,7 +7,7 @@ RSpec.describe Identity, type: :model do
   it { is_expected.to validate_presence_of(:surname) }
   it { is_expected.to validate_presence_of(:date_of_birth) }
   it { is_expected.to validate_presence_of(:gender) }
-  it { is_expected.to validate_inclusion_of(:status).in_array(%w(inactive active)) }
+  it { is_expected.to validate_inclusion_of(:status).in_array(%w(inactive active deleted)) }
 
   describe 'scopes' do
     let!(:offender_1) do
@@ -255,6 +255,54 @@ RSpec.describe Identity, type: :model do
     context 'ordering' do
       it 'orders record by surname, given_name, middle_names' do
         expect(Identity.search({})).to eq [identity_1, identity_3, identity_2]
+      end
+    end
+  end
+
+  describe '#soft_delete!' do
+    let(:identity) { create(:identity, status: 'active') }
+
+    context 'success' do
+      before { identity.soft_delete! }
+
+      it 'sof deletes the identity' do
+        expect(identity.status).to eq 'deleted'
+      end
+    end
+
+    context 'failure' do
+      before do
+        allow(identity).to receive(:update_attribute).and_return(false)
+
+        identity.soft_delete!
+      end
+
+      it 'does not soft delete the identity' do
+        expect(identity.status).to eq 'active'
+      end
+    end
+  end
+
+  describe '#make_active!' do
+    let(:identity) { create(:identity, status: 'inactive') }
+
+    context 'success' do
+      before { identity.make_active! }
+
+      it 'activates the identity' do
+        expect(identity.status).to eq 'active'
+      end
+    end
+
+    context 'failure' do
+      before do
+        allow(identity).to receive(:update_attribute).and_return(false)
+
+        identity.make_active!
+      end
+
+      it 'does not activate the identity' do
+        expect(identity.status).to eq 'inactive'
       end
     end
   end
