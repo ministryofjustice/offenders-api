@@ -24,7 +24,7 @@ Rails.application.routes.draw do
       resources :offenders, format: :json, except: [:new, :create, :edit, :update, :destroy] do
         get :search, on: :collection
       end
-      resources :identities, format: :json, except: [:new, :edit, :destroy] do
+      resources :identities, format: :json, except: [:new, :edit] do
         get :search, on: :collection
         patch :current, on: :member
         patch :activate, on: :member

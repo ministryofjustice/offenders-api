@@ -2,7 +2,7 @@ class Identity < ActiveRecord::Base
   include Swagger::Blocks
   include IdentityModel
 
-  STATUSES = %w(inactive active).freeze
+  STATUSES = %w(inactive active deleted).freeze
 
   has_paper_trail
 

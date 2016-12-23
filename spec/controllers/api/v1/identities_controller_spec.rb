@@ -332,6 +332,51 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
       end
     end
 
+    describe 'DELETE #destroy' do
+      let(:identity) { create(:identity, status: 'active') }
+
+      context 'success' do
+        before do
+          delete :destroy, id: identity
+          identity.reload
+        end
+
+        it 'deletes the identity' do
+          expect(identity.status).to eq 'deleted'
+        end
+
+        it 'returns status "success"' do
+          expect(response.status).to be 200
+        end
+
+        it 'returns success:true' do
+          expect(response.body).to eq('{"success":true}')
+        end
+      end
+
+      context 'failure' do
+        before do
+          identity_double = instance_double(Identity)
+          allow(Identity).to receive(:find).and_return(identity_double)
+          allow(identity_double).to receive(:update_attribute).and_return(false)
+
+          delete :destroy, id: identity
+        end
+
+        it 'does not delete the identity' do
+          expect(Identity.last.status).to eq 'active'
+        end
+
+        it 'returns status 422' do
+          expect(response.status).to be 422
+        end
+
+        it 'returns success:false' do
+          expect(response.body).to eq('{"success":false}')
+        end
+      end
+    end
+
     describe 'PATCH #activate' do
       let(:identity) { create(:identity, status: 'inactive') }
 
@@ -471,6 +516,18 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
       before do
         patch :update, id: identity.id, identity: params
+      end
+
+      it 'returns status 401' do
+        expect(response.status).to be 401
+      end
+    end
+
+    describe 'DELETE #destroy' do
+      let(:identity) { create(:identity) }
+
+      before do
+        delete :destroy, id: identity.id
       end
 
       it 'returns status 401' do

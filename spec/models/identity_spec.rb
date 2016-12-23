@@ -7,7 +7,7 @@ RSpec.describe Identity, type: :model do
   it { is_expected.to validate_presence_of(:surname) }
   it { is_expected.to validate_presence_of(:date_of_birth) }
   it { is_expected.to validate_presence_of(:gender) }
-  it { is_expected.to validate_inclusion_of(:status).in_array(%w(inactive active)) }
+  it { is_expected.to validate_inclusion_of(:status).in_array(%w(inactive active deleted)) }
 
   describe 'scopes' do
     let!(:offender_1) do
