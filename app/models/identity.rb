@@ -2,7 +2,11 @@ class Identity < ActiveRecord::Base
   include Swagger::Blocks
   include IdentityModel
 
-  STATUSES = %w(inactive active deleted).freeze
+  STATUSES = {
+    deleted: 'deleted',
+    inactive: 'inactive',
+    active: 'active'
+  }.freeze
 
   has_paper_trail
 
@@ -13,7 +17,7 @@ class Identity < ActiveRecord::Base
   validates :surname, presence: true
   validates :date_of_birth, presence: true
   validates :gender, presence: true
-  validates :status, inclusion: { in: STATUSES }
+  validates :status, inclusion: { in: STATUSES.values }
 
   scope :active, -> { where("status = 'active'") }
   scope :inactive, -> { where("status = 'inactive'") }
@@ -40,5 +44,13 @@ class Identity < ActiveRecord::Base
       end
     end
     results.where(params).order(:surname, :given_name, :middle_names)
+  end
+
+  def make_active!
+    update_attribute(:status, STATUSES[:active])
+  end
+
+  def soft_delete!
+    update_attribute(:status, STATUSES[:deleted])
   end
 end

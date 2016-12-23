@@ -40,7 +40,7 @@ module Api
       end
 
       def destroy
-        if identity.update_attribute(:status, 'deleted')
+        if identity.soft_delete!
           render json: { success: true }, status: 200
         else
           render json: { success: false }, status: 422
@@ -48,7 +48,7 @@ module Api
       end
 
       def activate
-        if identity.update_attribute(:status, 'active')
+        if identity.make_active!
           render json: { success: true }, status: 200
         else
           render json: { success: false }, status: 422

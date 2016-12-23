@@ -358,7 +358,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
         before do
           identity_double = instance_double(Identity)
           allow(Identity).to receive(:find).and_return(identity_double)
-          allow(identity_double).to receive(:update_attribute).and_return(false)
+          allow(identity_double).to receive(:soft_delete!).and_return(false)
 
           delete :destroy, id: identity
         end
@@ -403,7 +403,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
         before do
           identity_double = instance_double(Identity)
           allow(Identity).to receive(:find).and_return(identity_double)
-          allow(identity_double).to receive(:update_attribute).and_return(false)
+          allow(identity_double).to receive(:make_active!).and_return(false)
 
           patch :activate, id: identity
         end
