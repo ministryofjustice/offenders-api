@@ -6,6 +6,8 @@ gem 'api_pagination_headers'
 gem 'carrierwave'
 gem 'devise'
 gem 'doorkeeper'
+gem 'factory_girl_rails'
+gem 'faker'
 gem 'haml-rails'
 gem 'govuk_elements_rails'
 gem 'govuk_elements_form_builder', git: 'https://github.com/ministryofjustice/govuk_elements_form_builder.git'
@@ -36,8 +38,6 @@ end
 
 group :development, :test do
   gem 'awesome_print'
-  gem 'factory_girl_rails'
-  gem 'faker'
   gem 'pry-byebug'
   gem 'pry-rails'
 end
