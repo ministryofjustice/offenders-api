@@ -15,6 +15,20 @@ namespace :import do
     FileUtils.rm_rf(directory)
   end
 
+  desc 'Create 100k offender records with identities'
+  task fake_offenders: :environment do
+    Offender.destroy_all
+    100_000.times do
+      offender = FactoryGirl.build(:offender)
+      next unless offender.save
+      identity = nil
+      [1, 2, 3, 4, 5].sample.times do
+        identity = FactoryGirl.create(:identity, :active, offender: offender)
+      end
+      offender.update current_identity: identity
+    end
+  end
+
   desc 'Import sample offender records'
   task sample: :environment do
     file = Rails.root.join('lib', 'assets', 'data', 'data.csv')

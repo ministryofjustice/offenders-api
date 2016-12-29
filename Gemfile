@@ -36,6 +36,8 @@ end
 
 group :development, :test do
   gem 'awesome_print'
+  gem 'factory_girl_rails'
+  gem 'faker'
   gem 'pry-byebug'
   gem 'pry-rails'
 end
@@ -43,7 +45,6 @@ end
 group :test do
   gem 'codeclimate-test-reporter', require: nil
   gem 'database_cleaner'
-  gem 'factory_girl_rails'
   gem 'rspec-mocks'
   gem 'rspec-rails'
   gem 'shoulda-matchers',   '~> 2.8.0', require: false
