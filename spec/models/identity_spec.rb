@@ -70,7 +70,23 @@ RSpec.describe Identity, type: :model do
 
     context 'name search' do
       context 'when query matches' do
-        let(:params) { { given_name: 'ala', surname: 'brown' } }
+        let(:params) { { given_name: 'alanis', surname: 'brown' } }
+
+        it 'returns matching records' do
+          expect(Identity.search(params)).to eq [identity_1]
+        end
+      end
+
+      context 'when query matches with wildcard characters' do
+        let(:params) { { given_name: 'ala%', surname: 'br_wn' } }
+
+        it 'returns matching records' do
+          expect(Identity.search(params)).to eq [identity_1]
+        end
+      end
+
+      context 'when query matches with name switch on' do
+        let(:params) { { given_name: 'brown', surname: 'alanis', name_switch: '1' } }
 
         it 'returns matching records' do
           expect(Identity.search(params)).to eq [identity_1]
@@ -216,7 +232,7 @@ RSpec.describe Identity, type: :model do
       context 'when query matches' do
         let(:params) do
           {
-            given_name: 'jon',
+            given_name: 'jon%',
             surname: 'ceasar',
             noms_id: 'A9876ZX',
             date_of_birth: '19541009',

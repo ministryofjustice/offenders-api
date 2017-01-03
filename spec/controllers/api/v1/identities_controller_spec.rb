@@ -104,7 +104,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
       context 'name search' do
         context 'when query matches' do
-          let(:search_params) { { given_name: 'deb', surname: 'yellow' } }
+          let(:search_params) { { given_name: 'deb%', surname: 'yellow' } }
 
           before { get :search, search_params }
 

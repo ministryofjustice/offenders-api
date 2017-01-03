@@ -124,6 +124,7 @@ module Api
           :given_name,
           :middle_names,
           :surname,
+          :name_switch,
           :date_of_birth,
           :date_of_birth_from,
           :date_of_birth_to,

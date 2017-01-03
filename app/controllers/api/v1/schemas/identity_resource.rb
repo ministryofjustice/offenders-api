@@ -228,6 +228,13 @@ module IdentityResource
             key :type, :string
           end
           parameter do
+            key :name, :name_switch
+            key :in, :query
+            key :description, 'First/Last name switch'
+            key :required, false
+            key :type, :string
+          end
+          parameter do
             key :name, :page
             key :in, :query
             key :description, 'Page to return'
