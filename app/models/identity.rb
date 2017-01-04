@@ -25,30 +25,7 @@ class Identity < ActiveRecord::Base
   delegate :noms_id, :nationality_code, :establishment_code, to: :offender
 
   def self.search(params)
-    results = joins(:offender)
-    given_name_surname = [params[:given_name], params[:surname]].compact.map(&:upcase)
-    %i(given_name middle_names surname noms_id nationality_code
-       establishment_code date_of_birth_from date_of_birth_to).each do |field|
-      next unless params[field]
-      value = params.delete(field)
-      results = case field
-                when :given_name, :surname
-                  if params[:name_switch]
-                    results.where(field => given_name_surname)
-                  else
-                    results.where("#{field} ILIKE ?", value)
-                  end
-                when :middle_names
-                  results.where("#{field} ILIKE ?", value)
-                when :date_of_birth_from
-                  results.where('date_of_birth >= ?', value)
-                when :date_of_birth_to
-                  results.where('date_of_birth <= ?', value)
-                when :noms_id, :nationality_code, :establishment_code
-                  results.where("offenders.#{field} = ?", value)
-                end
-    end
-    results.where(params.except(:name_switch)).order(:surname, :given_name, :middle_names)
+    SearchIdentities.new(params).call
   end
 
   def make_active!
