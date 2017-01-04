@@ -14,6 +14,9 @@ Documentation:
   Description: Document classes and non-namespace modules.
   Enabled: false
 
+Metrics/AbcSize:
+  Max: 17
+
 Metrics/MethodLength:
   Max: 20
 
