@@ -51,6 +51,12 @@ module IdentityModel
         property :cro_number do
           key :type, :string
         end
+        property :current do
+          key :type, :boolean
+        end
+        property :status do
+          key :type, :string
+        end
       end
 
       swagger_schema :IdentityInput do

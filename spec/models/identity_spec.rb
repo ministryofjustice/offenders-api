@@ -100,4 +100,32 @@ RSpec.describe Identity, type: :model do
       end
     end
   end
+
+  describe '#current' do
+    let!(:offender_1) do
+      create(:offender, noms_id: 'A1234BC')
+    end
+
+    let!(:identity_1) do
+      create(:identity, offender: offender_1)
+    end
+
+    let!(:identity_2) do
+      create(:identity, offender: offender_1)
+    end
+
+    before { offender_1.update current_identity: identity_1 }
+
+    context 'when is current identity of offender' do
+      it 'returns true' do
+        expect(identity_1.current).to be true
+      end
+    end
+
+    context 'when is not current identity of offender' do
+      it 'returns false' do
+        expect(identity_2.current).to be false
+      end
+    end
+  end
 end

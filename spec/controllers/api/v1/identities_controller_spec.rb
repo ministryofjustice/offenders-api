@@ -149,7 +149,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
       it 'returns JSON represenation of identity record' do
         expect(JSON.parse(response.body).as_json)
-          .to include identity.as_json(except: %w(status date_of_birth created_at updated_at))
+          .to include identity.as_json(except: %w(date_of_birth created_at updated_at), methods: :current)
       end
     end
 
