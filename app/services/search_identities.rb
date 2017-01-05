@@ -25,16 +25,34 @@ class SearchIdentities
   def call
     FIELDS.each do |field|
       next unless @params[field]
-      value = @params.delete(field)
       table_field_name = FIELD_OPERATION_MAPPINGS[field][:table_field_name]
       operation = FIELD_OPERATION_MAPPINGS[field][:operation]
-      @relation = if @params[:name_switch] && %i(given_name surname).include?(field)
-                    @relation.where(field => @given_name_surname)
-                  else
-                    @relation.where("#{table_field_name} #{operation} ?", value)
-                  end
+      value = @params.delete(field)
+
+      if @params[:name_switch] && %i(given_name surname).include?(field)
+        operation = 'IN'
+        value = @given_name_surname
+      end
+
+      add_condition_to_relation(table_field_name, operation, value)
     end
 
-    @relation.where(@params.except(:name_switch)).order(:surname, :given_name, :middle_names)
+    @relation = @relation.where(@params.except(:count, :name_switch))
+
+    return_records_or_count
+  end
+
+  private
+
+  def add_condition_to_relation(table_field_name, operation, value)
+    @relation = @relation.where("#{table_field_name} #{operation} (?)", value)
+  end
+
+  def return_records_or_count
+    if @params[:count]
+      @relation.order('count_all DESC, surname ASC').group(:surname).count
+    else
+      @relation.order(:surname, :given_name, :middle_names)
+    end
   end
 end

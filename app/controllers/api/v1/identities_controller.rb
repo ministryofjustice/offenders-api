@@ -4,7 +4,7 @@ module Api
       include Swagger::Blocks
       include IdentityResource
 
-      after_action only: [:index, :search] { set_pagination_headers(:identities) }
+      after_action only: [:index, :search] { set_pagination_headers(:identities) unless search_params[:count] }
 
       def index
         @identities = Identity.active.order(:surname, :given_name, :middle_names)
@@ -14,7 +14,8 @@ module Api
       end
 
       def search
-        @identities = Identity.active.search(search_params).page(params[:page]).per(params[:per_page])
+        @identities = Identity.active.search(search_params)
+        @identities = @identities.page(params[:page]).per(params[:per_page]) unless search_params[:count]
 
         render json: @identities
       end
@@ -131,7 +132,8 @@ module Api
           :gender,
           :pnc_number,
           :cro_number,
-          :establishment_code
+          :establishment_code,
+          :count
         )
       end
     end

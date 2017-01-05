@@ -235,6 +235,13 @@ module IdentityResource
             key :type, :string
           end
           parameter do
+            key :name, :count
+            key :in, :query
+            key :description, 'Group count by surname'
+            key :required, false
+            key :type, :string
+          end
+          parameter do
             key :name, :page
             key :in, :query
             key :description, 'Page to return'
