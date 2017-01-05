@@ -233,5 +233,13 @@ RSpec.describe SearchIdentities do
         expect(described_class.new({}).call).to eq [identity_1, identity_3, identity_2]
       end
     end
+
+    context 'count and group by surname' do
+      let(:params) { { count: 'true' } }
+
+      it 'returns group by count by surname' do
+        expect(described_class.new(params).call).to eq('BROWN' => 1, 'CEASAR' => 1, 'YELLOW' => 1)
+      end
+    end
   end
 end
