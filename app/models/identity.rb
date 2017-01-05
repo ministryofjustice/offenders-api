@@ -22,6 +22,8 @@ class Identity < ActiveRecord::Base
   scope :active, -> { where("status = 'active'") }
   scope :inactive, -> { where("status = 'inactive'") }
 
+  default_scope { includes(:offender) }
+
   delegate :noms_id, :nationality_code, :establishment_code, to: :offender
 
   def self.search(params)
