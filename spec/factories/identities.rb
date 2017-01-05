@@ -2,12 +2,15 @@ FactoryGirl.define do
   factory :identity, class: Identity do
     offender
 
-    given_name { Faker::Name.first_name }
-    surname { Faker::Name.last_name }
+    title { %w(MR MRS MISS MS DR SIR LADY LORD).sample }
+    given_name { Faker::Name.first_name.upcase }
+    middle_names { Faker::Name.first_name.upcase }
+    surname { Faker::Name.last_name.upcase }
+    suffix { %w(JR SR).sample }
     date_of_birth { Faker::Date.between(80.years.ago, 20.years.ago) }
     gender { %w(M F).sample }
-    pnc_number { rand(9999) }
-    cro_number { rand(9999) }
+    pnc_number { rand(999_999) }
+    cro_number { rand(999_999) }
 
     trait :active do
       status 'active'
