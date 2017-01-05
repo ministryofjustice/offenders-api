@@ -62,7 +62,8 @@ module ParseCsv
         date_of_birth: Date.parse(row['DATE_OF_BIRTH']),
         gender: row['GENDER_CODE'],
         pnc_number: row['PNC_ID'],
-        cro_number: row['CRIMINAL_RECORDS_OFFICE_NUMBER']
+        cro_number: row['CRIMINAL_RECORDS_OFFICE_NUMBER'],
+        status: 'active'
       }
     end
   end

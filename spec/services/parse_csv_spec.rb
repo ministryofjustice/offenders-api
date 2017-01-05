@@ -46,6 +46,7 @@ RSpec.describe ParseCsv do
           expect(identity.nationality_code).to eq('BRIT')
           expect(identity.cro_number).to eq('339223/02H')
           expect(identity.establishment_code).to eq('LEI')
+          expect(identity.status).to eq('active')
         end
       end
 
