@@ -37,4 +37,8 @@ class Identity < ActiveRecord::Base
   def soft_delete!
     update_attribute(:status, STATUSES[:deleted])
   end
+
+  def current
+    offender.current_identity_id == id
+  end
 end
