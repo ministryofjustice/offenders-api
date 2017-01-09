@@ -275,7 +275,7 @@ module IdentityResource
         end
       end
 
-      swagger_path '/identities/{id}/destroy' do
+      swagger_path '/identities/{id}' do
         operation :delete do
           key :description, 'Deletes an identity'
           key :operationId, 'deleteIdentity'
@@ -333,7 +333,7 @@ module IdentityResource
         end
       end
 
-      swagger_path '/identities/{id}/current' do
+      swagger_path '/identities/{id}/make_current' do
         operation :patch do
           key :description, 'Sets an identity as current identity of the offender'
           key :operationId, 'currentIdentity'

@@ -422,7 +422,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
       end
     end
 
-    describe 'PATCH #current' do
+    describe 'PATCH #make_current' do
       let!(:offender) { create(:offender) }
       let!(:identity_1) { create(:identity, surname: 'BLACK', offender: offender) }
       let!(:identity_2) { create(:identity, surname: 'BLACK', offender: offender) }
@@ -433,7 +433,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
       context 'success' do
         before do
-          patch :current, id: identity_2
+          patch :make_current, id: identity_2
           offender.reload
         end
 
@@ -458,7 +458,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
           allow(identity_double).to receive(:offender).and_return(offender_double)
           allow(offender_double).to receive(:update_attribute).and_return(false)
 
-          patch :current, id: identity_2
+          patch :make_current, id: identity_2
 
           offender.reload
         end
@@ -547,11 +547,11 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
       end
     end
 
-    describe 'PATCH #current' do
+    describe 'PATCH #make_current' do
       let(:identity) { create(:identity) }
 
       before do
-        patch :current, id: identity.id
+        patch :make_current, id: identity.id
       end
 
       it 'returns status 401' do

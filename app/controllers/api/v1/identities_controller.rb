@@ -56,7 +56,7 @@ module Api
         end
       end
 
-      def current
+      def make_current
         if identity.offender.update_attribute(:current_identity, identity)
           render json: { success: true }, status: 200
         else
