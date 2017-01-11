@@ -19,8 +19,8 @@ class Identity < ActiveRecord::Base
   validates :gender, presence: true
   validates :status, inclusion: { in: STATUSES.values }
 
-  scope :active, -> { where("status = '#{STATUSES[:active]}'") }
-  scope :inactive, -> { where("status = '#{STATUSES[:inactive]}'") }
+  scope :active, -> { where("status = 'active'") }
+  scope :inactive, -> { where("status = 'inactive'") }
 
   default_scope { includes(:offender) }
 
