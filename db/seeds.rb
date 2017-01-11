@@ -10,7 +10,7 @@ pvb = Doorkeeper::Application.find_or_create_by!(
 )
 
 mtp = Doorkeeper::Application.find_or_create_by!(
-  name: 'Money to Offenders',
+  name: 'Money to Prisoners',
   redirect_uri: "https://#{ENV['HTTP_HOST']}"
 )
 
