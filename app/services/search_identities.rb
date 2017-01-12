@@ -50,7 +50,9 @@ class SearchIdentities
 
   def return_records_or_count
     if @params[:count]
-      @relation.order('count_all DESC, surname ASC').group(:surname).count
+      @relation.order('count_all DESC, surname ASC').group(:surname).count.map do |k, v|
+        { surname: k, count: v }
+      end
     else
       @relation.order(:surname, :given_name, :middle_names)
     end

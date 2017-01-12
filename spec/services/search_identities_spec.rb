@@ -236,9 +236,16 @@ RSpec.describe SearchIdentities do
 
     context 'count and group by surname' do
       let(:params) { { count: 'true' } }
+      let(:expected_response) do
+        [
+          { surname: 'BROWN', count: 1 },
+          { surname: 'CEASAR', count: 1 },
+          { surname: 'YELLOW', count: 1 }
+        ]
+      end
 
       it 'returns group by count by surname' do
-        expect(described_class.new(params).call).to eq('BROWN' => 1, 'CEASAR' => 1, 'YELLOW' => 1)
+        expect(described_class.new(params).call).to eq(expected_response)
       end
     end
   end
