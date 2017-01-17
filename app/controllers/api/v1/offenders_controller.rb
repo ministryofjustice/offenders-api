@@ -7,14 +7,15 @@ module Api
       after_action only: [:index, :search] { set_pagination_headers(:offenders) }
 
       def index
-        @offenders = Offender.active.page(params[:page]).per(params[:per_page])
+        @offenders = Offender.includes(:current_identity).active.page(params[:page]).per(params[:per_page])
         @offenders = @offenders.updated_after(updated_after) if updated_after
 
         render json: @offenders
       end
 
       def search
-        @offenders = Offender.active.search(search_params).page(params[:page]).per(params[:per_page])
+        @offenders = Offender.includes(:current_identity).active.search(search_params)
+        @offenders = @offenders.page(params[:page]).per(params[:per_page])
 
         render json: @offenders
       end
