@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ParseCsv do
+RSpec.describe ParseOffenders do
   let(:csv_data) { fixture_file_upload('files/data.csv', 'text/csv') }
 
   describe '#call' do
@@ -108,7 +108,7 @@ RSpec.describe ParseCsv do
 
         it 'throws an error with the line number' do
           expect { described_class.call(csv_data) }
-            .to raise_error(ParseCsv::ParsingError)
+            .to raise_error(ParseOffenders::ParsingError)
         end
       end
     end

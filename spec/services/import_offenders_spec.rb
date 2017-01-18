@@ -8,7 +8,7 @@ RSpec.describe ImportOffenders do
   describe '#call' do
     context 'when successful' do
       it 'calls the parse csv service with the data' do
-        expect(ParseCsv).to receive(:call).with(import.offenders_file.read)
+        expect(ParseOffenders).to receive(:call).with(import.offenders_file.read)
         ImportOffenders.call(import)
       end
 
@@ -26,7 +26,7 @@ RSpec.describe ImportOffenders do
 
     context 'when failing' do
       before do
-        expect(ParseCsv).to receive(:call).and_raise(StandardError)
+        expect(ParseOffenders).to receive(:call).and_raise(StandardError)
       end
 
       it 'marks the import failed' do

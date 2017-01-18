@@ -1,4 +1,4 @@
-module ParseCsv
+module ParseOffenders
   class ParsingError < StandardError; end
 
   module_function
@@ -66,9 +66,9 @@ module ParseCsv
         status: 'active'
       }
     end
-  end
 
-  def middle_names(second_name, third_name)
-    [second_name, third_name].reject(&:blank?).join(', ')
+    def middle_names(second_name, third_name)
+      [second_name, third_name].reject(&:blank?).join(', ')
+    end
   end
 end
