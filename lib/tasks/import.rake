@@ -41,4 +41,11 @@ namespace :import do
       NotificationMailer.import_not_performed.deliver_now
     end
   end
+
+  desc 'Import nicknames from Google nickname-and-diminutive-names-lookup'
+  task nicknames: :environment do
+    uri = URI('https://raw.githubusercontent.com/carltonnorthern/nickname-and-diminutive-names-lookup/master/names.csv')
+    file = Net::HTTP.get(uri)
+    ParseNicknames.call(file)
+  end
 end
