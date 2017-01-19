@@ -2,7 +2,7 @@ namespace :import do
   desc 'Retry last import'
   task retry: :environment do
     import = Import.last
-    ParseCsv.call(import.offenders_file.read)
+    ParseOffenders.call(import.offenders_file.read)
     import.update_attribute(:status, :successful)
     Import.where('id != ?', import.id).destroy_all
   end
@@ -32,7 +32,7 @@ namespace :import do
   desc 'Import sample offender records'
   task sample: :environment do
     file = Rails.root.join('lib', 'assets', 'data', 'data.csv')
-    ParseCsv.call(file.read)
+    ParseOffenders.call(file.read)
   end
 
   desc 'Check and notify if no import has been performed in the last 24 hours'
@@ -40,5 +40,12 @@ namespace :import do
     unless Import.where('created_at > ?', 1.day.ago).any?
       NotificationMailer.import_not_performed.deliver_now
     end
+  end
+
+  desc 'Import nicknames from Google nickname-and-diminutive-names-lookup'
+  task nicknames: :environment do
+    uri = URI('https://raw.githubusercontent.com/carltonnorthern/nickname-and-diminutive-names-lookup/master/names.csv')
+    file = Net::HTTP.get(uri)
+    ParseNicknames.call(file)
   end
 end

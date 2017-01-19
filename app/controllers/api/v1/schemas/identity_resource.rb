@@ -235,6 +235,13 @@ module IdentityResource
             key :type, :string
           end
           parameter do
+            key :name, :name_variation
+            key :in, :query
+            key :description, 'Name variation'
+            key :required, false
+            key :type, :string
+          end
+          parameter do
             key :name, :count
             key :in, :query
             key :description, 'Group count by surname'

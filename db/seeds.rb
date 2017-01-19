@@ -38,3 +38,7 @@ unless User.find_by(email: 'staff@example.com')
     role: 'staff'
   )
 end
+
+# Import nicknames
+file = Rails.root.join('db', 'nicknames.csv')
+ParseNicknames.call(file.read)
