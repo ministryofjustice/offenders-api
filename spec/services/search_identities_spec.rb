@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe SearchIdentities do
   describe '#call' do
+    before { ParseNicknames.call(fixture_file_upload('files/nicknames.csv', 'text/csv')) }
+
     let!(:offender_1) do
       create(:offender, noms_id: 'A1234BC', establishment_code: 'LEI')
     end
@@ -46,10 +48,18 @@ RSpec.describe SearchIdentities do
       end
 
       context 'when query matches with name switch on' do
-        let(:params) { { given_name: 'brown', surname: 'alanis', name_switch: '1' } }
+        let(:params) { { given_name: 'brown', surname: 'alanis', name_switch: 'Y' } }
 
         it 'returns matching records' do
           expect(described_class.new(params).call).to eq [identity_1]
+        end
+      end
+
+      context 'when query matches with name variation on' do
+        let(:params) { { given_name: 'deborah', name_variation: 'Y' } }
+
+        it 'returns matching records' do
+          expect(described_class.new(params).call).to eq [identity_2]
         end
       end
 

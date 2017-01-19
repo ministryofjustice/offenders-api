@@ -25,27 +25,33 @@ class SearchIdentities
   def call
     FIELDS.each do |field|
       next unless @params[field]
-      table_field_name = FIELD_OPERATION_MAPPINGS[field][:table_field_name]
-      operation = FIELD_OPERATION_MAPPINGS[field][:operation]
-      value = @params.delete(field)
+      @table_field_name = FIELD_OPERATION_MAPPINGS[field][:table_field_name]
+      @operation = FIELD_OPERATION_MAPPINGS[field][:operation]
+      @value = @params.delete(field)
 
-      if @params[:name_switch] && %i(given_name surname).include?(field)
-        operation = 'IN'
-        value = @given_name_surname
-      end
-
-      add_condition_to_relation(table_field_name, operation, value)
+      check_name_switch_and_name_variation(field)
+      add_condition_to_relation
     end
 
-    @relation = @relation.where(@params.except(:count, :name_switch))
+    @relation = @relation.where(@params.except(:count, :name_switch, :name_variation))
 
     return_records_or_count
   end
 
   private
 
-  def add_condition_to_relation(table_field_name, operation, value)
-    @relation = @relation.where("#{table_field_name} #{operation} (?)", value)
+  def check_name_switch_and_name_variation(field)
+    if @params[:name_switch] && %i(given_name surname).include?(field)
+      @operation = 'IN'
+      @value = @given_name_surname
+    elsif @params[:name_variation] && field == :given_name
+      @operation = 'IN'
+      @value = Nickname.for(@value.upcase).map(&:name)
+    end
+  end
+
+  def add_condition_to_relation
+    @relation = @relation.where("#{@table_field_name} #{@operation} (?)", @value)
   end
 
   def return_records_or_count
