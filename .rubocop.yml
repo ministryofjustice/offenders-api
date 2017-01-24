@@ -20,9 +20,6 @@ Metrics/MethodLength:
 Metrics/ClassLength:
   Max: 120
 
-CyclomaticComplexity:
-  Max: 7
-
 # No-one in this team uses a fixed-width terminal
 Metrics/LineLength:
   Max: 120

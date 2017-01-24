@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170118140231) do
+ActiveRecord::Schema.define(version: 20170124095438) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
+  enable_extension "fuzzystrmatch"
 
   create_table "identities", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.uuid   "offender_id"
