@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Identity, type: :model do
   it { is_expected.to belong_to(:offender) }
 
+  it { is_expected.to validate_presence_of(:offender) }
   it { is_expected.to validate_presence_of(:given_name) }
   it { is_expected.to validate_presence_of(:surname) }
   it { is_expected.to validate_presence_of(:date_of_birth) }
@@ -19,11 +20,11 @@ RSpec.describe Identity, type: :model do
     end
 
     let!(:identity_1) do
-      create(:identity, offender: offender_1, status: 'active')
+      create(:identity, offender: offender_1, given_name: 'DEBORAH', status: 'active')
     end
 
     let!(:identity_2) do
-      create(:identity, offender: offender_2)
+      create(:identity, offender: offender_2, surname: 'SMITH')
     end
 
     context 'active' do
@@ -37,6 +38,22 @@ RSpec.describe Identity, type: :model do
       it 'scopes active offenders' do
         expect(Identity.inactive.count).to be 1
         expect(Identity.inactive.first).to eq identity_2
+      end
+    end
+
+    context 'nicknames' do
+      before { ParseNicknames.call(fixture_file_upload('files/nicknames.csv', 'text/csv')) }
+
+      it 'scopes matching nicknames' do
+        expect(Identity.nicknames('debby').count).to be 1
+        expect(Identity.nicknames('debby').first).to eq identity_1
+      end
+    end
+
+    context 'soundex' do
+      it 'scopes matching surnames with same soundex' do
+        expect(Identity.soundex('smidth').count).to be 1
+        expect(Identity.soundex('smidth').first).to eq identity_2
       end
     end
   end

@@ -242,6 +242,13 @@ module IdentityResource
             key :type, :string
           end
           parameter do
+            key :name, :soundex
+            key :in, :query
+            key :description, 'Soundex search'
+            key :required, false
+            key :type, :string
+          end
+          parameter do
             key :name, :count
             key :in, :query
             key :description, 'Group count by surname'

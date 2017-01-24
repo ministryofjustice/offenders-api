@@ -127,6 +127,7 @@ module Api
           :surname,
           :name_switch,
           :name_variation,
+          :soundex,
           :date_of_birth,
           :date_of_birth_from,
           :date_of_birth_to,

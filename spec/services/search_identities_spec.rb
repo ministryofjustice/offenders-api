@@ -20,7 +20,7 @@ RSpec.describe SearchIdentities do
 
     let!(:identity_2) do
       create(:identity, offender: offender_1,
-                        given_name: 'DEBBY', middle_names: 'LAURA MARTA', surname: 'YELLOW',
+                        given_name: 'DEBBY', middle_names: 'LAURA MARTA', surname: 'SMITH',
                         gender: 'M', date_of_birth: '19691128', pnc_number: '99/135626A', cro_number: '639816/39Y')
     end
 
@@ -57,6 +57,14 @@ RSpec.describe SearchIdentities do
 
       context 'when query matches with name variation on' do
         let(:params) { { given_name: 'deborah', name_variation: 'Y' } }
+
+        it 'returns matching records' do
+          expect(described_class.new(params).call).to eq [identity_2]
+        end
+      end
+
+      context 'when query matches with suoundex on' do
+        let(:params) { { surname: 'schmitt', soundex: 'Y' } }
 
         it 'returns matching records' do
           expect(described_class.new(params).call).to eq [identity_2]
@@ -250,7 +258,7 @@ RSpec.describe SearchIdentities do
         [
           { surname: 'BROWN', count: 1 },
           { surname: 'CEASAR', count: 1 },
-          { surname: 'YELLOW', count: 1 }
+          { surname: 'SMITH', count: 1 }
         ]
       end
 

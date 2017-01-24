@@ -28,26 +28,38 @@ class SearchIdentities
       @table_field_name = FIELD_OPERATION_MAPPINGS[field][:table_field_name]
       @operation = FIELD_OPERATION_MAPPINGS[field][:operation]
       @value = @params.delete(field)
+      @skip_add_condition = false
 
-      check_name_switch_and_name_variation(field)
-      add_condition_to_relation
+      check_name_switch(field)
+      check_name_variation(field)
+      check_soundex(field)
+
+      add_condition_to_relation unless @skip_add_condition
     end
 
-    @relation = @relation.where(@params.except(:count, :name_switch, :name_variation))
+    @relation = @relation.where(@params.except(:count, :name_switch, :name_variation, :soundex))
 
     return_records_or_count
   end
 
   private
 
-  def check_name_switch_and_name_variation(field)
-    if @params[:name_switch] && %i(given_name surname).include?(field)
-      @operation = 'IN'
-      @value = @given_name_surname
-    elsif @params[:name_variation] && field == :given_name
-      @operation = 'IN'
-      @value = Nickname.for(@value.upcase).map(&:name)
-    end
+  def check_name_switch(field)
+    return unless @params[:name_switch] && %i(given_name surname).include?(field)
+    @operation = 'IN'
+    @value = @given_name_surname
+  end
+
+  def check_name_variation(field)
+    return unless @params[:name_variation] && field == :given_name
+    @relation = @relation.nicknames(@value)
+    @skip_add_condition = true
+  end
+
+  def check_soundex(field)
+    return unless @params[:soundex] && field == :surname
+    @relation = @relation.soundex(@value)
+    @skip_add_condition = true
   end
 
   def add_condition_to_relation

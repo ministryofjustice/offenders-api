@@ -19,10 +19,12 @@ class Identity < ActiveRecord::Base
   validates :gender, presence: true
   validates :status, inclusion: { in: STATUSES.values }
 
+  default_scope { includes(:offender) }
+
   scope :active, -> { where(status: STATUSES[:active]) }
   scope :inactive, -> { where(status: STATUSES[:inactive]) }
-
-  default_scope { includes(:offender) }
+  scope :nicknames, -> (term) { where(given_name: Nickname.for(term.upcase).map(&:name)) }
+  scope :soundex, -> (term) { where(['SOUNDEX(surname) = SOUNDEX(?)', term.upcase]) }
 
   delegate :noms_id, :nationality_code, :establishment_code, to: :offender
 
