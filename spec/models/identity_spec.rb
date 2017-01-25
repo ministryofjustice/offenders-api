@@ -118,7 +118,7 @@ RSpec.describe Identity, type: :model do
     end
   end
 
-  describe '#current' do
+  describe '#current?' do
     let!(:offender_1) do
       create(:offender, noms_id: 'A1234BC')
     end
@@ -135,13 +135,13 @@ RSpec.describe Identity, type: :model do
 
     context 'when is current identity of offender' do
       it 'returns true' do
-        expect(identity_1.current).to be true
+        expect(identity_1.current?).to be true
       end
     end
 
     context 'when is not current identity of offender' do
       it 'returns false' do
-        expect(identity_2.current).to be false
+        expect(identity_2.current?).to be false
       end
     end
   end
