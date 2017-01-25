@@ -104,37 +104,17 @@ module Api
 
       def identity_params
         params.require(:identity).permit(
-          :offender_id,
-          :noms_offender_id,
-          :given_name,
-          :middle_names,
-          :surname,
-          :title,
-          :suffix,
-          :date_of_birth,
-          :gender,
-          :pnc_number,
-          :cro_number
+          :offender_id, :noms_offender_id, :pnc_number, :cro_number,
+          :title, :given_name, :middle_names, :surname, :suffix, :date_of_birth, :gender
         )
       end
 
       def search_params
         params.permit(
-          :offender_id,
-          :noms_id,
-          :given_name,
-          :middle_names,
-          :surname,
-          :name_switch,
-          :name_variation,
-          :soundex,
-          :date_of_birth,
-          :date_of_birth_from,
-          :date_of_birth_to,
-          :gender,
-          :pnc_number,
-          :cro_number,
-          :establishment_code,
+          :offender_id, :noms_id, :pnc_number, :cro_number, :establishment_code,
+          :given_name, :middle_names, :surname, :gender,
+          :date_of_birth, :date_of_birth_from, :date_of_birth_to,
+          :name_switch, :name_variation, :soundex,
           :count
         )
       end

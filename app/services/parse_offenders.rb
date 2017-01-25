@@ -55,14 +55,12 @@ module ParseOffenders
     def identity_attributes_from(row)
       {
         noms_offender_id: row['NOMIS_OFFENDER_ID'],
-        given_name: row['GIVEN_NAME_1'],
+        given_name: row['GIVEN_NAME_1'], surname: row['SURNAME'],
         middle_names: middle_names(row['GIVEN_NAME_2'], row['GIVEN_NAME_3']),
-        surname: row['SURNAME'],
         title: row['SALUTATION'],
         date_of_birth: Date.parse(row['DATE_OF_BIRTH']),
         gender: row['GENDER_CODE'],
-        pnc_number: row['PNC_ID'],
-        cro_number: row['CRIMINAL_RECORDS_OFFICE_NUMBER'],
+        pnc_number: row['PNC_ID'], cro_number: row['CRIMINAL_RECORDS_OFFICE_NUMBER'],
         status: 'active'
       }
     end

@@ -14,12 +14,6 @@ Documentation:
   Description: Document classes and non-namespace modules.
   Enabled: false
 
-Metrics/MethodLength:
-  Max: 20
-
-Metrics/ClassLength:
-  Max: 120
-
 # No-one in this team uses a fixed-width terminal
 Metrics/LineLength:
   Max: 120

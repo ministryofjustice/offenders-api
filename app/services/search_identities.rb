@@ -25,10 +25,8 @@ class SearchIdentities
   def call
     FIELDS.each do |field|
       next unless @params[field]
-      @table_field_name = FIELD_OPERATION_MAPPINGS[field][:table_field_name]
-      @operation = FIELD_OPERATION_MAPPINGS[field][:operation]
-      @value = @params.delete(field)
-      @skip_add_condition = false
+
+      prepare_where_clause_default_variables(field)
 
       check_name_switch(field)
       check_name_variation(field)
@@ -37,12 +35,18 @@ class SearchIdentities
       add_condition_to_relation unless @skip_add_condition
     end
 
-    @relation = @relation.where(@params.except(:count, :name_switch, :name_variation, :soundex))
-
+    add_remaining_params_to_filter_on
     return_records_or_count
   end
 
   private
+
+  def prepare_where_clause_default_variables(field)
+    @table_field_name = FIELD_OPERATION_MAPPINGS[field][:table_field_name]
+    @operation = FIELD_OPERATION_MAPPINGS[field][:operation]
+    @value = @params.delete(field)
+    @skip_add_condition = false
+  end
 
   def check_name_switch(field)
     return unless @params[:name_switch] && %i(given_name surname).include?(field)
@@ -64,6 +68,10 @@ class SearchIdentities
 
   def add_condition_to_relation
     @relation = @relation.where("#{@table_field_name} #{@operation} (?)", @value)
+  end
+
+  def add_remaining_params_to_filter_on
+    @relation = @relation.where(@params.slice(:gender, :date_of_birth, :pnc_number, :cro_number))
   end
 
   def return_records_or_count
