@@ -10,8 +10,6 @@ class SearchIdentities
     date_of_birth_to: { table_field_name: 'identities.date_of_birth', operation: '<=' }
   }.freeze
 
-  FIELDS = FIELD_OPERATION_MAPPINGS.keys
-
   def initialize(params, relation = nil)
     @relation = begin
                   relation.joins(:offender)
@@ -23,18 +21,12 @@ class SearchIdentities
   end
 
   def call
-    FIELDS.each do |field|
+    FIELD_OPERATION_MAPPINGS.keys.each do |field|
       next unless @params[field]
-
       prepare_where_clause_default_variables(field)
-
-      check_name_switch(field)
-      check_name_variation(field)
-      check_soundex(field)
-
+      perform_advanced_name_search(field)
       add_condition_to_relation unless @skip_add_condition
     end
-
     add_remaining_params_to_filter_on
     return_records_or_count
   end
@@ -48,10 +40,23 @@ class SearchIdentities
     @skip_add_condition = false
   end
 
+  def perform_advanced_name_search(field)
+    check_name_switch(field)
+    check_exact_surname(field)
+    check_name_variation(field)
+    check_soundex(field)
+  end
+
   def check_name_switch(field)
     return unless @params[:name_switch] && %i(given_name surname).include?(field)
     @operation = 'IN'
     @value = @given_name_surname
+  end
+
+  def check_exact_surname(field)
+    return unless @params[:exact_surname] && field == :surname
+    @operation = '='
+    @value.upcase!
   end
 
   def check_name_variation(field)

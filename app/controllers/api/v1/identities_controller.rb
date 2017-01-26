@@ -114,7 +114,7 @@ module Api
           :offender_id, :noms_id, :pnc_number, :cro_number, :establishment_code,
           :given_name, :middle_names, :surname, :gender,
           :date_of_birth, :date_of_birth_from, :date_of_birth_to,
-          :name_switch, :name_variation, :soundex,
+          :name_switch, :exact_surname, :name_variation, :soundex,
           :count
         )
       end

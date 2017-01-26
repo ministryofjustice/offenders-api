@@ -235,6 +235,13 @@ module IdentityResource
             key :type, :string
           end
           parameter do
+            key :name, :exact_surname
+            key :in, :query
+            key :description, 'Exact surname'
+            key :required, false
+            key :type, :string
+          end
+          parameter do
             key :name, :name_variation
             key :in, :query
             key :description, 'Name variation'
