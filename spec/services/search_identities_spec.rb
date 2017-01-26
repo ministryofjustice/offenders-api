@@ -47,6 +47,22 @@ RSpec.describe SearchIdentities do
         end
       end
 
+      context 'when query matches with exact surname' do
+        let(:params) { { surname: 'brown', exact_surname: 'Y' } }
+
+        it 'returns matching records' do
+          expect(described_class.new(params).call).to eq [identity_1]
+        end
+      end
+
+      context 'when query does not match with exact surname' do
+        let(:params) { { surname: 'br_wn', exact_surname: 'Y' } }
+
+        it 'returns an empty array' do
+          expect(described_class.new(params).call).to eq []
+        end
+      end
+
       context 'when query matches with name switch on' do
         let(:params) { { given_name: 'brown', surname: 'alanis', name_switch: 'Y' } }
 
