@@ -1,6 +1,11 @@
 source 'https://rubygems.org'
 ruby '2.3.0'
 
+git_source(:github) do |repo_name|
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
+  "https://github.com/#{repo_name}.git"
+end
+
 gem 'active_model_serializers'
 gem 'api_pagination_headers'
 gem 'carrierwave'
@@ -8,16 +13,16 @@ gem 'devise'
 gem 'doorkeeper'
 gem 'factory_girl_rails'
 gem 'faker'
-gem 'haml-rails'
-gem 'govuk_elements_rails'
 gem 'govuk_elements_form_builder', git: 'https://github.com/ministryofjustice/govuk_elements_form_builder.git'
+gem 'govuk_elements_rails'
 gem 'govuk_frontend_toolkit'
 gem 'govuk_template', '0.18.0'
+gem 'haml-rails'
 gem 'jquery-rails'
 gem 'kaminari'
 gem 'paper_trail'
 gem 'pg'
-gem 'rails', '4.2.7.1'
+gem 'rails', '~> 5.0.1'
 gem 'sass-rails'
 gem 'secure_headers'
 gem 'sentry-raven'
@@ -32,7 +37,10 @@ group :production, :devunicorn do
 end
 
 group :development do
+  gem 'listen', '~> 3.0.5'
   gem 'rubocop', require: false
+  gem 'spring'
+  gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'web-console'
 end
 
@@ -43,10 +51,11 @@ group :development, :test do
 end
 
 group :test do
-  gem 'codeclimate-test-reporter', require: nil
+  gem 'codeclimate-test-reporter'
   gem 'database_cleaner'
+  gem 'rails-controller-testing'
   gem 'rspec-mocks'
   gem 'rspec-rails'
-  gem 'shoulda-matchers',   '~> 2.8.0', require: false
-  gem 'simplecov', require: false
+  gem 'shoulda-matchers', '~> 3.1.0', require: false
+  gem 'simplecov'
 end

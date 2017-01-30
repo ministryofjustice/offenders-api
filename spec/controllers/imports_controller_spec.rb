@@ -31,12 +31,12 @@ RSpec.describe ImportsController, type: :controller do
       before { allow(ProcessImportJob).to receive(:perform_later) }
 
       it 'creates an import' do
-        expect { post :create, import_params }
+        expect { post :create, params: import_params }
           .to change(Import, :count).by(1)
       end
 
       it 'redirects to new import url' do
-        post :create, import_params
+        post :create, params: import_params
         expect(response).to redirect_to(new_import_path)
       end
     end
@@ -45,12 +45,12 @@ RSpec.describe ImportsController, type: :controller do
       before { import_params[:import][:offenders_file] = '' }
 
       it 'does not create an import' do
-        expect { post :create, import_params }
+        expect { post :create, params: import_params }
           .to_not change(Import, :count)
       end
 
       it 'renders the new action' do
-        post :create, import_params
+        post :create, params: import_params
         expect(response).to render_template(:new)
       end
     end

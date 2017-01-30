@@ -38,7 +38,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
       it 'paginates records' do
         create_list(:identity, 3, status: 'active')
 
-        get :index, page: '1', per_page: '2'
+        get :index, params: { page: '1', per_page: '2' }
 
         expect(JSON.parse(response.body).size).to eq 2
       end
@@ -83,7 +83,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
         context 'when query matches' do
           let(:search_params) { { noms_id: 'A9876ZX' } }
 
-          before { get :search, search_params }
+          before { get :search, params: search_params }
 
           it 'returns collection of identity records matching query' do
             expect(JSON.parse(response.body).map { |p| p['id'] })
@@ -94,7 +94,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
         context 'when query does not match' do
           let(:search_params) { { noms_id: 'A9876XY' } }
 
-          before { get :search, search_params }
+          before { get :search, params: search_params }
 
           it 'returns an empty set' do
             expect(response.body).to eq('[]')
@@ -106,7 +106,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
         context 'when query matches' do
           let(:search_params) { { given_name: 'deb%', surname: 'yellow' } }
 
-          before { get :search, search_params }
+          before { get :search, params: search_params }
 
           it 'returns collection of identity records matching query' do
             expect(JSON.parse(response.body).map { |p| p['id'] })
@@ -117,7 +117,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
         context 'when query does not match' do
           let(:search_params) { { given_name: 'luke' } }
 
-          before { get :search, search_params }
+          before { get :search, params: search_params }
 
           it 'returns an empty set' do
             expect(response.body).to eq('[]')
@@ -126,7 +126,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
       end
 
       it 'paginates records' do
-        get :search, page: '1', per_page: '2'
+        get :search, params: { page: '1', per_page: '2' }
 
         expect(JSON.parse(response.body).size).to eq 2
       end
@@ -141,7 +141,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
     describe 'GET #show' do
       let(:identity) { create(:identity) }
 
-      before { get :show, id: identity }
+      before { get :show, params: { id: identity } }
 
       it 'returns status 200' do
         expect(response.status).to be 200
@@ -156,7 +156,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
     describe 'POST #create' do
       context 'when valid' do
         context 'when offender is not present' do
-          before { post :create, identity: params }
+          before { post :create, params: { identity: params } }
 
           it 'creates a new identity record with given params' do
             identity = Identity.last
@@ -183,7 +183,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
         context 'when offender is present' do
           before do
             offender = create(:offender)
-            post :create, identity: params.merge(offender_id: offender.id)
+            post :create, params: { identity: params.merge(offender_id: offender.id) }
           end
 
           it 'creates a new identity record with given params' do
@@ -217,7 +217,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
         context 'with validation errors on the identity' do
           before do
             params.delete('gender')
-            post :create, identity: params
+            post :create, params: { identity: params }
           end
 
           it 'does not create an identity record' do
@@ -239,7 +239,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
         context 'with validation errors on the offender' do
           before do
             params.delete('noms_id')
-            post :create, identity: params
+            post :create, params: { identity: params }
           end
 
           it 'does not create an identity record' do
@@ -265,7 +265,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
       context 'when valid' do
         before do
-          patch :update, id: identity, identity: params
+          patch :update, params: { id: identity, identity: params }
           identity.reload
         end
 
@@ -291,7 +291,8 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
       context 'when invalid' do
         context 'with validation errors on the identity' do
           before do
-            patch :update, id: identity, identity: params.merge(surname: '')
+            invalid_params = params.merge('surname' => '')
+            patch :update, params: { id: identity, identity: invalid_params }
           end
 
           it 'does not update the identity record' do
@@ -312,7 +313,8 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
       context 'with validation errors on the offender' do
         before do
-          patch :update, id: identity, identity: params.merge(noms_id: '')
+          invalid_params = params.merge('noms_id' => '')
+          patch :update, params: { id: identity, identity: invalid_params }
           identity.reload
         end
 
@@ -337,7 +339,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
       context 'success' do
         before do
-          delete :destroy, id: identity
+          delete :destroy, params: { id: identity }
           identity.reload
         end
 
@@ -360,7 +362,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
           allow(Identity).to receive(:find).and_return(identity_double)
           allow(identity_double).to receive(:soft_delete!).and_return(false)
 
-          delete :destroy, id: identity
+          delete :destroy, params: { id: identity }
         end
 
         it 'does not delete the identity' do
@@ -382,7 +384,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
       context 'success' do
         before do
-          patch :activate, id: identity
+          patch :activate, params: { id: identity }
           identity.reload
         end
 
@@ -405,7 +407,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
           allow(Identity).to receive(:find).and_return(identity_double)
           allow(identity_double).to receive(:make_active!).and_return(false)
 
-          patch :activate, id: identity
+          patch :activate, params: { id: identity }
         end
 
         it 'does not activate the identity' do
@@ -433,7 +435,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
       context 'success' do
         before do
-          patch :make_current, id: identity_2
+          patch :make_current, params: { id: identity_2 }
           offender.reload
         end
 
@@ -458,7 +460,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
           allow(identity_double).to receive(:offender).and_return(offender_double)
           allow(offender_double).to receive(:update_attribute).and_return(false)
 
-          patch :make_current, id: identity_2
+          patch :make_current, params: { id: identity_2 }
 
           offender.reload
         end
@@ -488,7 +490,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
     end
 
     describe 'GET #search' do
-      before { get :search, query: '' }
+      before { get :search, params: { query: '' } }
 
       it 'returns status 401' do
         expect(response.status).to be 401
@@ -496,7 +498,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
     end
 
     describe 'GET #show' do
-      before { get :show, id: 1 }
+      before { get :show, params: { id: 1 } }
 
       it 'returns status 401' do
         expect(response.status).to be 401
@@ -504,7 +506,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
     end
 
     describe 'POST #create' do
-      before { post :create, identity: params }
+      before { post :create, params: { identity: params } }
 
       it 'returns status 401' do
         expect(response.status).to be 401
@@ -515,7 +517,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
       let(:identity) { create(:identity) }
 
       before do
-        patch :update, id: identity.id, identity: params
+        patch :update, params: { id: identity.id, identity: params }
       end
 
       it 'returns status 401' do
@@ -527,7 +529,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
       let(:identity) { create(:identity) }
 
       before do
-        delete :destroy, id: identity.id
+        delete :destroy, params: { id: identity.id }
       end
 
       it 'returns status 401' do
@@ -539,7 +541,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
       let(:identity) { create(:identity) }
 
       before do
-        patch :activate, id: identity.id
+        patch :activate, params: { id: identity.id }
       end
 
       it 'returns status 401' do
@@ -551,7 +553,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
       let(:identity) { create(:identity) }
 
       before do
-        patch :make_current, id: identity.id
+        patch :make_current, params: { id: identity.id }
       end
 
       it 'returns status 401' do

@@ -9,7 +9,7 @@ class Offender < ActiveRecord::Base
 
   validates :noms_id, presence: true, uniqueness: true
 
-  scope :updated_after, -> (time) { where('updated_at > ?', time) }
+  scope :updated_after, ->(time) { where('updated_at > ?', time) }
   scope :active, -> { joins(:current_identity).where("identities.status": Identity::STATUSES[:active]) }
   scope :inactive, -> { joins(:current_identity).where("identities.status": Identity::STATUSES[:inactive]) }
 

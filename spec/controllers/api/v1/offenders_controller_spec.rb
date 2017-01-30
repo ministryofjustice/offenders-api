@@ -55,7 +55,7 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
       end
 
       it 'paginates records' do
-        get :index, page: '1', per_page: '2'
+        get :index, params: { page: '1', per_page: '2' }
 
         expect(JSON.parse(response.body).size).to eq 2
       end
@@ -73,7 +73,7 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
       end
 
       it 'filters records updated after a timestamp' do
-        get :index, updated_after: 10.days.ago
+        get :index, params: { updated_after: 10.days.ago }
 
         expect(JSON.parse(response.body).size).to eq 1
       end
@@ -84,7 +84,7 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
         context 'when query matches' do
           let(:search_params) { { noms_id: 'A1234BC' } }
 
-          before { get :search, search_params }
+          before { get :search, params: search_params }
 
           it 'returns collection of offender records matching query' do
             expect(JSON.parse(response.body).map { |p| p['id'] })
@@ -95,7 +95,7 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
         context 'when query does not match' do
           let(:search_params) { { noms_id: 'A4321KL' } }
 
-          before { get :search, search_params }
+          before { get :search, params: search_params }
 
           it 'returns an empty set' do
             expect(response.body).to eq('[]')
@@ -104,7 +104,7 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
       end
 
       it 'paginates records' do
-        get :search, page: '1', per_page: '2'
+        get :search, params: { page: '1', per_page: '2' }
 
         expect(JSON.parse(response.body).size).to eq 2
       end
@@ -125,7 +125,7 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
     describe 'GET #show' do
       let(:offender) { create(:offender) }
 
-      before { get :show, id: offender }
+      before { get :show, params: { id: offender } }
 
       it 'returns status 200' do
         expect(response.status).to be 200
@@ -148,7 +148,7 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
     end
 
     describe 'GET #search' do
-      before { get :search, query: '' }
+      before { get :search, params: { query: '' } }
 
       it 'returns status 401' do
         expect(response.status).to be 401
@@ -156,7 +156,7 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
     end
 
     describe 'GET #show' do
-      before { get :show, id: 1 }
+      before { get :show, params: { id: 1 } }
 
       it 'returns status 401' do
         expect(response.status).to be 401
