@@ -6,15 +6,13 @@ class ServicesController < ApplicationController
     @services = Doorkeeper::Application.order(name: :asc)
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @service = Doorkeeper::Application.new
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     @service = Doorkeeper::Application.new(service_params)

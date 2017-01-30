@@ -23,7 +23,7 @@ RSpec.describe ServicesController, type: :controller do
     describe 'GET #show' do
       let(:application) { create(:application) }
 
-      before { get :show, id: application }
+      before { get :show, params: { id: application } }
 
       it 'returns status 200' do
         expect(response.status).to be 200
@@ -49,7 +49,7 @@ RSpec.describe ServicesController, type: :controller do
     describe 'GET #edit' do
       let(:application) { create(:application) }
 
-      before { get :edit, id: application }
+      before { get :edit, params: { id: application } }
 
       it 'returns status 200' do
         expect(response.status).to be 200
@@ -62,7 +62,7 @@ RSpec.describe ServicesController, type: :controller do
 
     describe 'POST #create' do
       context 'when valid' do
-        before { post :create, service: params }
+        before { post :create, params: { service: params } }
 
         it 'creates a new Doorkeeper::Application' do
           expect(Doorkeeper::Application.count).to be 1
@@ -76,7 +76,7 @@ RSpec.describe ServicesController, type: :controller do
       context 'when invalid' do
         before do
           params.delete('name')
-          post :create, service: params
+          post :create, params: { service: params }
         end
 
         it 'does not create a Doorkeeper::Application' do
@@ -94,7 +94,7 @@ RSpec.describe ServicesController, type: :controller do
 
       context 'when valid' do
         before do
-          patch :update, id: application, service: params
+          patch :update, params: { id: application, service: params }
         end
 
         it 'updates a new Doorkeeper::Application' do
@@ -109,7 +109,7 @@ RSpec.describe ServicesController, type: :controller do
       context 'when invalid' do
         before do
           params['name'] = ''
-          patch :update, id: application, service: params
+          patch :update, params: { id: application, service: params }
         end
 
         it 'does not update a Doorkeeper::Application' do
@@ -126,7 +126,7 @@ RSpec.describe ServicesController, type: :controller do
       let(:application) { create(:application) }
 
       before do
-        delete :destroy, id: application
+        delete :destroy, params: { id: application }
       end
 
       it 'deletes a Doorkeeper::Application' do
@@ -155,7 +155,7 @@ RSpec.describe ServicesController, type: :controller do
     describe 'GET #show' do
       let(:application) { create(:application) }
 
-      before { get :show, id: application }
+      before { get :show, params: { id: application } }
 
       it 'redirects to root' do
         expect(response).to redirect_to(root_url)
@@ -173,7 +173,7 @@ RSpec.describe ServicesController, type: :controller do
     describe 'GET #edit' do
       let(:application) { create(:application) }
 
-      before { get :edit, id: application }
+      before { get :edit, params: { id: application } }
 
       it 'redirects to root' do
         expect(response).to redirect_to(root_url)
@@ -181,7 +181,7 @@ RSpec.describe ServicesController, type: :controller do
     end
 
     describe 'POST #create' do
-      before { post :create, service: params }
+      before { post :create, params: { service: params } }
 
       it 'redirects to root' do
         expect(response).to redirect_to(root_url)
@@ -191,7 +191,7 @@ RSpec.describe ServicesController, type: :controller do
     describe 'PATCH/PUT #update' do
       let(:application) { create(:application) }
 
-      before { patch :update, id: application, service: params }
+      before { patch :update, params: { id: application, service: params } }
 
       it 'redirects to root' do
         expect(response).to redirect_to(root_url)
@@ -201,7 +201,7 @@ RSpec.describe ServicesController, type: :controller do
     describe 'DELETE #destroy' do
       let(:application) { create(:application) }
 
-      before { delete :destroy, id: application }
+      before { delete :destroy, params: { id: application } }
 
       it 'redirects to root' do
         expect(response).to redirect_to(root_url)
