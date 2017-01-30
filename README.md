@@ -8,13 +8,13 @@ Initial Offenders API microservice Rails app. Set up with Doorkeeper OAuth2 prov
 
 Instructions:
 
-`HTTP_HOST=localhost:3000 ADMIN_EMAIL=example@example.com ADMIN_PASSWORD=password123 rake db:create db:migrate db:seed`
+`HTTP_HOST=localhost:3000 ADMIN_EMAIL=example@example.com ADMIN_PASSWORD=password123 rails db:create db:migrate db:seed`
 
 Replace `ADMIN_EMAIL` and `ADMIN_PASSWORD` with preferred values.
 
 To import sample records:
 
-`rake import:sample`
+`rails import:sample`
 
 Navigate to http://localhost:3000
 
