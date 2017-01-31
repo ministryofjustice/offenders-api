@@ -12,7 +12,8 @@ class HeartbeatController < ApplicationController
 
   def healthcheck
     checks = {
-      database: database_alive?
+      database: database_connected?,
+      redis: redis_connected?
     }
 
     status = :bad_gateway unless checks.values.all?
@@ -23,9 +24,15 @@ class HeartbeatController < ApplicationController
 
   private
 
-  def database_alive?
+  def database_connected?
     ActiveRecord::Base.connection.active?
   rescue PG::ConnectionBad
+    false
+  end
+
+  def redis_connected?
+    Sidekiq.redis(&:info)
+  rescue Redis::CannotConnectError
     false
   end
 end
