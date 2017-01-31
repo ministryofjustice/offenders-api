@@ -8,6 +8,4 @@ EXPOSE 6379
 
 RUN RAILS_ENV=production SECRET_KEY_BASE=a-real-secret-key-is-not-needed-here bundle exec rails assets:precompile
 
-RUN RAILS_ENV=production bin/rake --trace
-
 CMD ["./run.sh"]
