@@ -31,6 +31,8 @@ class HeartbeatController < ApplicationController
   end
 
   def redis_connected?
-    !!Sidekiq.redis(&:info) rescue false
+    Sidekiq.redis(&:info)
+  rescue Redis::CannotConnectError
+    false
   end
 end
