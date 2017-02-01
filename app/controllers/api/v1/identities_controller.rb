@@ -25,77 +25,50 @@ module Api
       end
 
       def create
-        if offender.valid?
-          create_identity
-        else
-          render json: { error: offender.errors }, status: 422
-        end
+        offender = find_or_create_offender
+        new_identity = offender.identities.create!(identity_params)
+        offender.update!(current_identity: new_identity) unless identity_params[:offender_id]
+
+        render json: new_identity, status: :created
       end
 
       def update
-        if identity.update(identity_params) && identity.offender.update(offender_params)
-          render json: { success: true }, status: 200
-        else
-          render json: { error: identity_or_offender_errors }, status: 422
-        end
+        identity.update!(identity_params)
+        identity.offender.update!(offender_params)
+
+        render json: identity
       end
 
       def destroy
-        if identity.soft_delete!
-          render json: { success: true }, status: 200
-        else
-          render json: { success: false }, status: 422
-        end
+        identity.soft_delete!
+
+        render json: { success: true }
       end
 
       def activate
-        if identity.make_active!
-          render json: { success: true }, status: 200
-        else
-          render json: { success: false }, status: 422
-        end
+        identity.make_active!
+
+        render json: { success: true }
       end
 
       def make_current
-        if identity.offender.update_attribute(:current_identity, identity)
-          render json: { success: true }, status: 200
-        else
-          render json: { success: false }, status: 422
-        end
+        identity.offender.update!(current_identity: identity)
+
+        render json: { success: true }
       end
 
       private
 
       def identity
-        @_identity ||= Identity.find(params[:id])
+        Identity.find(params[:id])
       end
 
-      def offender
-        @_offender ||=
-          if identity_params[:offender_id]
-            Offender.find(identity_params[:offender_id])
-          else
-            Offender.create(offender_params)
-          end
-      end
-
-      def create_identity
-        @identity = offender.identities.build(identity_params)
-        if @identity.save
-          update_current_identity_of_offender
-          render json: { id: @identity.id, offender_id: offender.id }, status: :created
+      def find_or_create_offender
+        if identity_params[:offender_id]
+          Offender.find(identity_params[:offender_id])
         else
-          render json: { error: @identity.errors }, status: 422
+          Offender.create!(offender_params)
         end
-      end
-
-      def update_current_identity_of_offender
-        offender.update_attribute(:current_identity, @identity) unless identity_params[:offender_id]
-      end
-
-      def identity_or_offender_errors
-        return identity.errors unless identity.valid?
-        return identity.offender.errors unless identity.offender.valid?
       end
 
       def offender_params

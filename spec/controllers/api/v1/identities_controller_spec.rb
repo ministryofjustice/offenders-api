@@ -141,15 +141,31 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
     describe 'GET #show' do
       let(:identity) { create(:identity) }
 
-      before { get :show, params: { id: identity } }
+      context 'when record is found' do
+        before { get :show, params: { id: identity } }
 
-      it 'returns status 200' do
-        expect(response.status).to be 200
+        it 'returns status 200' do
+          expect(response.status).to be 200
+        end
+
+        it 'returns JSON represenation of identity record' do
+          expect(JSON.parse(response.body).as_json)
+            .to include identity.as_json(except: %w(date_of_birth created_at updated_at), methods: :current)
+        end
       end
 
-      it 'returns JSON represenation of identity record' do
-        expect(JSON.parse(response.body).as_json)
-          .to include identity.as_json(except: %w(date_of_birth created_at updated_at), methods: :current)
+      context 'when record is not found' do
+        before { get :show, params: { id: 'not-present' } }
+
+        it 'returns status 404' do
+          expect(response.status).to be 404
+        end
+
+        it 'returns JSON represenation of identity record' do
+          expect(JSON.parse(response.body)).to eq(
+            'error' => "Couldn't find Identity with 'id'=not-present"
+          )
+        end
       end
     end
 
@@ -158,15 +174,15 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
         context 'when offender is not present' do
           before { post :create, params: { identity: params } }
 
+          let(:identity) { Identity.last }
+
           it 'creates a new identity record with given params' do
-            identity = Identity.last
             identity_attrs = identity.attributes.except(*excepted_attrs)
             expect(identity_attrs).to include(params.except(*excepted_attrs, *offender_attrs))
             expect(identity.date_of_birth).to eq Date.parse(params['date_of_birth'])
           end
 
           it 'sets current_offender on the created offender' do
-            identity = Identity.last
             expect(identity.offender.current_identity).to eq identity
           end
 
@@ -174,9 +190,9 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
             expect(response.status).to be 201
           end
 
-          it 'returns the id and the offender_id of the created record' do
-            identity = Identity.last
-            expect(response.body).to eq({ id: identity.id, offender_id: identity.offender.id }.to_json)
+          it 'returns JSON represenation of the created identity record' do
+            expect(JSON.parse(response.body).as_json)
+              .to include identity.as_json(except: %w(date_of_birth created_at updated_at), methods: :current)
           end
         end
 
@@ -186,8 +202,9 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
             post :create, params: { identity: params.merge(offender_id: offender.id) }
           end
 
+          let(:identity) { Identity.last }
+
           it 'creates a new identity record with given params' do
-            identity = Identity.last
             identity_attrs = identity.attributes.except(*excepted_attrs)
             expect(identity_attrs).to include(params.except(*excepted_attrs, *offender_attrs))
             expect(identity.date_of_birth).to eq Date.parse(params['date_of_birth'])
@@ -198,7 +215,6 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
           end
 
           it 'does not update current_offender field on offender' do
-            identity = Identity.last
             expect(identity.offender.current_identity).to_not be identity
           end
 
@@ -206,9 +222,9 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
             expect(response.status).to be 201
           end
 
-          it 'returns the id and the offender_id of the created record' do
-            identity = Identity.last
-            expect(response.body).to eq({ id: identity.id, offender_id: identity.offender.id }.to_json)
+          it 'returns JSON represenation of the created identity record' do
+            expect(JSON.parse(response.body).as_json)
+              .to include identity.as_json(except: %w(date_of_birth created_at updated_at), methods: :current)
           end
         end
       end
@@ -231,7 +247,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
           it 'returns error for missing attribute' do
             expect(JSON.parse(response.body)).to eq(
-              'error' => { 'gender' => ['can\'t be blank'] }
+              'error' => { 'gender' => ["can't be blank"] }
             )
           end
         end
@@ -253,7 +269,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
           it 'returns error for missing attribute' do
             expect(JSON.parse(response.body)).to eq(
-              'error' => { 'noms_id' => ['can\'t be blank'] }
+              'error' => { 'noms_id' => ["can't be blank"] }
             )
           end
         end
@@ -283,8 +299,9 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
           expect(response.status).to be 200
         end
 
-        it 'returns success:true' do
-          expect(response.body).to eq('{"success":true}')
+        it 'returns JSON represenation of identity record' do
+          expect(JSON.parse(response.body).as_json)
+            .to include identity.as_json(except: %w(date_of_birth created_at updated_at), methods: :current)
         end
       end
 
@@ -305,7 +322,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
           it 'returns JSON error' do
             expect(JSON.parse(response.body)).to eq(
-              'error' => { 'surname' => ['can\'t be blank'] }
+              'error' => { 'surname' => ["can't be blank"] }
             )
           end
         end
@@ -328,7 +345,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
         it 'returns JSON error' do
           expect(JSON.parse(response.body)).to eq(
-            'error' => { 'noms_id' => ['can\'t be blank'] }
+            'error' => { 'noms_id' => ["can't be blank"] }
           )
         end
       end
@@ -368,14 +385,6 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
         it 'does not delete the identity' do
           expect(Identity.last.status).to eq 'active'
         end
-
-        it 'returns status 422' do
-          expect(response.status).to be 422
-        end
-
-        it 'returns success:false' do
-          expect(response.body).to eq('{"success":false}')
-        end
       end
     end
 
@@ -412,14 +421,6 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
         it 'does not activate the identity' do
           expect(Identity.last.status).to eq 'inactive'
-        end
-
-        it 'returns status 422' do
-          expect(response.status).to be 422
-        end
-
-        it 'returns success:false' do
-          expect(response.body).to eq('{"success":false}')
         end
       end
     end
@@ -458,7 +459,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
           identity_double = instance_double(Identity)
           allow(Identity).to receive(:find).and_return(identity_double)
           allow(identity_double).to receive(:offender).and_return(offender_double)
-          allow(offender_double).to receive(:update_attribute).and_return(false)
+          allow(offender_double).to receive(:update!).and_return(false)
 
           patch :make_current, params: { id: identity_2 }
 
@@ -467,14 +468,6 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
         it 'does not update the offender current identity' do
           expect(offender.current_identity).to eq identity_1
-        end
-
-        it 'returns status 422' do
-          expect(response.status).to be 422
-        end
-
-        it 'returns success:false' do
-          expect(response.body).to eq('{"success":false}')
         end
       end
     end
