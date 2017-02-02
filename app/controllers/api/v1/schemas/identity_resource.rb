@@ -295,6 +295,86 @@ module IdentityResource
         end
       end
 
+      swagger_path '/identities/inactive' do
+        operation :get do
+          key :description, 'Returns a paginated list of inactive identities'
+          key :operationId, 'inactiveIdentities'
+          key :produces, ['application/json']
+          key :tags, ['identity']
+          parameter do
+            key :name, :page
+            key :in, :query
+            key :description, 'Page to return'
+            key :required, false
+            key :type, :integer
+            key :format, :int32
+          end
+          parameter do
+            key :name, :per_page
+            key :in, :query
+            key :description, 'Per page number of results'
+            key :required, false
+            key :type, :integer
+            key :format, :int32
+          end
+          response 200 do
+            key :description, 'A list of inactive identities'
+            schema do
+              key :type, :array
+              items do
+                key :'$ref', :Identity
+              end
+            end
+          end
+          response :default do
+            key :description, 'unexpected error'
+            schema do
+              key :'$ref', :ErrorModel
+            end
+          end
+        end
+      end
+
+      swagger_path '/identities/blank_noms_offender_id' do
+        operation :get do
+          key :description, 'Returns a paginated list of identities with blank noms_offender_id'
+          key :operationId, 'blankNomsOffenderIdIdentities'
+          key :produces, ['application/json']
+          key :tags, ['identity']
+          parameter do
+            key :name, :page
+            key :in, :query
+            key :description, 'Page to return'
+            key :required, false
+            key :type, :integer
+            key :format, :int32
+          end
+          parameter do
+            key :name, :per_page
+            key :in, :query
+            key :description, 'Per page number of results'
+            key :required, false
+            key :type, :integer
+            key :format, :int32
+          end
+          response 200 do
+            key :description, 'A list of identities with blank noms_offender_id'
+            schema do
+              key :type, :array
+              items do
+                key :'$ref', :Identity
+              end
+            end
+          end
+          response :default do
+            key :description, 'unexpected error'
+            schema do
+              key :'$ref', :ErrorModel
+            end
+          end
+        end
+      end
+
       swagger_path '/identities/{id}' do
         operation :delete do
           key :description, 'Deletes an identity'
