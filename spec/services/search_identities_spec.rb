@@ -15,19 +15,22 @@ RSpec.describe SearchIdentities do
     let!(:identity_1) do
       create(:identity, offender: offender_1,
                         given_name: 'ALANIS', middle_names: 'LENA ROBERTA', surname: 'BROWN',
-                        gender: 'M', date_of_birth: '19650807', pnc_number: '74/832963V', cro_number: '195942/38G')
+                        gender: 'M', date_of_birth: '19650807',
+                        pnc_number: '74/832963V', cro_number: '195942/38G', ethnicity_code: 'W1')
     end
 
     let!(:identity_2) do
       create(:identity, offender: offender_1,
                         given_name: 'DEBBY', middle_names: 'LAURA MARTA', surname: 'SMITH',
-                        gender: 'M', date_of_birth: '19691128', pnc_number: '99/135626A', cro_number: '639816/39Y')
+                        gender: 'M', date_of_birth: '19691128',
+                        pnc_number: '99/135626A', cro_number: '639816/39Y', ethnicity_code: 'B1')
     end
 
     let!(:identity_3) do
       create(:identity, offender: offender_2,
                         given_name: 'JONAS', middle_names: 'JULIUS', surname: 'CEASAR',
-                        gender: 'F', date_of_birth: '19541009', pnc_number: '38/836893N', cro_number: '741860/84F')
+                        gender: 'F', date_of_birth: '19541009',
+                        pnc_number: '38/836893N', cro_number: '741860/84F', ethnicity_code: 'A1')
     end
 
     context 'name search' do
@@ -150,6 +153,24 @@ RSpec.describe SearchIdentities do
       end
     end
 
+    context 'ethnicity_code search' do
+      context 'when query matches' do
+        let(:params) { { ethnicity_code: 'A1' } }
+
+        it 'returns matching records' do
+          expect(described_class.new(params).call).to eq [identity_3]
+        end
+      end
+
+      context 'when query does not match' do
+        let(:params) { { ethnicity_code: 'W2' } }
+
+        it 'returns an empty array' do
+          expect(described_class.new(params).call).to eq []
+        end
+      end
+    end
+
     context 'pnc_number search' do
       context 'when query matches' do
         let(:params) { { pnc_number: '38/836893N' } }
@@ -232,6 +253,7 @@ RSpec.describe SearchIdentities do
             date_of_birth: '19541009',
             gender: 'F',
             establishment_code: 'BMI',
+            ethnicity_code: 'A1',
             pnc_number: '38/836893N',
             cro_number: '741860/84F'
           }
@@ -251,6 +273,7 @@ RSpec.describe SearchIdentities do
             date_of_birth: '19720911',
             gender: 'M',
             establishment_code: 'LEI',
+            ethnicity_code: 'B1',
             pnc_number: '38/525271A',
             cro_number: '056339/17X'
           }

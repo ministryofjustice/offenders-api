@@ -44,6 +44,9 @@ module OffenderModel
         property :cro_number do
           key :type, :string
         end
+        property :ethnicity_code do
+          key :type, :string
+        end
       end
     end
   end

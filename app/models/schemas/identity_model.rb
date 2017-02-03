@@ -51,6 +51,9 @@ module IdentityModel
         property :cro_number do
           key :type, :string
         end
+        property :ethnicity_code do
+          key :type, :string
+        end
         property :current do
           key :type, :boolean
         end

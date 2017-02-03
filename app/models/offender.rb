@@ -13,7 +13,8 @@ class Offender < ActiveRecord::Base
   scope :active, -> { joins(:current_identity).where("identities.status": Identity::STATUSES[:active]) }
   scope :inactive, -> { joins(:current_identity).where("identities.status": Identity::STATUSES[:inactive]) }
 
-  delegate :given_name, :middle_names, :surname, :title, :suffix, :date_of_birth, :gender, :pnc_number, :cro_number,
+  delegate :given_name, :middle_names, :surname, :title, :suffix, :date_of_birth, :gender,
+           :pnc_number, :cro_number, :ethnicity_code,
            to: :current_identity, allow_nil: true
 
   def self.search(params)

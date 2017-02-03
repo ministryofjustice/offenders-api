@@ -4,6 +4,7 @@ class SearchIdentities
     middle_names: { table_field_name: 'identities.middle_names', operation: 'ILIKE' },
     surname: { table_field_name: 'identities.surname', operation: 'ILIKE' },
     noms_id: { table_field_name: 'offenders.noms_id', operation: '=' },
+    ethnicity_code: { table_field_name: 'identities.ethnicity_code', operation: '=' },
     nationality_code: { table_field_name: 'offenders.nationality_code', operation: '=' },
     establishment_code: { table_field_name: 'offenders.establishment_code', operation: '=' },
     date_of_birth_from: { table_field_name: 'identities.date_of_birth', operation: '>=' },

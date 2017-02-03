@@ -11,6 +11,7 @@ FactoryGirl.define do
     gender { %w(M F).sample }
     pnc_number { rand(999_999) }
     cro_number { rand(999_999) }
+    ethnicity_code { %w(A1 B1 W1 W3).sample }
 
     trait :active do
       status 'active'

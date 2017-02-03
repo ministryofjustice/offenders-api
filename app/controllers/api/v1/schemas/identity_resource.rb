@@ -23,14 +23,6 @@ module IdentityResource
             key :type, :integer
             key :format, :int32
           end
-          parameter do
-            key :name, :updated_after
-            key :in, :query
-            key :description, 'Identities updated after given timestamp'
-            key :required, false
-            key :type, :string
-            key :format, 'date-time'
-          end
           response 200 do
             key :description, 'A list of identities'
             schema do
@@ -222,6 +214,13 @@ module IdentityResource
           end
           parameter do
             key :name, :establishment_code
+            key :in, :query
+            key :description, 'Establishment code'
+            key :required, false
+            key :type, :string
+          end
+          parameter do
+            key :name, :ethnicity_code
             key :in, :query
             key :description, 'Establishment code'
             key :required, false

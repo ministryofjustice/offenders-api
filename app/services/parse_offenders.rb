@@ -59,7 +59,7 @@ module ParseOffenders
         middle_names: middle_names(row['GIVEN_NAME_2'], row['GIVEN_NAME_3']),
         title: row['SALUTATION'],
         date_of_birth: Date.parse(row['DATE_OF_BIRTH']),
-        gender: row['GENDER_CODE'],
+        gender: row['GENDER_CODE'], ethnicity_code: row['ETHNICITY_CODE'],
         pnc_number: row['PNC_ID'], cro_number: row['CRIMINAL_RECORDS_OFFICE_NUMBER'],
         status: 'active'
       }
