@@ -29,6 +29,7 @@ RSpec.describe ParseOffenders do
           expect(offender.nationality_code).to eq('BRIT')
           expect(offender.cro_number).to eq('309129/05R')
           expect(offender.establishment_code).to eq('LEI')
+          expect(offender.ethnicity_code).to eq('W1')
         end
 
         it 'imports all the fields correctly for the identity' do
@@ -46,6 +47,7 @@ RSpec.describe ParseOffenders do
           expect(identity.nationality_code).to eq('BRIT')
           expect(identity.cro_number).to eq('339223/02H')
           expect(identity.establishment_code).to eq('LEI')
+          expect(identity.ethnicity_code).to eq('B1')
           expect(identity.status).to eq('active')
         end
       end
@@ -81,6 +83,7 @@ RSpec.describe ParseOffenders do
           expect(offender.nationality_code).to eq('BRIT')
           expect(offender.cro_number).to eq('309129/05R')
           expect(offender.establishment_code).to eq('LEI')
+          expect(offender.ethnicity_code).to eq('W1')
         end
 
         it 'updates all the fields correctly for the identity' do
@@ -98,6 +101,7 @@ RSpec.describe ParseOffenders do
           expect(identity.nationality_code).to eq('BRIT')
           expect(identity.cro_number).to eq('339223/02H')
           expect(identity.establishment_code).to eq('LEI')
+          expect(identity.ethnicity_code).to eq('B1')
         end
       end
     end

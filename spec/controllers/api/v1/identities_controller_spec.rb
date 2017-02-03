@@ -16,7 +16,8 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
       'date_of_birth' => '19711010',
       'gender' => 'M',
       'pnc_number' => 'PNC123',
-      'cro_number' => 'CRO987'
+      'cro_number' => 'CRO987',
+      'ethnicity_code' => 'W1'
     }
   end
   let(:offender_attrs) { %w(noms_id establishment_code nationality_code) }
@@ -63,20 +64,23 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
       let!(:identity_1) do
         create(:identity, offender: offender_1,
-                          given_name: 'ALANIS', middle_names: 'LENA ROBERTA', surname: 'BROWN', status: 'active',
-                          gender: 'M', date_of_birth: '19650807', pnc_number: '74/832963V', cro_number: '195942/38G')
+                          given_name: 'ALANIS', middle_names: 'LENA ROBERTA', surname: 'BROWN',
+                          status: 'active', gender: 'M', date_of_birth: '19650807',
+                          pnc_number: '74/832963V', cro_number: '195942/38G', ethnicity_code: 'W1')
       end
 
       let!(:identity_2) do
         create(:identity, offender: offender_1,
-                          given_name: 'DEBBY', middle_names: 'LAURA MARTA', surname: 'YELLOW', status: 'active',
-                          gender: 'M', date_of_birth: '19691128', pnc_number: '99/135626A', cro_number: '639816/39Y')
+                          given_name: 'DEBBY', middle_names: 'LAURA MARTA', surname: 'YELLOW',
+                          status: 'active', gender: 'M', date_of_birth: '19691128',
+                          pnc_number: '99/135626A', cro_number: '639816/39Y', ethnicity_code: 'A1')
       end
 
       let!(:identity_3) do
         create(:identity, offender: offender_2,
-                          given_name: 'JONAS', middle_names: 'JULIUS', surname: 'CEASAR', status: 'active',
-                          gender: 'F', date_of_birth: '19541009', pnc_number: '38/836893N', cro_number: '741860/84F')
+                          given_name: 'JONAS', middle_names: 'JULIUS', surname: 'CEASAR',
+                          status: 'active', gender: 'F', date_of_birth: '19541009',
+                          pnc_number: '38/836893N', cro_number: '741860/84F', ethnicity_code: 'B1')
       end
 
       context 'searching for NOMS ID' do
