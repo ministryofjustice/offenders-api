@@ -41,16 +41,22 @@ module Api
       end
 
       def create
-        offender = find_or_create_offender
-        new_identity = offender.identities.create!(identity_params)
-        offender.update!(current_identity: new_identity) unless identity_params[:offender_id]
+        new_identity = nil
+
+        ActiveRecord::Base.transaction do
+          offender = find_or_create_offender
+          new_identity = offender.identities.create!(identity_params)
+          offender.update!(current_identity: new_identity) unless identity_params[:offender_id]
+        end
 
         render json: new_identity, status: :created
       end
 
       def update
-        identity.update!(identity_params)
-        identity.offender.update!(offender_params)
+        ActiveRecord::Base.transaction do
+          identity.update!(identity_params)
+          identity.offender.update!(offender_params)
+        end
 
         render json: identity
       end

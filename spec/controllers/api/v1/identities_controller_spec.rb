@@ -284,7 +284,10 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
           it 'does not create an identity record' do
             expect(Identity.count).to be 0
-            # expect(Offender.count).to be 0 TODO: Maybe we should avoid the creation of the offender
+          end
+
+          it 'does not create an offender record' do
+            expect(Offender.count).to be 0
           end
 
           it 'returns status 422/unprocessable entity' do
@@ -354,12 +357,16 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
       context 'when invalid' do
         context 'with validation errors on the identity' do
           before do
-            invalid_params = params.merge('surname' => '')
+            invalid_params = params.merge('surname' => '', 'noms_id' => 'A1289BC')
             patch :update, params: { id: identity, identity: invalid_params }
           end
 
           it 'does not update the identity record' do
             expect(identity.surname).to eq('BLACK')
+          end
+
+          it 'does not update the offender record' do
+            expect(identity.offender.noms_id).to eq('A7104HJ')
           end
 
           it 'returns status "unprocessable entity"' do
@@ -376,13 +383,17 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
       context 'with validation errors on the offender' do
         before do
-          invalid_params = params.merge('noms_id' => '')
+          invalid_params = params.merge('noms_id' => '', 'surname' => 'YELLOW')
           patch :update, params: { id: identity, identity: invalid_params }
           identity.reload
         end
 
         it 'does not update the identity record' do
           expect(identity.offender.noms_id).to eq('A7104HJ')
+        end
+
+        it 'does not update the identity record' do
+          expect(identity.surname).to eq('BLACK')
         end
 
         it 'returns status "unprocessable entity"' do
