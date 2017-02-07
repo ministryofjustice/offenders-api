@@ -90,6 +90,14 @@ RSpec.describe SearchIdentities do
         end
       end
 
+      context 'when query matches with name_switch and exact_surname on' do
+        let(:params) { { given_name: 'brown', surname: 'alanis', name_switch: 'Y', exact_surname: 'Y' } }
+
+        it 'returns matching records' do
+          expect(described_class.new(params).call).to eq [identity_1]
+        end
+      end
+
       context 'when query does not match' do
         let(:params) { { given_name: 'luke' } }
 

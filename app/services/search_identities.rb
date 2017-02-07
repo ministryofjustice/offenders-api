@@ -42,22 +42,22 @@ class SearchIdentities
   end
 
   def perform_advanced_name_search(field)
-    check_name_switch(field)
     check_exact_surname(field)
+    check_name_switch(field)
     check_name_variation(field)
     check_soundex(field)
-  end
-
-  def check_name_switch(field)
-    return unless @params[:name_switch] && %i(given_name surname).include?(field)
-    @operation = 'IN'
-    @value = @given_name_surname
   end
 
   def check_exact_surname(field)
     return unless @params[:exact_surname] && field == :surname
     @operation = '='
     @value.upcase!
+  end
+
+  def check_name_switch(field)
+    return unless @params[:name_switch] && %i(given_name surname).include?(field)
+    @operation = 'IN'
+    @value = @given_name_surname
   end
 
   def check_name_variation(field)
