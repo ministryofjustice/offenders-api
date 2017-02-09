@@ -142,6 +142,48 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
       end
     end
 
+    describe 'GET #inactive' do
+      let!(:identity_1) do
+        create(:identity, status: 'active')
+      end
+
+      let!(:identity_2) do
+        create(:identity, status: 'inactive')
+      end
+
+      let!(:identity_3) do
+        create(:identity, status: 'deleted')
+      end
+
+      before { get :inactive }
+
+      it 'returns collection of inactive identities' do
+        expect(JSON.parse(response.body).map { |p| p['id'] })
+          .to match_array([identity_2['id']])
+      end
+    end
+
+    describe 'GET #blank_noms_offender_id' do
+      let!(:identity_1) do
+        create(:identity, noms_offender_id: '123456')
+      end
+
+      let!(:identity_2) do
+        create(:identity, noms_offender_id: '')
+      end
+
+      let!(:identity_3) do
+        create(:identity, noms_offender_id: nil)
+      end
+
+      before { get :blank_noms_offender_id }
+
+      it 'returns collection of identities with blank noms_offender_id' do
+        expect(JSON.parse(response.body).map { |p| p['id'] })
+          .to match_array([identity_2['id'], identity_3['id']])
+      end
+    end
+
     describe 'GET #show' do
       let(:identity) { create(:identity) }
 
@@ -488,6 +530,22 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
     describe 'GET #search' do
       before { get :search, params: { query: '' } }
+
+      it 'returns status 401' do
+        expect(response.status).to be 401
+      end
+    end
+
+    describe 'GET #inactive' do
+      before { get :inactive }
+
+      it 'returns status 401' do
+        expect(response.status).to be 401
+      end
+    end
+
+    describe 'GET #blank_noms_offender_id' do
+      before { get :blank_noms_offender_id }
 
       it 'returns status 401' do
         expect(response.status).to be 401

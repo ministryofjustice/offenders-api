@@ -20,24 +20,31 @@ RSpec.describe Identity, type: :model do
     end
 
     let!(:identity_1) do
-      create(:identity, offender: offender_1, given_name: 'DEBORAH', status: 'active')
+      create(:identity, offender: offender_1, given_name: 'DEBORAH', status: 'active', noms_offender_id: '')
     end
 
     let!(:identity_2) do
-      create(:identity, offender: offender_2, surname: 'SMITH')
+      create(:identity, offender: offender_2, surname: 'SMITH', noms_offender_id: '12345')
     end
 
     context 'active' do
-      it 'scopes active offenders' do
+      it 'scopes active identities' do
         expect(Identity.active.count).to be 1
         expect(Identity.active.first).to eq identity_1
       end
     end
 
     context 'inactive' do
-      it 'scopes active offenders' do
+      it 'scopes active identities' do
         expect(Identity.inactive.count).to be 1
         expect(Identity.inactive.first).to eq identity_2
+      end
+    end
+
+    context 'blank_noms_offender_id' do
+      it 'scopes blank_noms_offender_id identities' do
+        expect(Identity.blank_noms_offender_id.count).to be 1
+        expect(Identity.blank_noms_offender_id.first).to eq identity_1
       end
     end
 
