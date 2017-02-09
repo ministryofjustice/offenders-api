@@ -82,6 +82,14 @@ RSpec.describe SearchIdentities do
         end
       end
 
+      context 'when query matches with name variation on but no nicknames' do
+        let(:params) { { given_name: 'jonas', name_variation: 'Y' } }
+
+        it 'returns matching records' do
+          expect(described_class.new(params).call).to eq [identity_3]
+        end
+      end
+
       context 'when query matches with suoundex on' do
         let(:params) { { surname: 'schmitt', soundex: 'Y' } }
 
