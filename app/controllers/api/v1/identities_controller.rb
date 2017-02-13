@@ -63,20 +63,14 @@ module Api
 
       def destroy
         identity.soft_delete!
-
-        render json: { success: true }
       end
 
       def activate
         identity.make_active!
-
-        render json: { success: true }
       end
 
       def make_current
         identity.offender.update!(current_identity: identity)
-
-        render json: { success: true }
       end
 
       private
