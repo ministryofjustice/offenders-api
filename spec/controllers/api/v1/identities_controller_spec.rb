@@ -309,6 +309,9 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
           it 'does not create an identity record' do
             expect(Identity.count).to be 0
+          end
+
+          it 'does not create an offender record' do
             expect(Offender.count).to be 0
           end
 
@@ -421,12 +424,8 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
           expect(identity.status).to eq 'deleted'
         end
 
-        it 'returns status "success"' do
-          expect(response.status).to be 200
-        end
-
-        it 'returns success:true' do
-          expect(response.body).to eq('{"success":true}')
+        it 'returns status code 204' do
+          expect(response.status).to be 204
         end
       end
 
@@ -458,12 +457,8 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
           expect(identity.status).to eq 'active'
         end
 
-        it 'returns status "success"' do
-          expect(response.status).to be 200
-        end
-
-        it 'returns success:true' do
-          expect(response.body).to eq('{"success":true}')
+        it 'returns status code 204' do
+          expect(response.status).to be 204
         end
       end
 
@@ -501,12 +496,8 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
           expect(offender.current_identity).to eq identity_2
         end
 
-        it 'returns status "success"' do
-          expect(response.status).to be 200
-        end
-
-        it 'returns success:true' do
-          expect(response.body).to eq('{"success":true}')
+        it 'returns status code 204' do
+          expect(response.status).to be 204
         end
       end
 
