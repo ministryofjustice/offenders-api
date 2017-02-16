@@ -10,8 +10,9 @@ class Offender < ActiveRecord::Base
   validates :noms_id, presence: true, uniqueness: true
 
   scope :updated_after, ->(time) { where('updated_at > ?', time) }
-  scope :active, -> { joins(:current_identity).where("identities.status": Identity::STATUSES[:active]) }
-  scope :inactive, -> { joins(:current_identity).where("identities.status": Identity::STATUSES[:inactive]) }
+  scope :active, -> { not_merged.joins(:current_identity).where("identities.status": Identity::STATUSES[:active]) }
+  scope :inactive, -> { not_merged.joins(:current_identity).where("identities.status": Identity::STATUSES[:inactive]) }
+  scope :not_merged, -> { where(merged_to_id: nil) }
 
   delegate :given_name, :middle_names, :surname, :title, :suffix, :date_of_birth, :gender,
            :pnc_number, :cro_number, :ethnicity_code,
@@ -19,5 +20,9 @@ class Offender < ActiveRecord::Base
 
   def self.search(params)
     distinct.joins(:identities).where(params).order(:noms_id)
+  end
+
+  def merged?
+    merged_to_id.present?
   end
 end

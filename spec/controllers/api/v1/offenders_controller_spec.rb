@@ -123,17 +123,74 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
     end
 
     describe 'GET #show' do
-      let(:offender) { create(:offender) }
+      context 'when offender has not been merged' do
+        before { get :show, params: { id: offender_1 } }
 
-      before { get :show, params: { id: offender } }
+        it 'returns status 200' do
+          expect(response.status).to be 200
+        end
 
-      it 'returns status 200' do
-        expect(response.status).to be 200
+        it 'returns JSON represenation of offender record' do
+          excepted_fields = %w(merged_to_id date_of_birth created_at updated_at current_identity_id)
+          expect(JSON.parse(response.body).as_json)
+            .to include offender_1.as_json(except: excepted_fields)
+        end
       end
 
-      it 'returns JSON represenation of offender record' do
-        expect(JSON.parse(response.body).as_json)
-          .to include offender.as_json(except: %w(date_of_birth created_at updated_at current_identity_id))
+      context 'when offender has been merged' do
+        before do
+          offender_1.update(merged_to_id: offender_2.id)
+          get :show, params: { id: offender_1 }
+        end
+
+        it 'returns status 302' do
+          expect(response.status).to be 302
+        end
+
+        it 'returns JSON represenation of offender record' do
+          excepted_fields = %w(merged_to_id date_of_birth created_at updated_at current_identity_id)
+          expect(JSON.parse(response.body).as_json)
+            .to include offender_2.as_json(except: excepted_fields)
+        end
+      end
+    end
+
+    describe 'PATCH #merge' do
+      let!(:identity_5) do
+        create(:identity, offender: offender_1, status: 'active')
+      end
+
+      let!(:identity_6) do
+        create(:identity, offender: offender_1, status: 'active')
+      end
+
+      before do
+        params = {
+          id: offender_2,
+          offender_id: offender_1.id,
+          identity_ids: [identity_1.id, identity_2.id, identity_5.id],
+          current_identity_id: identity_2.id
+        }
+        patch :merge, params: params
+      end
+
+      context 'setting identities' do
+        it 'sets the passed identity ids to the offender' do
+          expect(offender_2.reload.identities.pluck(:id).sort)
+            .to eq [identity_1.id, identity_2.id, identity_5.id].sort
+        end
+
+        it 'soft deletes the extraneous identities' do
+          expect(identity_6.reload.status).to eq 'deleted'
+        end
+      end
+
+      it 'sets the current_identity of the offender' do
+        expect(offender_2.reload.current_identity).to eq identity_2
+      end
+
+      it 'sets the merged_to_id of the other offender' do
+        expect(offender_1.reload.merged_to_id).to eq offender_2.id
       end
     end
   end
@@ -157,6 +214,14 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
 
     describe 'GET #show' do
       before { get :show, params: { id: 1 } }
+
+      it 'returns status 401' do
+        expect(response.status).to be 401
+      end
+    end
+
+    describe 'PATCH #merge' do
+      before { patch :merge, params: { id: 1 } }
 
       it 'returns status 401' do
         expect(response.status).to be 401

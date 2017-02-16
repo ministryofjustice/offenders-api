@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     scope module: :v1, constraints: ApiConstraint.new(version: 1) do
       resources :offenders, format: :json, except: [:new, :create, :edit, :update, :destroy] do
         get :search, on: :collection
+        patch :merge, on: :member
       end
       resources :identities, format: :json, except: [:new, :edit] do
         get :search, on: :collection

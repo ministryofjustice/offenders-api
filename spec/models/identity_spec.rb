@@ -20,11 +20,12 @@ RSpec.describe Identity, type: :model do
     end
 
     let!(:identity_1) do
-      create(:identity, offender: offender_1, given_name: 'DEBORAH', status: 'active', noms_offender_id: '')
+      create(:identity, offender: offender_1, surname: 'COLE', given_name: 'DEBORAH',
+                        status: 'active', noms_offender_id: '')
     end
 
     let!(:identity_2) do
-      create(:identity, offender: offender_2, surname: 'SMITH', noms_offender_id: '12345')
+      create(:identity, offender: offender_2, surname: 'SMITH', given_name: 'MARK', noms_offender_id: '12345')
     end
 
     context 'active' do

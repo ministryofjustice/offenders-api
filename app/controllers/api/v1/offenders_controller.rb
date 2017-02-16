@@ -21,9 +21,21 @@ module Api
       end
 
       def show
-        @offender = Offender.find(params[:id])
+        offender = Offender.find(params[:id])
 
-        render json: @offender
+        if offender.merged?
+          offender_to_redirect_to = Offender.find(offender.merged_to_id)
+          render json: offender_to_redirect_to, status: 302
+        else
+          render json: offender
+        end
+      end
+
+      def merge
+        offender_merge_from = Offender.find(merge_params[:offender_id])
+        offender_merge_to = Offender.find(params[:id])
+
+        MergeOffenders.call(offender_merge_from, offender_merge_to, merge_params)
       end
 
       private
@@ -36,6 +48,12 @@ module Api
         @_updated_after ||= Time.parse(params[:updated_after])
       rescue ArgumentError, TypeError
         nil
+      end
+
+      def merge_params
+        params.permit(
+          :offender_id, :current_identity_id, identity_ids: []
+        )
       end
     end
   end

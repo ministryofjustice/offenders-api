@@ -77,6 +77,60 @@ module OffenderResource
         end
       end
 
+      swagger_path '/offenders/{id}/merge' do
+        operation :patch do
+          key :description, 'Merges two offenders'
+          key :operationId, 'mergeOffenders'
+          key :tags, ['offender']
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :description, 'ID of offender to be merge offender in params'
+            key :required, true
+            key :type, :string
+            key :format, :uuid
+          end
+          parameter do
+            key :name, :offender_id
+            key :in, :query
+            key :description, 'Offender to be merged from'
+            key :required, false
+            key :type, :string
+            key :format, :uuid
+          end
+          parameter do
+            key :name, :current_identity_id
+            key :in, :query
+            key :description, 'Current identity of the merged offender'
+            key :required, false
+            key :type, :string
+            key :format, :uuid
+          end
+          parameter do
+            key :name, :identity_ids
+            key :in, :query
+            key :description, 'Array of identities to be kept on the merged offender'
+            key :required, false
+            key :type, :array
+            items do
+              key :format, :uuid
+            end
+          end
+          response 200 do
+            key :description, 'offender response'
+            schema do
+              key :'$ref', :Offender
+            end
+          end
+          response :default do
+            key :description, 'unexpected error'
+            schema do
+              key :'$ref', :ErrorModel
+            end
+          end
+        end
+      end
+
       swagger_path '/offenders/search' do
         operation :get do
           key :description, 'Returns a paginated list of offenders matching the given search parameters'
