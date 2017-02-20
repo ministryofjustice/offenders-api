@@ -21,6 +21,14 @@ namespace :import do
     ParseOffenders.call(file.read)
   end
 
+  desc 'Import NOMIS extract, and remove previous records'
+  task nomis_extract: :environment do
+    Offender.delete_all
+    Identity.delete_all
+    file = Rails.root.join('lib', 'assets', 'data', 'nomis_extract.csv')
+    ParseOffenders.call(file.read)
+  end
+
   desc 'Check and notify if no import has been performed in the last 24 hours'
   task check: :environment do
     unless Import.where('created_at > ?', 1.day.ago).any?
