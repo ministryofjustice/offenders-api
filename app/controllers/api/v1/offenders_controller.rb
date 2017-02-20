@@ -52,7 +52,7 @@ module Api
 
       def merge_params
         params.permit(
-          :offender_id, :current_identity_id, identity_ids: []
+          :offender_id, :current_identity_id, :identity_ids
         )
       end
     end
