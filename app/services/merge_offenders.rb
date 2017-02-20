@@ -3,7 +3,7 @@ module MergeOffenders
 
   def call(offender_merge_from, offender_merge_to, merge_params)
     ActiveRecord::Base.transaction do
-      Identity.where(id: merge_params[:identity_ids])
+      Identity.where(id: merge_params[:identity_ids].split(','))
               .update_all(offender_id: offender_merge_to.id)
       Identity.where(id: identity_ids_to_be_deleted(offender_merge_from, offender_merge_to, merge_params))
               .update_all(status: Identity::STATUSES[:deleted])
@@ -20,7 +20,7 @@ module MergeOffenders
     end
 
     def identity_ids_to_be_deleted(offender_merge_from, offender_merge_to, merge_params)
-      previous_identity_ids(offender_merge_from, offender_merge_to) - merge_params[:identity_ids]
+      previous_identity_ids(offender_merge_from, offender_merge_to) - merge_params[:identity_ids].split(',')
     end
   end
 end

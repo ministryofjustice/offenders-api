@@ -168,7 +168,7 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
         params = {
           id: offender_2,
           offender_id: offender_1.id,
-          identity_ids: [identity_1.id, identity_2.id, identity_5.id],
+          identity_ids: [identity_1.id, identity_2.id, identity_5.id].join(','),
           current_identity_id: identity_2.id
         }
         patch :merge, params: params
@@ -191,6 +191,10 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
 
       it 'sets the merged_to_id of the other offender' do
         expect(offender_1.reload.merged_to_id).to eq offender_2.id
+      end
+
+      it 'returns status 204' do
+        expect(response.status).to be 204
       end
     end
   end

@@ -31,7 +31,7 @@ RSpec.describe MergeOffenders do
 
   let(:params) do
     {
-      identity_ids: [identity_1.id, identity_2.id, identity_5.id],
+      identity_ids: [identity_1.id, identity_2.id, identity_5.id].join(','),
       current_identity_id: identity_2.id
     }
   end
