@@ -17,5 +17,6 @@
 /spec/examples.txt
 /tmp
 /public/uploads
+/lib/assets/data/soi_extract.csv
 
 coverage
