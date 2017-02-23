@@ -16,21 +16,21 @@ RSpec.describe SearchIdentities do
       create(:identity, offender: offender_1,
                         given_name: 'ALANIS', middle_names: 'LENA ROBERTA', surname: 'BROWN',
                         gender: 'M', date_of_birth: '19650807',
-                        pnc_number: '74/832963V', cro_number: '195942/38G', ethnicity_code: 'W1')
+                        pnc_number: '74/832963V^89/652734H', cro_number: '195942/38G^672348/56H', ethnicity_code: 'W1')
     end
 
     let!(:identity_2) do
       create(:identity, offender: offender_1,
                         given_name: 'DEBBY', middle_names: 'LAURA MARTA', surname: 'SMITH',
                         gender: 'M', date_of_birth: '19691128',
-                        pnc_number: '99/135626A', cro_number: '639816/39Y', ethnicity_code: 'B1')
+                        pnc_number: '99/135626A^76/198452G', cro_number: '639816/39Y^8374635/82K', ethnicity_code: 'B1')
     end
 
     let!(:identity_3) do
       create(:identity, offender: offender_2,
                         given_name: 'JONAS', middle_names: 'JULIUS', surname: 'CEASAR',
                         gender: 'F', date_of_birth: '19541009',
-                        pnc_number: '38/836893N', cro_number: '741860/84F', ethnicity_code: 'A1')
+                        pnc_number: '38/836893N^10/3740173J', cro_number: '741860/84F^283745/61A', ethnicity_code: 'A1')
     end
 
     context 'name search' do
@@ -188,8 +188,8 @@ RSpec.describe SearchIdentities do
     end
 
     context 'pnc_number search' do
-      context 'when query matches' do
-        let(:params) { { pnc_number: '38/836893N' } }
+      context 'when query matches with wildcard characters' do
+        let(:params) { { pnc_number: '%38/836893N%' } }
 
         it 'returns matching records' do
           expect(described_class.new(params).call).to eq [identity_3]
@@ -197,7 +197,7 @@ RSpec.describe SearchIdentities do
       end
 
       context 'when query does not match' do
-        let(:params) { { pnc_number: '76/127718Z' } }
+        let(:params) { { pnc_number: '%76/127718Z%' } }
 
         it 'returns an empty array' do
           expect(described_class.new(params).call).to eq []
@@ -206,8 +206,8 @@ RSpec.describe SearchIdentities do
     end
 
     context 'cro_number search' do
-      context 'when query matches' do
-        let(:params) { { cro_number: '195942/38G' } }
+      context 'when query matches with wildcard characters' do
+        let(:params) { { cro_number: '%195942/38G%' } }
 
         it 'returns matching records' do
           expect(described_class.new(params).call).to eq [identity_1]
@@ -270,8 +270,8 @@ RSpec.describe SearchIdentities do
             gender: 'F',
             establishment_code: 'BMI',
             ethnicity_code: 'A1',
-            pnc_number: '38/836893N',
-            cro_number: '741860/84F'
+            pnc_number: '%38/836893N%',
+            cro_number: '%741860/84F%'
           }
         end
 

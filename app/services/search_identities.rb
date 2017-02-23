@@ -3,12 +3,16 @@ class SearchIdentities
     given_name: { table_field_name: 'identities.given_name', operation: 'ILIKE' },
     middle_names: { table_field_name: 'identities.middle_names', operation: 'ILIKE' },
     surname: { table_field_name: 'identities.surname', operation: 'ILIKE' },
+    gender: { table_field_name: 'identities.gender', operation: '=' },
     noms_id: { table_field_name: 'offenders.noms_id', operation: '=' },
     ethnicity_code: { table_field_name: 'identities.ethnicity_code', operation: '=' },
     nationality_code: { table_field_name: 'offenders.nationality_code', operation: '=' },
     establishment_code: { table_field_name: 'offenders.establishment_code', operation: '=' },
+    date_of_birth: { table_field_name: 'identities.date_of_birth', operation: '=' },
     date_of_birth_from: { table_field_name: 'identities.date_of_birth', operation: '>=' },
-    date_of_birth_to: { table_field_name: 'identities.date_of_birth', operation: '<=' }
+    date_of_birth_to: { table_field_name: 'identities.date_of_birth', operation: '<=' },
+    pnc_number: { table_field_name: 'identities.pnc_number', operation: 'ILIKE' },
+    cro_number: { table_field_name: 'identities.cro_number', operation: 'ILIKE' }
   }.freeze
 
   def initialize(params, relation = nil)
@@ -28,7 +32,6 @@ class SearchIdentities
       perform_advanced_name_search(field)
       add_condition_to_relation unless @skip_add_condition
     end
-    add_remaining_params_to_filter_on
     return_records_or_count
   end
 
@@ -74,10 +77,6 @@ class SearchIdentities
 
   def add_condition_to_relation
     @relation = @relation.where("#{@table_field_name} #{@operation} (?)", @value)
-  end
-
-  def add_remaining_params_to_filter_on
-    @relation = @relation.where(@params.slice(:gender, :date_of_birth, :pnc_number, :cro_number))
   end
 
   def return_records_or_count
