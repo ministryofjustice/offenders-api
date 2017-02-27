@@ -54,6 +54,7 @@ RSpec.describe Offender, type: :model do
       end
     end
 
+    # This spec fails when run with seed 40126
     context 'not_merged' do
       it 'scopes not merged offenders' do
         expect(Offender.not_merged.count).to be 2
