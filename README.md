@@ -32,7 +32,7 @@ e.g:
 
 ```
 http://localhost:3000/api/offenders?page=1&per_page=10&access_token=<ACCESS TOKEN>
-http://localhost:3000/api/offenders/search?noms_id=A1403AE&surname=smith&access_token=<ACCESS TOKEN>
+http://localhost:3000/api/offenders/search?noms_id=A1403AE&access_token=<ACCESS TOKEN>
 http://localhost:3000/api/offenders/<PRISONER ID>?access_token=<ACCESS TOKEN>
 ```
 
@@ -48,12 +48,6 @@ You can access the Swagger documentation at:
 
 ```
 http://localhost:3000/api-docs
-```
-
-To create a offender record using Curl:
-
-```
-curl -v -H "Authorization: Bearer <ACCESS TOKEN>" -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{ "offender" : { "noms_id" : "1234", "given_name" : "John", "surname" : "Smith", "date_of_birth" : "19800101", "gender" : "M" } }'  http://localhost:3000/api/offenders
 ```
 
 An accept header containing the API version can be passed, currently this defaults to version 1 if nothing is passed.

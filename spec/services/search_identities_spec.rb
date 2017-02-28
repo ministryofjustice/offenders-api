@@ -14,28 +14,28 @@ RSpec.describe SearchIdentities do
 
     let!(:identity_1) do
       create(:identity, offender: offender_1,
-                        given_name: 'ALANIS', middle_names: 'LENA ROBERTA', surname: 'BROWN',
+                        given_name_1: 'ALANIS', given_name_2: 'LENA', given_name_3: 'ROBERTA', surname: 'BROWN',
                         gender: 'M', date_of_birth: '19650807',
                         pnc_number: '74/832963V^89/652734H', cro_number: '195942/38G^672348/56H', ethnicity_code: 'W1')
     end
 
     let!(:identity_2) do
       create(:identity, offender: offender_1,
-                        given_name: 'DEBBY', middle_names: 'LAURA MARTA', surname: 'SMITH',
+                        given_name_1: 'DEBBY', given_name_2: 'LAURA', given_name_3: 'MARTA', surname: 'SMITH',
                         gender: 'M', date_of_birth: '19691128',
                         pnc_number: '99/135626A^76/198452G', cro_number: '639816/39Y^8374635/82K', ethnicity_code: 'B1')
     end
 
     let!(:identity_3) do
       create(:identity, offender: offender_2,
-                        given_name: 'JONAS', middle_names: 'JULIUS', surname: 'CEASAR',
+                        given_name_1: 'JONAS', given_name_2: 'JULIUS', surname: 'CEASAR',
                         gender: 'F', date_of_birth: '19541009',
                         pnc_number: '38/836893N^10/3740173J', cro_number: '741860/84F^283745/61A', ethnicity_code: 'A1')
     end
 
     context 'name search' do
       context 'when query matches' do
-        let(:params) { { given_name: 'alanis', surname: 'brown' } }
+        let(:params) { { given_name_1: 'alanis', surname: 'brown' } }
 
         it 'returns matching records' do
           expect(described_class.new(params).call).to eq [identity_1]
@@ -43,7 +43,7 @@ RSpec.describe SearchIdentities do
       end
 
       context 'when query matches with wildcard characters' do
-        let(:params) { { given_name: 'ala%', surname: 'br_wn' } }
+        let(:params) { { given_name_1: 'ala%', surname: 'br_wn' } }
 
         it 'returns matching records' do
           expect(described_class.new(params).call).to eq [identity_1]
@@ -67,7 +67,7 @@ RSpec.describe SearchIdentities do
       end
 
       context 'when query matches with name switch on' do
-        let(:params) { { given_name: 'brown', surname: 'alanis', name_switch: 'Y' } }
+        let(:params) { { given_name_1: 'brown', surname: 'alanis', name_switch: 'Y' } }
 
         it 'returns matching records' do
           expect(described_class.new(params).call).to eq [identity_1]
@@ -75,7 +75,7 @@ RSpec.describe SearchIdentities do
       end
 
       context 'when query matches with name variation on' do
-        let(:params) { { given_name: 'deborah', name_variation: 'Y' } }
+        let(:params) { { given_name_1: 'deborah', name_variation: 'Y' } }
 
         it 'returns matching records' do
           expect(described_class.new(params).call).to eq [identity_2]
@@ -83,7 +83,7 @@ RSpec.describe SearchIdentities do
       end
 
       context 'when query matches with name variation on but no nicknames' do
-        let(:params) { { given_name: 'jonas', name_variation: 'Y' } }
+        let(:params) { { given_name_1: 'jonas', name_variation: 'Y' } }
 
         it 'returns matching records' do
           expect(described_class.new(params).call).to eq [identity_3]
@@ -99,7 +99,7 @@ RSpec.describe SearchIdentities do
       end
 
       context 'when query matches with name_switch and exact_surname on' do
-        let(:params) { { given_name: 'brown', surname: 'alanis', name_switch: 'Y', exact_surname: 'Y' } }
+        let(:params) { { given_name_1: 'brown', surname: 'alanis', name_switch: 'Y', exact_surname: 'Y' } }
 
         it 'returns matching records' do
           expect(described_class.new(params).call).to eq [identity_1]
@@ -107,7 +107,7 @@ RSpec.describe SearchIdentities do
       end
 
       context 'when query does not match' do
-        let(:params) { { given_name: 'luke' } }
+        let(:params) { { given_name_1: 'luke' } }
 
         it 'returns an empty array' do
           expect(described_class.new(params).call).to eq []
@@ -263,7 +263,7 @@ RSpec.describe SearchIdentities do
       context 'when query matches' do
         let(:params) do
           {
-            given_name: 'jon%',
+            given_name_1: 'jon%',
             surname: 'ceasar',
             noms_id: 'A9876ZX',
             date_of_birth: '19541009',
@@ -283,8 +283,8 @@ RSpec.describe SearchIdentities do
       context 'when query does not match' do
         let(:params) do
           {
-            given_name: 'jan',
-            middle_names: 'rob',
+            given_name_1: 'jan',
+            given_name_2: 'rob',
             noms_id: 'A8765IO',
             date_of_birth: '19720911',
             gender: 'M',
@@ -302,7 +302,7 @@ RSpec.describe SearchIdentities do
     end
 
     context 'ordering' do
-      it 'orders record by surname, given_name, middle_names' do
+      it 'orders record by surname, given_name_1' do
         expect(described_class.new({}).call).to eq [identity_1, identity_3, identity_2]
       end
     end

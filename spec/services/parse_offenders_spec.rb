@@ -19,8 +19,9 @@ RSpec.describe ParseOffenders do
         it 'imports all the fields correctly for the offender' do
           offender = Offender.find_by!(noms_id: 'A1234BC')
 
-          expect(offender.given_name).to eq('LARRY')
-          expect(offender.middle_names).to eq('MARK, JOE')
+          expect(offender.given_name_1).to eq('LARRY')
+          expect(offender.given_name_2).to eq('MARK')
+          expect(offender.given_name_3).to eq('JOE')
           expect(offender.surname).to eq('LATITUDE')
           expect(offender.title).to eq('MR')
           expect(offender.date_of_birth).to eq(Date.civil(1970, 1, 30))
@@ -37,8 +38,9 @@ RSpec.describe ParseOffenders do
 
           expect(identity.noms_id).to eq('A1234BC')
           expect(identity.noms_offender_id).to eq('1055829')
-          expect(identity.given_name).to eq('JOHN')
-          expect(identity.middle_names).to eq('LUKE, FRANK')
+          expect(identity.given_name_1).to eq('JOHN')
+          expect(identity.given_name_2).to eq('LUKE')
+          expect(identity.given_name_3).to eq('FRANK')
           expect(identity.surname).to eq('DOE')
           expect(identity.title).to eq('MR')
           expect(identity.date_of_birth).to eq(Date.civil(1980, 2, 20))
@@ -73,8 +75,9 @@ RSpec.describe ParseOffenders do
         it 'updates all the fields correctly for the offender' do
           offender = Offender.find_by!(noms_id: 'A1234BC')
 
-          expect(offender.given_name).to eq('LARRY')
-          expect(offender.middle_names).to eq('MARK, JOE')
+          expect(offender.given_name_1).to eq('LARRY')
+          expect(offender.given_name_2).to eq('MARK')
+          expect(offender.given_name_3).to eq('JOE')
           expect(offender.surname).to eq('LATITUDE')
           expect(offender.title).to eq('MR')
           expect(offender.date_of_birth).to eq(Date.civil(1970, 1, 30))
@@ -91,8 +94,9 @@ RSpec.describe ParseOffenders do
 
           expect(identity.noms_id).to eq('A1234BC')
           expect(identity.noms_offender_id).to eq('1055829')
-          expect(identity.given_name).to eq('JOHN')
-          expect(identity.middle_names).to eq('LUKE, FRANK')
+          expect(identity.given_name_1).to eq('JOHN')
+          expect(identity.given_name_2).to eq('LUKE')
+          expect(identity.given_name_3).to eq('FRANK')
           expect(identity.surname).to eq('DOE')
           expect(identity.title).to eq('MR')
           expect(identity.date_of_birth).to eq(Date.civil(1980, 2, 20))

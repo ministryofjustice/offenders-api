@@ -8,8 +8,9 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
       'noms_id' => 'A1234BC',
       'nationality_code' => 'BRIT',
       'establishment_code' => 'LEI',
-      'given_name' => 'JOHN',
-      'middle_names' => 'FRANK MARK',
+      'given_name_1' => 'JOHN',
+      'given_name_2' => 'FRANK',
+      'given_name_3' => 'MARK',
       'surname' => 'SMITH',
       'title' => 'MR',
       'suffix' => 'DR',
@@ -64,21 +65,21 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
       let!(:identity_1) do
         create(:identity, offender: offender_1,
-                          given_name: 'ALANIS', middle_names: 'LENA ROBERTA', surname: 'BROWN',
+                          given_name_1: 'ALANIS', given_name_2: 'LENA', given_name_3: 'ROBERTA', surname: 'BROWN',
                           status: 'active', gender: 'M', date_of_birth: '19650807',
                           pnc_number: '74/832963V', cro_number: '195942/38G', ethnicity_code: 'W1')
       end
 
       let!(:identity_2) do
         create(:identity, offender: offender_1,
-                          given_name: 'DEBBY', middle_names: 'LAURA MARTA', surname: 'YELLOW',
+                          given_name_1: 'DEBBY', given_name_2: 'LAURA', given_name_3: 'MARTA', surname: 'YELLOW',
                           status: 'active', gender: 'M', date_of_birth: '19691128',
                           pnc_number: '99/135626A', cro_number: '639816/39Y', ethnicity_code: 'A1')
       end
 
       let!(:identity_3) do
         create(:identity, offender: offender_2,
-                          given_name: 'JONAS', middle_names: 'JULIUS', surname: 'CEASAR',
+                          given_name_1: 'JONAS', given_name_2: 'JULIUS', surname: 'CEASAR',
                           status: 'active', gender: 'F', date_of_birth: '19541009',
                           pnc_number: '38/836893N', cro_number: '741860/84F', ethnicity_code: 'B1')
       end
@@ -108,7 +109,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
 
       context 'name search' do
         context 'when query matches' do
-          let(:search_params) { { given_name: 'deb%', surname: 'yellow' } }
+          let(:search_params) { { given_name_1: 'deb%', surname: 'yellow' } }
 
           before { get :search, params: search_params }
 
@@ -119,7 +120,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
         end
 
         context 'when query does not match' do
-          let(:search_params) { { given_name: 'luke' } }
+          let(:search_params) { { given_name_1: 'luke' } }
 
           before { get :search, params: search_params }
 

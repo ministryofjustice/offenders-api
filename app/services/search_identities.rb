@@ -1,7 +1,8 @@
 class SearchIdentities
   FIELD_OPERATION_MAPPINGS = {
-    given_name: { table_field_name: 'identities.given_name', operation: 'ILIKE' },
-    middle_names: { table_field_name: 'identities.middle_names', operation: 'ILIKE' },
+    given_name_1: { table_field_name: 'identities.given_name_1', operation: 'ILIKE' },
+    given_name_2: { table_field_name: 'identities.given_name_2', operation: 'ILIKE' },
+    given_name_3: { table_field_name: 'identities.given_name_3', operation: 'ILIKE' },
     surname: { table_field_name: 'identities.surname', operation: 'ILIKE' },
     gender: { table_field_name: 'identities.gender', operation: '=' },
     noms_id: { table_field_name: 'offenders.noms_id', operation: '=' },
@@ -22,7 +23,7 @@ class SearchIdentities
                   Identity.joins(:offender)
                 end
     @params = params
-    @given_name_surname = [params[:given_name], params[:surname]].compact.map(&:upcase)
+    @given_name_surname = [params[:given_name_1], params[:surname]].compact.map(&:upcase)
   end
 
   def call
@@ -58,13 +59,13 @@ class SearchIdentities
   end
 
   def check_name_switch(field)
-    return unless @params[:name_switch] && %i(given_name surname).include?(field)
+    return unless @params[:name_switch] && %i(given_name_1 surname).include?(field)
     @operation = 'IN'
     @value = @given_name_surname
   end
 
   def check_name_variation(field)
-    return unless @params[:name_variation] && field == :given_name
+    return unless @params[:name_variation] && field == :given_name_1
     @relation = @relation.nicknames(@value)
     @skip_add_condition = true
   end
@@ -85,7 +86,7 @@ class SearchIdentities
         { surname: k, count: v }
       end
     else
-      @relation.order(:surname, :given_name, :middle_names)
+      @relation.order(:surname, :given_name_1, :given_name_2)
     end
   end
 end

@@ -9,7 +9,7 @@ module Api
       end
 
       def index
-        @identities = Identity.active.order(:surname, :given_name, :middle_names)
+        @identities = Identity.active.order(:surname, :given_name_1, :given_name_2)
         @identities = @identities.page(params[:page]).per(params[:per_page])
 
         render json: @identities
@@ -23,14 +23,14 @@ module Api
       end
 
       def inactive
-        @identities = Identity.inactive.order(:surname, :given_name, :middle_names)
+        @identities = Identity.inactive.order(:surname, :given_name_1, :given_name_2)
         @identities = @identities.page(params[:page]).per(params[:per_page])
 
         render json: @identities
       end
 
       def blank_noms_offender_id
-        @identities = Identity.blank_noms_offender_id.order(:surname, :given_name, :middle_names)
+        @identities = Identity.blank_noms_offender_id.order(:surname, :given_name_1, :given_name_2)
         @identities = @identities.page(params[:page]).per(params[:per_page])
 
         render json: @identities
@@ -94,14 +94,14 @@ module Api
       def identity_params
         params.require(:identity).permit(
           :offender_id, :noms_offender_id, :pnc_number, :cro_number, :ethnicity_code,
-          :title, :given_name, :middle_names, :surname, :suffix, :date_of_birth, :gender
+          :title, :given_name_1, :given_name_2, :given_name_3, :surname, :suffix, :date_of_birth, :gender
         )
       end
 
       def search_params
         params.permit(
           :offender_id, :noms_id, :pnc_number, :cro_number, :establishment_code, :ethnicity_code,
-          :given_name, :middle_names, :surname, :gender,
+          :given_name_1, :given_name_2, :given_name_3, :surname, :gender,
           :date_of_birth, :date_of_birth_from, :date_of_birth_to,
           :name_switch, :exact_surname, :name_variation, :soundex,
           :count

@@ -4,7 +4,7 @@ RSpec.describe Identity, type: :model do
   it { is_expected.to belong_to(:offender) }
 
   it { is_expected.to validate_presence_of(:offender) }
-  it { is_expected.to validate_presence_of(:given_name) }
+  it { is_expected.to validate_presence_of(:given_name_1) }
   it { is_expected.to validate_presence_of(:surname) }
   it { is_expected.to validate_presence_of(:date_of_birth) }
   it { is_expected.to validate_presence_of(:gender) }
@@ -20,12 +20,12 @@ RSpec.describe Identity, type: :model do
     end
 
     let!(:identity_1) do
-      create(:identity, offender: offender_1, surname: 'COLE', given_name: 'DEBORAH',
+      create(:identity, offender: offender_1, surname: 'COLE', given_name_1: 'DEBORAH',
                         status: 'active', noms_offender_id: '')
     end
 
     let!(:identity_2) do
-      create(:identity, offender: offender_2, surname: 'SMITH', given_name: 'MARK', noms_offender_id: '12345')
+      create(:identity, offender: offender_2, surname: 'SMITH', given_name_1: 'MARK', noms_offender_id: '12345')
     end
 
     context 'active' do

@@ -55,18 +55,14 @@ module ParseOffenders
     def identity_attributes_from(row)
       {
         noms_offender_id: row['NOMIS_OFFENDER_ID'],
-        given_name: row['GIVEN_NAME_1'], surname: row['SURNAME'],
-        middle_names: middle_names(row['GIVEN_NAME_2'], row['GIVEN_NAME_3']),
+        given_name_1: row['GIVEN_NAME_1'], given_name_2: row['GIVEN_NAME_2'], given_name_3: row['GIVEN_NAME_3'],
+        surname: row['SURNAME'],
         title: row['SALUTATION'],
         date_of_birth: Date.parse(row['DATE_OF_BIRTH']),
         gender: row['GENDER_CODE'], ethnicity_code: row['ETHNICITY_CODE'],
         pnc_number: row['PNC_ID'], cro_number: row['CRIMINAL_RECORDS_OFFICE_NUMBER'],
         status: 'active'
       }
-    end
-
-    def middle_names(second_name, third_name)
-      [second_name, third_name].reject(&:blank?).join(', ')
     end
   end
 end
