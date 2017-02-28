@@ -19,10 +19,13 @@ module OffenderModel
         property :title do
           key :type, :string
         end
-        property :given_name do
+        property :given_name_1 do
           key :type, :string
         end
-        property :middle_names do
+        property :given_name_2 do
+          key :type, :string
+        end
+        property :given_name_3 do
           key :type, :string
         end
         property :surname do

@@ -3,8 +3,9 @@ FactoryGirl.define do
     offender
 
     title { %w(MR MRS MISS MS DR SIR LADY LORD).sample }
-    given_name { Faker::Name.first_name.upcase }
-    middle_names { Faker::Name.first_name.upcase }
+    given_name_1 { Faker::Name.first_name.upcase }
+    given_name_2 { Faker::Name.first_name.upcase }
+    given_name_3 { Faker::Name.first_name.upcase }
     surname { Faker::Name.last_name.upcase }
     suffix { %w(JR SR).sample }
     date_of_birth { Faker::Date.between(80.years.ago, 20.years.ago) }

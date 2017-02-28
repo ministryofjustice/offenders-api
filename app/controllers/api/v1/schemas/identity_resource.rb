@@ -140,16 +140,23 @@ module IdentityResource
           key :produces, ['application/json']
           key :tags, ['identity']
           parameter do
-            key :name, :given_name
+            key :name, :given_name_1
             key :in, :query
-            key :description, 'Given name'
+            key :description, 'Given name 1'
             key :required, false
             key :type, :string
           end
           parameter do
-            key :name, :middle_names
+            key :name, :given_name_2
             key :in, :query
-            key :description, 'Middle names'
+            key :description, 'Given name 2'
+            key :required, false
+            key :type, :string
+          end
+          parameter do
+            key :name, :given_name_3
+            key :in, :query
+            key :description, 'Given name 3'
             key :required, false
             key :type, :string
           end

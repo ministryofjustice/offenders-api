@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170215104605) do
+ActiveRecord::Schema.define(version: 20170227122233) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,8 +21,8 @@ ActiveRecord::Schema.define(version: 20170215104605) do
     t.uuid   "offender_id"
     t.string "noms_offender_id"
     t.string "title"
-    t.string "given_name"
-    t.string "middle_names"
+    t.string "given_name_1"
+    t.string "given_name_2"
     t.string "surname"
     t.string "suffix"
     t.date   "date_of_birth"
@@ -31,8 +31,9 @@ ActiveRecord::Schema.define(version: 20170215104605) do
     t.string "cro_number"
     t.string "status",           default: "inactive"
     t.string "ethnicity_code"
+    t.string "given_name_3"
     t.index ["cro_number"], name: "index_identities_on_cro_number", using: :btree
-    t.index ["given_name"], name: "index_identities_on_given_name", using: :btree
+    t.index ["given_name_1"], name: "index_identities_on_given_name_1", using: :btree
     t.index ["noms_offender_id"], name: "index_identities_on_noms_offender_id", using: :btree
     t.index ["offender_id"], name: "index_identities_on_offender_id", using: :btree
     t.index ["pnc_number"], name: "index_identities_on_pnc_number", using: :btree

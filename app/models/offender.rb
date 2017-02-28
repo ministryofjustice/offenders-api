@@ -14,7 +14,7 @@ class Offender < ActiveRecord::Base
   scope :inactive, -> { not_merged.joins(:current_identity).where("identities.status": Identity::STATUSES[:inactive]) }
   scope :not_merged, -> { where(merged_to_id: nil) }
 
-  delegate :given_name, :middle_names, :surname, :title, :suffix, :date_of_birth, :gender,
+  delegate :given_name_1, :given_name_2, :given_name_3, :surname, :title, :suffix, :date_of_birth, :gender,
            :pnc_number, :cro_number, :ethnicity_code,
            to: :current_identity, allow_nil: true
 
