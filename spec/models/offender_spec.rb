@@ -7,7 +7,6 @@ RSpec.describe Offender, type: :model do
   it { is_expected.to belong_to(:current_identity) }
 
   it { is_expected.to validate_presence_of(:noms_id) }
-  it { is_expected.to validate_uniqueness_of(:noms_id) }
 
   let!(:offender_1) do
     create(:offender, noms_id: 'A1234BC')
@@ -39,6 +38,24 @@ RSpec.describe Offender, type: :model do
     offender_3.update_attribute :current_identity, identity_3
   end
 
+  describe 'validates uniqueness of noms_id' do
+    context 'when another record with same noms_id is unmerged' do
+      before { offender_1.noms_id = offender_2.noms_id }
+
+      it 'is invalid' do
+        expect(offender_1).to_not be_valid
+      end
+    end
+
+    context 'when another record with same noms_id has been merged' do
+      before { offender_1.noms_id = offender_3.noms_id }
+
+      it 'is valid' do
+        expect(offender_1).to be_valid
+      end
+    end
+  end
+
   describe 'scopes' do
     context 'active' do
       it 'scopes active offenders' do
@@ -54,11 +71,10 @@ RSpec.describe Offender, type: :model do
       end
     end
 
-    # This spec fails when run with seed 40126
     context 'not_merged' do
       it 'scopes not merged offenders' do
         expect(Offender.not_merged.count).to be 2
-        expect(Offender.not_merged).to eq [offender_1, offender_2]
+        expect(Offender.not_merged).to include(offender_1, offender_2)
       end
     end
   end
