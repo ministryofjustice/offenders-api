@@ -1,6 +1,9 @@
 source 'https://rubygems.org'
 # ruby '2.3.0'
 
+gem 'tiny_tds'
+gem 'activerecord-sqlserver-adapter', '~> 4.2.0'
+
 gem 'active_model_serializers'
 gem 'carrierwave'
 gem 'devise'

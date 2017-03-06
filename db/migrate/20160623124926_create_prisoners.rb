@@ -1,6 +1,6 @@
 class CreatePrisoners < ActiveRecord::Migration
   def change
-    create_table :prisoners, id: :uuid do |t|
+    create_table :prisoners, id: :string do |t|
       t.string  :noms_id, index: true
       t.string  :given_name
       t.string  :middle_names

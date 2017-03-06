@@ -59,6 +59,10 @@ class Prisoner < ActiveRecord::Base
     end
   end
 
+  self.primary_key = 'id'
+  before_create :generate_uuid
+
+
   has_paper_trail
 
   has_many :aliases, dependent: :destroy
@@ -90,5 +94,11 @@ class Prisoner < ActiveRecord::Base
       aliases.delete_all
       aliases.create(aliases_params)
     end
+  end
+
+  protected
+
+  def generate_uuid
+    self[:id] ||= ActiveRecord::Base.connection.newid_function
   end
 end
