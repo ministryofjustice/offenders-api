@@ -1,24 +1,24 @@
 default: &default
-  adapter: postgresql
-  encoding: unicode
-  # For details on connection pooling, see rails configuration guide
-  # http://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: 5
+  adapter: sqlserver
+  # mode: dblib
   host: <%= ENV['OFFENDERS_API_DATABASE_HOST'] || 'localhost' %>
+  port: 1433
   username: <%= ENV['OFFENDERS_API_DATABASE_USERNAME'] %>
   password: <%= ENV['OFFENDERS_API_DATABASE_PASSWORD'] %>
+  timeout: 5000
+  azure: true
 
 development:
   <<: *default
-  database: offenders_api_development
+  database: <%= ENV['OFFENDERS_API_DATABASE'] %>_development
 
 test: &test
   <<: *default
-  database: 'offenders_api_test'
+  database: <%= ENV['OFFENDERS_API_DATABASE'] %>_test
 
 production:
   <<: *default
-  database: <%= ENV['OFFENDERS_API_DATABASE'] %>
+  database: <%= ENV['OFFENDERS_API_DATABASE'] %>_production
 
 cucumber:
   <<: *test
