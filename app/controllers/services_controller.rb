@@ -44,6 +44,6 @@ class ServicesController < ApplicationController
   end
 
   def service_params
-    params.require(:service).permit(:name, :redirect_uri)
+    params.require(:service).permit(:name, :redirect_uri, :scopes)
   end
 end

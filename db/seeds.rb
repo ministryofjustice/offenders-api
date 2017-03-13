@@ -1,7 +1,8 @@
 # Register sample applications for the Doorkeeper OAuth2 provider
 nomis = Doorkeeper::Application.find_or_create_by!(
   name: 'NOMIS',
-  redirect_uri: "https://#{ENV['HTTP_HOST']}"
+  redirect_uri: "https://#{ENV['HTTP_HOST']}",
+  scopes: 'write'
 )
 
 pvb = Doorkeeper::Application.find_or_create_by!(

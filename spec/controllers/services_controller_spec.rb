@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ServicesController, type: :controller do
-  let(:params) { { 'name' => 'NOMIS', 'redirect_uri' => 'https://nomis.com' } }
+  let(:params) { { 'name' => 'NOMIS', 'redirect_uri' => 'https://nomis.com', scopes: 'write' } }
 
   context 'when admin' do
     let(:user) { create(:user, :admin) }
@@ -66,6 +66,9 @@ RSpec.describe ServicesController, type: :controller do
 
         it 'creates a new Doorkeeper::Application' do
           expect(Doorkeeper::Application.count).to be 1
+          expect(Doorkeeper::Application.first.name).to eq 'NOMIS'
+          expect(Doorkeeper::Application.first.redirect_uri).to eq 'https://nomis.com'
+          expect(Doorkeeper::Application.first.scopes.to_s).to eq 'write'
         end
 
         it 'redirects to index' do

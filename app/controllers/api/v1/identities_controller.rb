@@ -4,6 +4,9 @@ module Api
       include Swagger::Blocks
       include IdentityResource
 
+      before_action :doorkeeper_authorize!, only: [:index, :search, :inactive, :blank_noms_offender_id, :show]
+      before_action -> { doorkeeper_authorize! :write }, only: [:create, :update, :destroy, :activate, :make_current]
+
       after_action only: [:index, :search, :inactive, :blank_noms_offender_id] do
         set_pagination_headers(:identities) unless search_params[:count]
       end
