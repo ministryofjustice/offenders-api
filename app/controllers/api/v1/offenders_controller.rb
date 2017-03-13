@@ -4,6 +4,9 @@ module Api
       include Swagger::Blocks
       include OffenderResource
 
+      before_action :doorkeeper_authorize!, only: [:index, :search, :show]
+      before_action -> { doorkeeper_authorize! :write }, only: [:merge]
+
       after_action only: [:index, :search] { set_pagination_headers(:offenders) }
 
       def index

@@ -4,8 +4,6 @@ module Api
     # For APIs, you may want to use :null_session instead.
     protect_from_forgery with: :null_session
 
-    before_action :doorkeeper_authorize!
-
     rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
 

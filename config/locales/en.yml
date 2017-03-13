@@ -20,7 +20,10 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  doorkeeper:
+    scopes:
+      public: 'Access your public data'
+      write: 'Update your information'
 
   errors:
     messages:

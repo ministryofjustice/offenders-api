@@ -1,9 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::OffendersController, type: :controller do
-  let!(:application) { create(:application) }
-  let!(:token)       { create(:access_token, application: application) }
-
   let!(:offender_1) do
     create(:offender, noms_id: 'A1234BC')
   end
@@ -44,157 +41,175 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
   end
 
   context 'when authenticated' do
+    let(:token) { create(:access_token, application: application, scopes: application.scopes) }
+
     before { request.headers['HTTP_AUTHORIZATION'] = "Bearer #{token.token}" }
 
-    describe 'GET #index' do
-      it 'returns collection of offender records' do
-        get :index
+    context 'with public scope' do
+      let(:application) { create(:application) }
 
-        expect(JSON.parse(response.body).map { |h| h['id'] })
-          .to match_array(Offender.active.pluck(:id))
+      describe 'GET #index' do
+        it 'returns collection of offender records' do
+          get :index
+
+          expect(JSON.parse(response.body).map { |h| h['id'] })
+            .to match_array(Offender.active.pluck(:id))
+        end
+
+        it 'paginates records' do
+          get :index, params: { page: '1', per_page: '2' }
+
+          expect(JSON.parse(response.body).size).to eq 2
+        end
+
+        it 'sets total count in response headers' do
+          get :index
+
+          expect(response.headers['Total-Count']).to eq '3'
+        end
+
+        it 'scopes active offenders' do
+          get :index
+
+          expect(JSON.parse(response.body).size).to eq 3
+        end
+
+        it 'filters records updated after a timestamp' do
+          get :index, params: { updated_after: 10.days.ago }
+
+          expect(JSON.parse(response.body).size).to eq 1
+        end
       end
 
-      it 'paginates records' do
-        get :index, params: { page: '1', per_page: '2' }
+      describe 'GET #search' do
+        context 'searching for NOMS ID' do
+          context 'when query matches' do
+            let(:search_params) { { noms_id: 'A1234BC' } }
 
-        expect(JSON.parse(response.body).size).to eq 2
-      end
+            before { get :search, params: search_params }
 
-      it 'sets total count in response headers' do
-        get :index
+            it 'returns collection of offender records matching query' do
+              expect(JSON.parse(response.body).map { |p| p['id'] })
+                .to match_array([offender_1['id']])
+            end
+          end
 
-        expect(response.headers['Total-Count']).to eq '3'
-      end
+          context 'when query does not match' do
+            let(:search_params) { { noms_id: 'A4321KL' } }
 
-      it 'scopes active offenders' do
-        get :index
+            before { get :search, params: search_params }
 
-        expect(JSON.parse(response.body).size).to eq 3
-      end
-
-      it 'filters records updated after a timestamp' do
-        get :index, params: { updated_after: 10.days.ago }
-
-        expect(JSON.parse(response.body).size).to eq 1
-      end
-    end
-
-    describe 'GET #search' do
-      context 'searching for NOMS ID' do
-        context 'when query matches' do
-          let(:search_params) { { noms_id: 'A1234BC' } }
-
-          before { get :search, params: search_params }
-
-          it 'returns collection of offender records matching query' do
-            expect(JSON.parse(response.body).map { |p| p['id'] })
-              .to match_array([offender_1['id']])
+            it 'returns an empty set' do
+              expect(response.body).to eq('[]')
+            end
           end
         end
 
-        context 'when query does not match' do
-          let(:search_params) { { noms_id: 'A4321KL' } }
+        it 'paginates records' do
+          get :search, params: { page: '1', per_page: '2' }
 
-          before { get :search, params: search_params }
+          expect(JSON.parse(response.body).size).to eq 2
+        end
 
-          it 'returns an empty set' do
-            expect(response.body).to eq('[]')
+        it 'sets total count in response headers' do
+          get :search
+
+          expect(response.headers['Total-Count']).to eq '3'
+        end
+
+        it 'scopes active offenders' do
+          get :search
+
+          expect(JSON.parse(response.body).size).to eq 3
+        end
+      end
+
+      describe 'GET #show' do
+        context 'when offender has not been merged' do
+          before { get :show, params: { id: offender_1 } }
+
+          it 'returns status 200' do
+            expect(response.status).to be 200
+          end
+
+          it 'returns JSON represenation of offender record' do
+            excepted_fields = %w(merged_to_id date_of_birth created_at updated_at current_identity_id)
+            expect(JSON.parse(response.body).as_json)
+              .to include offender_1.as_json(except: excepted_fields)
+          end
+        end
+
+        context 'when offender has been merged' do
+          before do
+            offender_1.update(merged_to_id: offender_2.id)
+            get :show, params: { id: offender_1 }
+          end
+
+          it 'returns status 302' do
+            expect(response.status).to be 302
+          end
+
+          it 'returns JSON represenation of offender record' do
+            excepted_fields = %w(merged_to_id date_of_birth created_at updated_at current_identity_id)
+            expect(JSON.parse(response.body).as_json)
+              .to include offender_2.as_json(except: excepted_fields)
           end
         end
       end
 
-      it 'paginates records' do
-        get :search, params: { page: '1', per_page: '2' }
+      context 'when accessing endpoint that requires write access' do
+        before { patch :merge, params: { id: offender_2, offender_id: offender_1.id } }
 
-        expect(JSON.parse(response.body).size).to eq 2
-      end
-
-      it 'sets total count in response headers' do
-        get :search
-
-        expect(response.headers['Total-Count']).to eq '3'
-      end
-
-      it 'scopes active offenders' do
-        get :search
-
-        expect(JSON.parse(response.body).size).to eq 3
+        it 'returns status 403' do
+          expect(response.status).to be 403
+        end
       end
     end
 
-    describe 'GET #show' do
-      context 'when offender has not been merged' do
-        before { get :show, params: { id: offender_1 } }
+    context 'with write scope' do
+      let(:application) { create(:application, :with_write_access) }
 
-        it 'returns status 200' do
-          expect(response.status).to be 200
+      describe 'PATCH #merge' do
+        let!(:identity_5) do
+          create(:identity, offender: offender_1, status: 'active')
         end
 
-        it 'returns JSON represenation of offender record' do
-          excepted_fields = %w(merged_to_id date_of_birth created_at updated_at current_identity_id)
-          expect(JSON.parse(response.body).as_json)
-            .to include offender_1.as_json(except: excepted_fields)
+        let!(:identity_6) do
+          create(:identity, offender: offender_1, status: 'active')
         end
-      end
 
-      context 'when offender has been merged' do
         before do
-          offender_1.update(merged_to_id: offender_2.id)
-          get :show, params: { id: offender_1 }
+          params = {
+            id: offender_2,
+            offender_id: offender_1.id,
+            identity_ids: [identity_1.id, identity_2.id, identity_5.id].join(','),
+            current_identity_id: identity_2.id
+          }
+          patch :merge, params: params
         end
 
-        it 'returns status 302' do
-          expect(response.status).to be 302
+        context 'setting identities' do
+          it 'sets the passed identity ids to the offender' do
+            expect(offender_2.reload.identities.pluck(:id).sort)
+              .to eq [identity_1.id, identity_2.id, identity_5.id].sort
+          end
+
+          it 'soft deletes the extraneous identities' do
+            expect(identity_6.reload.status).to eq 'deleted'
+          end
         end
 
-        it 'returns JSON represenation of offender record' do
-          excepted_fields = %w(merged_to_id date_of_birth created_at updated_at current_identity_id)
-          expect(JSON.parse(response.body).as_json)
-            .to include offender_2.as_json(except: excepted_fields)
-        end
-      end
-    end
-
-    describe 'PATCH #merge' do
-      let!(:identity_5) do
-        create(:identity, offender: offender_1, status: 'active')
-      end
-
-      let!(:identity_6) do
-        create(:identity, offender: offender_1, status: 'active')
-      end
-
-      before do
-        params = {
-          id: offender_2,
-          offender_id: offender_1.id,
-          identity_ids: [identity_1.id, identity_2.id, identity_5.id].join(','),
-          current_identity_id: identity_2.id
-        }
-        patch :merge, params: params
-      end
-
-      context 'setting identities' do
-        it 'sets the passed identity ids to the offender' do
-          expect(offender_2.reload.identities.pluck(:id).sort)
-            .to eq [identity_1.id, identity_2.id, identity_5.id].sort
+        it 'sets the current_identity of the offender' do
+          expect(offender_2.reload.current_identity).to eq identity_2
         end
 
-        it 'soft deletes the extraneous identities' do
-          expect(identity_6.reload.status).to eq 'deleted'
+        it 'sets the merged_to_id of the other offender' do
+          expect(offender_1.reload.merged_to_id).to eq offender_2.id
         end
-      end
 
-      it 'sets the current_identity of the offender' do
-        expect(offender_2.reload.current_identity).to eq identity_2
-      end
-
-      it 'sets the merged_to_id of the other offender' do
-        expect(offender_1.reload.merged_to_id).to eq offender_2.id
-      end
-
-      it 'returns status 204' do
-        expect(response.status).to be 204
+        it 'returns status 204' do
+          expect(response.status).to be 204
+        end
       end
     end
   end
