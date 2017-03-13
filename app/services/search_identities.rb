@@ -1,9 +1,9 @@
 class SearchIdentities
   FIELD_OPERATION_MAPPINGS = {
-    given_name_1: { table_field_name: 'identities.given_name_1', operation: 'ILIKE' },
-    given_name_2: { table_field_name: 'identities.given_name_2', operation: 'ILIKE' },
-    given_name_3: { table_field_name: 'identities.given_name_3', operation: 'ILIKE' },
-    surname: { table_field_name: 'identities.surname', operation: 'ILIKE' },
+    given_name_1: { table_field_name: 'identities.given_name_1', operation: 'LIKE' },
+    given_name_2: { table_field_name: 'identities.given_name_2', operation: 'LIKE' },
+    given_name_3: { table_field_name: 'identities.given_name_3', operation: 'LIKE' },
+    surname: { table_field_name: 'identities.surname', operation: 'LIKE' },
     gender: { table_field_name: 'identities.gender', operation: '=' },
     noms_id: { table_field_name: 'offenders.noms_id', operation: '=' },
     ethnicity_code: { table_field_name: 'identities.ethnicity_code', operation: '=' },
@@ -12,8 +12,8 @@ class SearchIdentities
     date_of_birth: { table_field_name: 'identities.date_of_birth', operation: '=' },
     date_of_birth_from: { table_field_name: 'identities.date_of_birth', operation: '>=' },
     date_of_birth_to: { table_field_name: 'identities.date_of_birth', operation: '<=' },
-    pnc_number: { table_field_name: 'identities.pnc_number', operation: 'ILIKE' },
-    cro_number: { table_field_name: 'identities.cro_number', operation: 'ILIKE' }
+    pnc_number: { table_field_name: 'identities.pnc_number', operation: 'LIKE' },
+    cro_number: { table_field_name: 'identities.cro_number', operation: 'LIKE' }
   }.freeze
 
   def initialize(params, relation = nil)
