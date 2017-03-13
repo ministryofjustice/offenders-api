@@ -19,6 +19,8 @@ class Offender < ActiveRecord::Base
            :pnc_number, :cro_number, :ethnicity_code,
            to: :current_identity, allow_nil: true
 
+  before_create :generate_uuid
+
   def self.search(params)
     distinct.joins(:identities).where(params).order(:noms_id)
   end
@@ -29,5 +31,11 @@ class Offender < ActiveRecord::Base
 
   def merged?
     merged_to_id.present?
+  end
+
+  protected
+
+  def generate_uuid
+    self[:id] ||= ActiveRecord::Base.connection.newid_function
   end
 end

@@ -29,6 +29,8 @@ class Identity < ActiveRecord::Base
 
   delegate :noms_id, :nationality_code, :establishment_code, to: :offender
 
+  before_create :generate_uuid
+
   def self.search(params)
     SearchIdentities.new(params).call
   end
@@ -45,4 +47,10 @@ class Identity < ActiveRecord::Base
     offender.current_identity_id == id
   end
   alias current current?
+
+  protected
+
+  def generate_uuid
+    self[:id] ||= ActiveRecord::Base.connection.newid_function
+  end
 end

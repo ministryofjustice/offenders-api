@@ -7,6 +7,7 @@ git_source(:github) do |repo_name|
 end
 
 gem 'active_model_serializers'
+gem 'activerecord-sqlserver-adapter'
 gem 'api_pagination_headers'
 gem 'carrierwave'
 gem 'devise'
@@ -21,7 +22,6 @@ gem 'haml-rails'
 gem 'jquery-rails'
 gem 'kaminari'
 gem 'paper_trail'
-gem 'pg'
 gem 'rails', '~> 5.0.1'
 gem 'sass-rails'
 gem 'secure_headers'
@@ -30,6 +30,7 @@ gem 'sidekiq'
 gem 'smarter_csv'
 gem 'swagger-blocks'
 gem 'swagger_engine'
+gem 'tiny_tds'
 gem 'uglifier'
 gem 'whenever', require: false
 
