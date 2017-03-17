@@ -114,9 +114,10 @@ RSpec.describe ParseOffenders do
       context 'with invalid records' do
         let(:csv_data) { fixture_file_upload('files/invalid_data.csv', 'text/csv') }
 
-        it 'throws an error with the line number' do
-          expect { described_class.call(csv_data) }
-            .to raise_error(ParseOffenders::ParsingError)
+        it 'returns an array with 3 hashes' do
+          errors = described_class.call(csv_data)
+          expect(errors.size).to eq 3
+          expect(errors.all? { |e| e.is_a?(Hash) }).to be true
         end
       end
     end
