@@ -1,14 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe ImportOffenders do
-  let(:offenders_file) { fixture_file_upload('files/data.csv', 'text/csv') }
-
   let(:import) { Import.create(offenders_file: offenders_file) }
 
   describe '#call' do
     context 'when successful' do
+      let(:offenders_file) { fixture_file_upload('files/data.csv', 'text/csv') }
+
       it 'calls the parse csv service with the data' do
-        expect(ParseOffenders).to receive(:call).with(import.offenders_file.read)
+        expect(ParseOffenders).to receive(:call).with(import.offenders_file.file.file).and_return([])
         ImportOffenders.call(import)
       end
 
@@ -25,9 +25,7 @@ RSpec.describe ImportOffenders do
     end
 
     context 'when failing' do
-      before do
-        expect(ParseOffenders).to receive(:call).and_raise(StandardError)
-      end
+      let(:offenders_file) { fixture_file_upload('files/invalid_data.csv', 'text/csv') }
 
       it 'marks the import failed' do
         ImportOffenders.call(import)

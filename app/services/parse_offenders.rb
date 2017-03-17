@@ -1,68 +1,54 @@
 module ParseOffenders
-  class ParsingError < StandardError; end
-
   module_function
 
   def call(data)
-    require 'csv'
+    errors = []
 
-    csv = CSV.parse(data, headers: true)
-
-    csv.each_with_index do |row, line_number|
-      parse_row(row, line_number + 1)
+    SmarterCSV.process(data, chunk_size: 1000, key_mapping: keys_mapping, remove_empty_values: false) do |chunk|
+      chunk.each { |row| parse_row(row, errors) }
     end
+
+    errors
   end
 
   class << self
     private
 
-    def parse_row(row, line_number)
-      offender = update_or_create_offender(row)
-      update_or_create_identity(offender, row)
-    rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound, ArgumentError
-      raise(ParsingError, "Error parsing line #{line_number}")
+    def parse_row(row, errors)
+      errors << row && return if row[:noms_id].blank?
+
+      offender = Offender.find_or_create_by(noms_id: row[:noms_id])
+      offender.update(offender_attrs(row))
+
+      identity = offender.identities.find_or_initialize_by(noms_offender_id: row[:noms_offender_id])
+      errors << row unless identity.update(identity_attrs(row))
+
+      set_current_offender(offender, identity, row)
     end
 
-    def update_or_create_offender(row)
-      offender = Offender.find_by(noms_id: row['NOMS_NUMBER'])
-      if offender
-        offender.update!(offender_attributes_from(row))
-        offender
-      else
-        Offender.create!(offender_attributes_from(row))
-      end
-    end
-
-    def update_or_create_identity(offender, row)
-      identity = offender.identities.where(noms_offender_id: row['NOMIS_OFFENDER_ID']).first
-      if identity
-        identity.update!(identity_attributes_from(row))
-      else
-        identity = offender.identities.create!(identity_attributes_from(row))
-      end
-      offender.update!(current_identity: identity) if row['WORKING_NAME'] == 'Y'
-      identity
-    end
-
-    def offender_attributes_from(row)
+    def keys_mapping
       {
-        noms_id: row['NOMS_NUMBER'],
-        nationality_code: row['NATIONALITY_CODE'],
-        establishment_code: row['ESTABLISHMENT_CODE']
+        noms_number: :noms_id,
+        nomis_offender_id: :noms_offender_id,
+        salutation: :title,
+        gender_code: :gender,
+        pnc_id: :pnc_number,
+        criminal_records_office_number: :cro_number
       }
     end
 
-    def identity_attributes_from(row)
-      {
-        noms_offender_id: row['NOMIS_OFFENDER_ID'],
-        given_name_1: row['GIVEN_NAME_1'], given_name_2: row['GIVEN_NAME_2'], given_name_3: row['GIVEN_NAME_3'],
-        surname: row['SURNAME'],
-        title: row['SALUTATION'],
-        date_of_birth: Date.parse(row['DATE_OF_BIRTH']),
-        gender: row['GENDER_CODE'], ethnicity_code: row['ETHNICITY_CODE'],
-        pnc_number: row['PNC_ID'], cro_number: row['CRIMINAL_RECORDS_OFFICE_NUMBER'],
-        status: 'active'
-      }
+    def offender_attrs(row)
+      row.slice(:noms_id, :establishment_code, :nationality_code)
+    end
+
+    def identity_attrs(row)
+      row.slice(:date_of_birth, :given_name_1, :given_name_2, :given_name_3, :surname,
+                :title, :gender, :pnc_number, :cro_number, :noms_offender_id, :ethnicity_code)
+         .merge(status: 'active')
+    end
+
+    def set_current_offender(offender, identity, row)
+      offender.update(current_identity: identity) if identity.persisted? && row[:working_name] == 'Y'
     end
   end
 end
