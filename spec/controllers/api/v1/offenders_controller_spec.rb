@@ -46,7 +46,7 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
     before { request.headers['HTTP_AUTHORIZATION'] = "Bearer #{token.token}" }
 
     context 'with public scope' do
-      let(:application) { create(:application) }
+      let(:application) { create(:application, :with_public_scope) }
 
       describe 'GET #index' do
         it 'returns collection of offender records' do
@@ -157,7 +157,7 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
         end
       end
 
-      context 'when accessing endpoint that requires write access' do
+      context 'when accessing endpoint that requires write scope' do
         before { patch :merge, params: { id: offender_2, offender_id: offender_1.id } }
 
         it 'returns status 403' do
@@ -167,7 +167,7 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
     end
 
     context 'with write scope' do
-      let(:application) { create(:application, :with_write_access) }
+      let(:application) { create(:application, :with_write_scope) }
 
       describe 'PATCH #merge' do
         let!(:identity_5) do
@@ -209,6 +209,14 @@ RSpec.describe Api::V1::OffendersController, type: :controller do
 
         it 'returns status 204' do
           expect(response.status).to be 204
+        end
+      end
+
+      context 'when accessing endpoint that requires public scope' do
+        before { get :index }
+
+        it 'returns status 200' do
+          expect(response.status).to be 200
         end
       end
     end
