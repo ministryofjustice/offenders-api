@@ -28,7 +28,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
     before { request.headers['HTTP_AUTHORIZATION'] = "Bearer #{token.token}" }
 
     context 'with public scope' do
-      let(:application) { create(:application) }
+      let(:application) { create(:application, :with_public_scope) }
 
       describe 'GET #index' do
         it 'returns collection of identity records' do
@@ -219,7 +219,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
         end
       end
 
-      context 'when accessing endpoint that requires write access' do
+      context 'when accessing endpoint that requires write scope' do
         before { post :create, params: { identity: params } }
 
         it 'returns status 403' do
@@ -229,7 +229,7 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
     end
 
     context 'with write scope' do
-      let(:application) { create(:application, :with_write_access) }
+      let(:application) { create(:application, :with_write_scope) }
 
       describe 'POST #create' do
         context 'when valid' do
@@ -533,6 +533,14 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
           it 'does not update the offender current identity' do
             expect(offender.current_identity).to eq identity_1
           end
+        end
+      end
+
+      context 'when accessing endpoint that requires public scope' do
+        before { get :index }
+
+        it 'returns status 200' do
+          expect(response.status).to be 200
         end
       end
     end

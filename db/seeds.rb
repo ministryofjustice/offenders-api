@@ -2,7 +2,7 @@
 nomis = Doorkeeper::Application.find_or_create_by!(
   name: 'NOMIS',
   redirect_uri: "https://#{ENV['HTTP_HOST']}",
-  scopes: 'write'
+  scopes: 'public write'
 )
 
 pvb = Doorkeeper::Application.find_or_create_by!(

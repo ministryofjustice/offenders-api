@@ -12,10 +12,13 @@ FactoryGirl.define do
   factory :application, class: Doorkeeper::Application do
     sequence(:name) { |n| "Application #{n}" }
     redirect_uri 'https://app.com/callback'
-    scopes 'public'
 
-    trait :with_write_access do
-      scopes 'write'
+    trait :with_public_scope do
+      scopes 'public'
+    end
+
+    trait :with_write_scope do
+      scopes 'public write'
     end
   end
 end
