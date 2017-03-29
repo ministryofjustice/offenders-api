@@ -12,13 +12,8 @@
 
 ActiveRecord::Schema.define(version: 20170227122233) do
 
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-  enable_extension "uuid-ossp"
-  enable_extension "fuzzystrmatch"
-
-  create_table "identities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.uuid   "offender_id"
+  create_table "identities", id: :string, force: :cascade do |t|
+    t.string "offender_id"
     t.string "noms_offender_id"
     t.string "title"
     t.string "given_name_1"
@@ -32,12 +27,12 @@ ActiveRecord::Schema.define(version: 20170227122233) do
     t.string "status",           default: "inactive"
     t.string "ethnicity_code"
     t.string "given_name_3"
-    t.index ["cro_number"], name: "index_identities_on_cro_number", using: :btree
-    t.index ["given_name_1"], name: "index_identities_on_given_name_1", using: :btree
-    t.index ["noms_offender_id"], name: "index_identities_on_noms_offender_id", using: :btree
-    t.index ["offender_id"], name: "index_identities_on_offender_id", using: :btree
-    t.index ["pnc_number"], name: "index_identities_on_pnc_number", using: :btree
-    t.index ["surname"], name: "index_identities_on_surname", using: :btree
+    t.index ["cro_number"], name: "index_identities_on_cro_number"
+    t.index ["given_name_1"], name: "index_identities_on_given_name_1"
+    t.index ["noms_offender_id"], name: "index_identities_on_noms_offender_id"
+    t.index ["offender_id"], name: "index_identities_on_offender_id"
+    t.index ["pnc_number"], name: "index_identities_on_pnc_number"
+    t.index ["surname"], name: "index_identities_on_surname"
   end
 
   create_table "imports", force: :cascade do |t|
@@ -56,15 +51,15 @@ ActiveRecord::Schema.define(version: 20170227122233) do
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
-    t.integer  "resource_owner_id", null: false
-    t.integer  "application_id",    null: false
-    t.string   "token",             null: false
-    t.integer  "expires_in",        null: false
-    t.text     "redirect_uri",      null: false
-    t.datetime "created_at",        null: false
+    t.integer  "resource_owner_id",                    null: false
+    t.integer  "application_id",                       null: false
+    t.string   "token",                                null: false
+    t.integer  "expires_in",                           null: false
+    t.text     "redirect_uri",      limit: 2147483647, null: false
+    t.datetime "created_at",                           null: false
     t.datetime "revoked_at"
     t.string   "scopes"
-    t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true, using: :btree
+    t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
   end
 
   create_table "oauth_access_tokens", force: :cascade do |t|
@@ -76,23 +71,23 @@ ActiveRecord::Schema.define(version: 20170227122233) do
     t.datetime "revoked_at"
     t.datetime "created_at",        null: false
     t.string   "scopes"
-    t.index ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true, using: :btree
-    t.index ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id", using: :btree
-    t.index ["token"], name: "index_oauth_access_tokens_on_token", unique: true, using: :btree
+    t.index ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true, where: "([refresh_token] IS NOT NULL)"
+    t.index ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id"
+    t.index ["token"], name: "index_oauth_access_tokens_on_token", unique: true, where: "([token] IS NOT NULL)"
   end
 
   create_table "oauth_applications", force: :cascade do |t|
-    t.string   "name",                      null: false
-    t.string   "uid",                       null: false
-    t.string   "secret",                    null: false
-    t.text     "redirect_uri",              null: false
-    t.string   "scopes",       default: "", null: false
+    t.string   "name",                                         null: false
+    t.string   "uid",                                          null: false
+    t.string   "secret",                                       null: false
+    t.text     "redirect_uri", limit: 2147483647,              null: false
+    t.string   "scopes",                          default: "", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
+    t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
-  create_table "offenders", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "offenders", id: :string, force: :cascade do |t|
     t.uuid     "current_identity_id"
     t.string   "noms_id"
     t.string   "nationality_code"
@@ -100,15 +95,15 @@ ActiveRecord::Schema.define(version: 20170227122233) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.uuid     "merged_to_id"
-    t.index ["current_identity_id"], name: "index_offenders_on_current_identity_id", using: :btree
-    t.index ["noms_id"], name: "index_offenders_on_noms_id", using: :btree
+    t.index ["current_identity_id"], name: "index_offenders_on_current_identity_id"
+    t.index ["noms_id"], name: "index_offenders_on_noms_id"
   end
 
   create_table "uploads", force: :cascade do |t|
     t.string   "md5"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["md5"], name: "index_uploads_on_md5", using: :btree
+    t.index ["md5"], name: "index_uploads_on_md5"
   end
 
   create_table "users", force: :cascade do |t|
@@ -127,19 +122,19 @@ ActiveRecord::Schema.define(version: 20170227122233) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "role"
-    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-    t.index ["role"], name: "index_users_on_role", using: :btree
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, where: "([reset_password_token] IS NOT NULL)"
+    t.index ["role"], name: "index_users_on_role"
   end
 
   create_table "versions", force: :cascade do |t|
-    t.string   "item_type",  null: false
-    t.integer  "item_id",    null: false
-    t.string   "event",      null: false
+    t.string   "item_type",                     null: false
+    t.integer  "item_id",                       null: false
+    t.string   "event",                         null: false
     t.string   "whodunnit"
-    t.text     "object"
+    t.text     "object",     limit: 2147483647
     t.datetime "created_at"
-    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
 end
