@@ -20,26 +20,6 @@ mps = Doorkeeper::Application.find_or_create_by!(
   redirect_uri: "https://#{ENV['HTTP_HOST']}"
 )
 
-# Admin user
-unless User.find_by(email: ENV['ADMIN_EMAIL'])
-  User.create!(
-    email: ENV['ADMIN_EMAIL'],
-    password: ENV['ADMIN_PASSWORD'],
-    password_confirmation: ENV['ADMIN_PASSWORD'],
-    role: 'admin'
-  )
-end
-
-# Staff user
-unless User.find_by(email: 'staff@example.com')
-  User.create!(
-    email: 'staff@example.com',
-    password: ENV['ADMIN_PASSWORD'],
-    password_confirmation: ENV['ADMIN_PASSWORD'],
-    role: 'staff'
-  )
-end
-
 # Import nicknames
 file = Rails.root.join('db', 'nicknames.csv')
 ParseNicknames.call(file.read)

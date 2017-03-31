@@ -50,14 +50,22 @@ GEM
       i18n (~> 0.7)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    addressable (2.5.0)
+      public_suffix (~> 2.0, >= 2.0.2)
     api_pagination_headers (2.1.1)
       rails (>= 4.2.0)
     arel (7.1.4)
     ast (2.3.0)
     awesome_print (1.7.0)
-    bcrypt (3.1.11)
     builder (3.2.3)
     byebug (9.0.6)
+    capybara (2.7.1)
+      addressable
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      xpath (~> 2.0)
     carrierwave (1.0.0)
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
@@ -72,12 +80,6 @@ GEM
     connection_pool (2.2.1)
     database_cleaner (1.5.3)
     debug_inspector (0.0.2)
-    devise (4.2.0)
-      bcrypt (~> 3.0)
-      orm_adapter (~> 0.1)
-      railties (>= 4.1.0, < 5.1)
-      responders
-      warden (~> 1.2.3)
     diff-lcs (1.3)
     docile (1.1.5)
     doorkeeper (4.2.5)
@@ -113,6 +115,7 @@ GEM
       haml (>= 4.0.6, < 5.0)
       html2haml (>= 1.0.1)
       railties (>= 4.0.1)
+    hashie (3.5.5)
     html2haml (2.1.0)
       erubis (~> 2.7.0)
       haml (~> 4.0)
@@ -129,6 +132,7 @@ GEM
       jsonapi-renderer (= 0.1.1.beta1)
     jsonapi-parser (0.1.1.beta3)
     jsonapi-renderer (0.1.1.beta1)
+    jwt (1.5.6)
     kaminari (1.0.1)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.0.1)
@@ -142,6 +146,8 @@ GEM
       kaminari-core (= 1.0.1)
     kaminari-core (1.0.1)
     kgio (2.11.0)
+    launchy (2.4.3)
+      addressable (~> 2.3)
     listen (3.0.8)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -155,11 +161,24 @@ GEM
     mime-types-data (3.2016.0521)
     mini_portile2 (2.1.0)
     minitest (5.10.1)
+    multi_json (1.12.1)
+    multi_xml (0.6.0)
     multipart-post (2.0.0)
     nio4r (2.0.0)
     nokogiri (1.7.0.1)
       mini_portile2 (~> 2.1.0)
-    orm_adapter (0.5.0)
+    oauth2 (1.3.1)
+      faraday (>= 0.8, < 0.12)
+      jwt (~> 1.0)
+      multi_json (~> 1.3)
+      multi_xml (~> 0.5)
+      rack (>= 1.2, < 3)
+    omniauth (1.6.1)
+      hashie (>= 3.4.6, < 3.6.0)
+      rack (>= 1.6.2, < 3)
+    omniauth-oauth2 (1.3.1)
+      oauth2 (~> 1.0)
+      omniauth (~> 1.2)
     paper_trail (6.0.2)
       activerecord (>= 4.0, < 5.2)
       request_store (~> 1.1)
@@ -176,6 +195,7 @@ GEM
       pry (~> 0.10)
     pry-rails (0.3.5)
       pry (>= 0.9.10)
+    public_suffix (2.0.4)
     rack (2.0.1)
     rack-protection (1.5.3)
       rack
@@ -216,8 +236,6 @@ GEM
       ffi (>= 0.5.0)
     redis (3.3.3)
     request_store (1.3.2)
-    responders (2.3.0)
-      railties (>= 4.2.0, < 5.1)
     rspec-core (3.5.4)
       rspec-support (~> 3.5.0)
     rspec-expectations (3.5.0)
@@ -299,8 +317,6 @@ GEM
       rack
       unicorn
     useragent (0.16.8)
-    warden (1.2.7)
-      rack (>= 1.0)
     web-console (3.4.0)
       actionview (>= 5.0)
       activemodel (>= 5.0)
@@ -311,6 +327,8 @@ GEM
     websocket-extensions (0.1.2)
     whenever (0.9.7)
       chronic (>= 0.6.3)
+    xpath (2.0.0)
+      nokogiri (~> 1.3)
 
 PLATFORMS
   ruby
@@ -319,10 +337,10 @@ DEPENDENCIES
   active_model_serializers
   api_pagination_headers
   awesome_print
+  capybara
   carrierwave
   codeclimate-test-reporter
   database_cleaner
-  devise
   doorkeeper
   factory_girl_rails
   faker
@@ -333,7 +351,9 @@ DEPENDENCIES
   haml-rails
   jquery-rails
   kaminari
+  launchy
   listen (~> 3.0.5)
+  omniauth-oauth2 (~> 1.3.1)
   paper_trail
   pg
   pry-byebug
