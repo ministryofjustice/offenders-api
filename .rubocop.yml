@@ -7,6 +7,7 @@ AllCops:
     - 'app/models/schemas/*'
     - 'db/**/*'
     - 'config/**/*'
+    - 'spec/support/oauth_helper.rb'
     - 'vendor/**/*'
 
 # Prefer sensible naming to comments everywhere.

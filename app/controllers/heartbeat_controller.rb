@@ -1,4 +1,6 @@
 class HeartbeatController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:ping, :healthcheck]
+
   def ping
     json = {
       'version_number'  => ENV['VERSION_NUMBER'] || 'Not Available',

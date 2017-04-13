@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   use_doorkeeper
-  devise_for :users
+
+  get '/auth/:provider/callback', to: 'sessions#create'
+  resource :session, only: %i[ new destroy ]
+  get 'users/sign_out', to: 'sessions#destroy'
 
   get 'ping', to: 'heartbeat#ping', format: :json
   get 'healthcheck', to: 'heartbeat#healthcheck',  as: 'healthcheck', format: :json
@@ -8,16 +11,10 @@ Rails.application.routes.draw do
   resources :apidocs, only: [:index]
   mount SwaggerEngine::Engine, at: "/api-docs"
 
-  authenticate :user do
-    constraints RoleConstraint.new(:admin) do
-      get '/', to: redirect('services#index')
-    end
+  root to: 'home#show'
 
-    root to: 'imports#new'
-
-    resources :services
-    resources :imports, only: [:new, :create]
-  end
+  resources :services
+  resources :imports, only: [:new, :create]
 
   namespace :api, format: :json do
     scope module: :v1, constraints: ApiConstraint.new(version: 1) do

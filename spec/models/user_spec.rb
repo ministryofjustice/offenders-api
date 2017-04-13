@@ -5,14 +5,7 @@ RSpec.describe User, type: :model do
   it { is_expected.to validate_inclusion_of(:role).in_array(User::ROLES) }
 
   describe 'roles' do
-    let(:user) do
-      User.create(
-        email: 'example@example.com',
-        password: 'password',
-        password_confirmation: 'password',
-        role: role
-      )
-    end
+    let(:user) { create(:user, email: 'user@example.com', role: role) }
 
     describe '#admin?' do
       let(:role) { 'admin' }

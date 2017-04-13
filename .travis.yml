@@ -5,11 +5,12 @@ cache: bundler
 addons:
   postgresql: '9.3'
 before_install:
-- export TZ=Europe/London
+  - export TZ=Europe/London
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
   - cp config/database.yml.travis config/database.yml
+env:
+  - MOJSSO_ID=xxx MOJSSO_SECRET=yyy
 script:
   - bundle exec rake db:migrate
   - bundle exec rake
-

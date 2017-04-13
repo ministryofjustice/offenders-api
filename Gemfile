@@ -9,7 +9,6 @@ end
 gem 'active_model_serializers'
 gem 'api_pagination_headers'
 gem 'carrierwave'
-gem 'devise'
 gem 'doorkeeper'
 gem 'factory_girl_rails'
 gem 'faker'
@@ -20,6 +19,7 @@ gem 'govuk_template', '0.18.0'
 gem 'haml-rails'
 gem 'jquery-rails'
 gem 'kaminari'
+gem 'omniauth-oauth2', '~> 1.3.1'
 gem 'paper_trail'
 gem 'pg'
 gem 'rails', '~> 5.0.1'
@@ -52,8 +52,10 @@ group :development, :test do
 end
 
 group :test do
+  gem 'capybara'
   gem 'codeclimate-test-reporter'
   gem 'database_cleaner'
+  gem 'launchy'
   gem 'rails-controller-testing'
   gem 'rspec-mocks'
   gem 'rspec-rails'
