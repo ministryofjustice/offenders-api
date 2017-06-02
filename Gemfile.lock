@@ -201,6 +201,9 @@ GEM
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
+    rack-throttle (0.5.0)
+      bundler (>= 1.0.0)
+      rack (>= 1.0.0)
     rails (5.0.2)
       actioncable (= 5.0.2)
       actionmailer (= 5.0.2)
@@ -358,6 +361,7 @@ DEPENDENCIES
   pg
   pry-byebug
   pry-rails
+  rack-throttle
   rails (~> 5.0.1)
   rails-controller-testing
   rspec-mocks
