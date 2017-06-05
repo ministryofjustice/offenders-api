@@ -1,6 +1,8 @@
 require_relative 'boot'
 
 require 'rails/all'
+require 'rack/throttle'
+require_relative '../app/middleware/api_throttle'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -11,6 +13,8 @@ module OffendersApi
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
+
+    config.middleware.use ApiThrottle, max: 60
 
     config.autoload_paths << "#{Rails.root}/app/controllers/api/v1/schemas"
     config.autoload_paths << "#{Rails.root}/app/models/schemas"
