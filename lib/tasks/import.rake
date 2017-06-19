@@ -67,14 +67,14 @@ namespace :import do
 
   def identity_attrs(row)
     row.slice(:date_of_birth, :given_name_1, :given_name_2, :given_name_3, :surname,
-              :title, :gender, :pnc_number, :cro_number, :noms_offender_id)
+              :title, :gender, :pnc_number, :cro_number, :nomis_offender_id)
        .merge(id: row[:soi_identity_id], status: 'active')
   end
 
   def keys_mapping
     {
       noms_number: :noms_id,
-      nomis_offender_id: :noms_offender_id,
+      nomis_offender_id: :nomis_offender_id,
       salutation: :title,
       gender_code: :gender,
       pnc_id: :pnc_number,

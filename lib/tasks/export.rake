@@ -6,8 +6,8 @@ namespace :export do
     file = Rails.root.join('lib', 'assets', 'data', 'soi_extract.csv')
 
     CSV.open(file, 'wb') do |csv|
-      csv << %w(noms_offender_id identity_id offender_id)
-      Identity.find_each { |identity| csv << [identity.noms_offender_id, identity.id, identity.offender.id] }
+      csv << %w(nomis_offender_id identity_id offender_id)
+      Identity.find_each { |identity| csv << [identity.nomis_offender_id, identity.id, identity.offender.id] }
     end
   end
 end

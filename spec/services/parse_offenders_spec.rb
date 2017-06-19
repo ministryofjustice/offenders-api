@@ -34,10 +34,10 @@ RSpec.describe ParseOffenders do
         end
 
         it 'imports all the fields correctly for the identity' do
-          identity = Identity.find_by!(noms_offender_id: '1055829')
+          identity = Identity.find_by!(nomis_offender_id: '1055829')
 
           expect(identity.noms_id).to eq('A1234BC')
-          expect(identity.noms_offender_id).to eq('1055829')
+          expect(identity.nomis_offender_id).to eq('1055829')
           expect(identity.given_name_1).to eq('JOHN')
           expect(identity.given_name_2).to eq('LUKE')
           expect(identity.given_name_3).to eq('FRANK')
@@ -58,9 +58,9 @@ RSpec.describe ParseOffenders do
         before do
           offender_one = create(:offender, noms_id: 'A1234BC')
           offender_two = create(:offender, noms_id: 'A1234BU')
-          create(:identity, offender: offender_one, noms_offender_id: '1056827')
-          create(:identity, offender: offender_one, noms_offender_id: '1055829')
-          create(:identity, offender: offender_two, noms_offender_id: '1055847')
+          create(:identity, offender: offender_one, nomis_offender_id: '1056827')
+          create(:identity, offender: offender_one, nomis_offender_id: '1055829')
+          create(:identity, offender: offender_two, nomis_offender_id: '1055847')
           described_class.call(csv_data)
         end
 
@@ -90,10 +90,10 @@ RSpec.describe ParseOffenders do
         end
 
         it 'updates all the fields correctly for the identity' do
-          identity = Identity.find_by!(noms_offender_id: '1055829')
+          identity = Identity.find_by!(nomis_offender_id: '1055829')
 
           expect(identity.noms_id).to eq('A1234BC')
-          expect(identity.noms_offender_id).to eq('1055829')
+          expect(identity.nomis_offender_id).to eq('1055829')
           expect(identity.given_name_1).to eq('JOHN')
           expect(identity.given_name_2).to eq('LUKE')
           expect(identity.given_name_3).to eq('FRANK')

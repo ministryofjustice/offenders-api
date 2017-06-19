@@ -20,7 +20,7 @@ module ParseOffenders
       offender = Offender.find_or_create_by(noms_id: row[:noms_id])
       offender.update(offender_attrs(row))
 
-      identity = offender.identities.find_or_initialize_by(noms_offender_id: row[:noms_offender_id])
+      identity = offender.identities.find_or_initialize_by(nomis_offender_id: row[:nomis_offender_id])
       errors << row unless identity.update(identity_attrs(row))
 
       set_current_offender(offender, identity, row)
@@ -29,7 +29,7 @@ module ParseOffenders
     def keys_mapping
       {
         noms_number: :noms_id,
-        nomis_offender_id: :noms_offender_id,
+        nomis_offender_id: :nomis_offender_id,
         salutation: :title,
         gender_code: :gender,
         pnc_id: :pnc_number,
@@ -43,7 +43,7 @@ module ParseOffenders
 
     def identity_attrs(row)
       row.slice(:date_of_birth, :given_name_1, :given_name_2, :given_name_3, :surname,
-                :title, :gender, :pnc_number, :cro_number, :noms_offender_id, :ethnicity_code)
+                :title, :gender, :pnc_number, :cro_number, :nomis_offender_id, :ethnicity_code)
          .merge(status: 'active')
     end
 

@@ -25,7 +25,7 @@ Rails.application.routes.draw do
       resources :identities, format: :json, except: [:new, :edit] do
         get :search, on: :collection
         get :inactive, on: :collection
-        get :blank_noms_offender_id, on: :collection
+        get :blank_nomis_offender_id, on: :collection
         patch :make_current, on: :member
         patch :activate, on: :member
       end

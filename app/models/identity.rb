@@ -23,7 +23,7 @@ class Identity < ActiveRecord::Base
 
   scope :active, -> { where(status: STATUSES[:active]) }
   scope :inactive, -> { where(status: STATUSES[:inactive]) }
-  scope :blank_noms_offender_id, -> { where(noms_offender_id: [nil, '']) }
+  scope :blank_nomis_offender_id, -> { where(nomis_offender_id: [nil, '']) }
   scope :nicknames, ->(term) { where(given_name_1: Nickname.for(term.upcase).map(&:name) << term.upcase) }
   scope :soundex, ->(term) { where('SOUNDEX(surname) = SOUNDEX(?)', term.upcase) }
 

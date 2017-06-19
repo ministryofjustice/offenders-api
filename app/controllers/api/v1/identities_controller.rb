@@ -4,10 +4,10 @@ module Api
       include Swagger::Blocks
       include IdentityResource
 
-      before_action :doorkeeper_authorize!, only: [:index, :search, :inactive, :blank_noms_offender_id, :show]
+      before_action :doorkeeper_authorize!, only: [:index, :search, :inactive, :blank_nomis_offender_id, :show]
       before_action -> { doorkeeper_authorize! :write }, only: [:create, :update, :destroy, :activate, :make_current]
 
-      after_action only: [:index, :search, :inactive, :blank_noms_offender_id] do
+      after_action only: [:index, :search, :inactive, :blank_nomis_offender_id] do
         set_pagination_headers(:identities) unless search_params[:count]
       end
 
@@ -32,8 +32,8 @@ module Api
         render json: @identities
       end
 
-      def blank_noms_offender_id
-        @identities = Identity.blank_noms_offender_id.order(:surname, :given_name_1, :given_name_2)
+      def blank_nomis_offender_id
+        @identities = Identity.blank_nomis_offender_id.order(:surname, :given_name_1, :given_name_2)
         @identities = @identities.page(params[:page]).per(params[:per_page])
 
         render json: @identities
@@ -96,7 +96,7 @@ module Api
 
       def identity_params
         params.require(:identity).permit(
-          :offender_id, :noms_offender_id, :pnc_number, :cro_number, :ethnicity_code,
+          :offender_id, :nomis_offender_id, :pnc_number, :cro_number, :ethnicity_code,
           :title, :given_name_1, :given_name_2, :given_name_3, :surname, :suffix, :date_of_birth, :gender
         )
       end
