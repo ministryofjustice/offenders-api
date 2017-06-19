@@ -342,9 +342,9 @@ module IdentityResource
         end
       end
 
-      swagger_path '/identities/blank_noms_offender_id' do
+      swagger_path '/identities/blank_nomis_offender_id' do
         operation :get do
-          key :description, 'Returns a paginated list of identities with blank noms_offender_id'
+          key :description, 'Returns a paginated list of identities with blank nomis_offender_id'
           key :operationId, 'blankNomsOffenderIdIdentities'
           key :produces, ['application/json']
           key :tags, ['identity']
@@ -365,7 +365,7 @@ module IdentityResource
             key :format, :int32
           end
           response 200 do
-            key :description, 'A list of identities with blank noms_offender_id'
+            key :description, 'A list of identities with blank nomis_offender_id'
             schema do
               key :type, :array
               items do

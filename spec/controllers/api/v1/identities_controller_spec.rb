@@ -167,22 +167,22 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
         end
       end
 
-      describe 'GET #blank_noms_offender_id' do
+      describe 'GET #blank_nomis_offender_id' do
         let!(:identity_1) do
-          create(:identity, noms_offender_id: '123456')
+          create(:identity, nomis_offender_id: '123456')
         end
 
         let!(:identity_2) do
-          create(:identity, noms_offender_id: '')
+          create(:identity, nomis_offender_id: '')
         end
 
         let!(:identity_3) do
-          create(:identity, noms_offender_id: nil)
+          create(:identity, nomis_offender_id: nil)
         end
 
-        before { get :blank_noms_offender_id }
+        before { get :blank_nomis_offender_id }
 
-        it 'returns collection of identities with blank noms_offender_id' do
+        it 'returns collection of identities with blank nomis_offender_id' do
           expect(JSON.parse(response.body).map { |p| p['id'] })
             .to match_array([identity_2['id'], identity_3['id']])
         end
@@ -571,8 +571,8 @@ RSpec.describe Api::V1::IdentitiesController, type: :controller do
       end
     end
 
-    describe 'GET #blank_noms_offender_id' do
-      before { get :blank_noms_offender_id }
+    describe 'GET #blank_nomis_offender_id' do
+      before { get :blank_nomis_offender_id }
 
       it 'returns status 401' do
         expect(response.status).to be 401

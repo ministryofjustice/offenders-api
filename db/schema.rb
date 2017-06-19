@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170404101013) do
+ActiveRecord::Schema.define(version: 20170616151916) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20170404101013) do
 
   create_table "identities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.uuid   "offender_id"
-    t.string "noms_offender_id"
+    t.string "nomis_offender_id"
     t.string "title"
     t.string "given_name_1"
     t.string "given_name_2"
@@ -29,12 +29,12 @@ ActiveRecord::Schema.define(version: 20170404101013) do
     t.string "gender"
     t.string "pnc_number"
     t.string "cro_number"
-    t.string "status",           default: "inactive"
+    t.string "status",            default: "inactive"
     t.string "ethnicity_code"
     t.string "given_name_3"
     t.index ["cro_number"], name: "index_identities_on_cro_number", using: :btree
     t.index ["given_name_1"], name: "index_identities_on_given_name_1", using: :btree
-    t.index ["noms_offender_id"], name: "index_identities_on_noms_offender_id", using: :btree
+    t.index ["nomis_offender_id"], name: "index_identities_on_nomis_offender_id", using: :btree
     t.index ["offender_id"], name: "index_identities_on_offender_id", using: :btree
     t.index ["pnc_number"], name: "index_identities_on_pnc_number", using: :btree
     t.index ["surname"], name: "index_identities_on_surname", using: :btree
