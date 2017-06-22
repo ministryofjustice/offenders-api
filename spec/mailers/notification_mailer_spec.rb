@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe NotificationMailer, type: :mailer do
+  let!(:host) { 'somedomain.com' }
+
+  before do
+    allow(ENV).to receive(:[]).with('HTTP_HOST').and_return(host)
+  end
+
   describe '#import_failed' do
     let(:import) { instance_double('Import') }
     let(:mailer) { described_class.import_failed(import, 'Error parsing line 1234').deliver_now }
@@ -12,7 +18,7 @@ RSpec.describe NotificationMailer, type: :mailer do
     end
 
     it 'renders the subject' do
-      expect(mailer.subject).to eq('Import failed')
+      expect(mailer.subject).to eq("Import failed (#{host})")
     end
 
     it 'renders the receiver email' do
@@ -28,7 +34,7 @@ RSpec.describe NotificationMailer, type: :mailer do
     let(:mailer) { described_class.import_not_performed.deliver_now }
 
     it 'renders the subject' do
-      expect(mailer.subject).to eq('Import not performed in the last 24 hours')
+      expect(mailer.subject).to eq("Import not performed in the last 24 hours (#{host})")
     end
 
     it 'renders the receiver email' do
