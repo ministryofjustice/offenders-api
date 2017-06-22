@@ -1,11 +1,13 @@
 class NotificationMailer < ApplicationMailer
+  default to: 'single-offender-identity@digital.justice.gov.uk'
+
   def import_failed(import, error)
     @import = import
     @error = error
-    mail(to: 'single-offender-identity@digital.justice.gov.uk', subject: 'Import failed')
+    mail(subject: "Import failed (#{ENV['HTTP_HOST']})")
   end
 
   def import_not_performed
-    mail(to: 'single-offender-identity@digital.justice.gov.uk', subject: 'Import not performed in the last 24 hours')
+    mail(subject: "Import not performed in the last 24 hours (#{ENV['HTTP_HOST']})")
   end
 end
