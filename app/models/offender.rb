@@ -10,7 +10,7 @@ class Offender < ActiveRecord::Base
   validates :noms_id, presence: true
   validate :uniqueness_of_noms_id
 
-  scope :updated_after, ->(time) { where('updated_at > ?', time) }
+  scope :updated_after, ->(time) { where('offenders.updated_at > ?', time) }
   scope :active, -> { not_merged.joins(:current_identity).where("identities.status": Identity::STATUSES[:active]) }
   scope :inactive, -> { not_merged.joins(:current_identity).where("identities.status": Identity::STATUSES[:inactive]) }
   scope :not_merged, -> { where(merged_to_id: nil) }
