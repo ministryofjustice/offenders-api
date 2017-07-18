@@ -1,9 +1,9 @@
 class NotificationMailer < ApplicationMailer
   default to: 'single-offender-identity@digital.justice.gov.uk'
 
-  def import_failed(import, error)
+  def import_failed(import)
     @import = import
-    @error = error
+    @error = import.error_log
     mail(subject: "Import failed (#{ENV['HTTP_HOST']})")
   end
 

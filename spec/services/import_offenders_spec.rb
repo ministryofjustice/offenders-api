@@ -32,6 +32,65 @@ RSpec.describe ImportOffenders do
         expect(import.status).to eq('failed')
       end
 
+      it 'saves the errors' do
+        expected_log = [
+          {
+            noms_id: '',
+            date_of_birth: '1970/01/30 00:00:00',
+            given_name_1: 'LARRY',
+            given_name_2: 'MARK',
+            given_name_3: 'JOE',
+            surname: 'LATITUDE',
+            title: 'MR',
+            gender: 'M',
+            pnc_number: '05/103329A',
+            nationality_code: 'BRIT',
+            cro_number: '309129/05R',
+            establishment_code: 'LEI',
+            nomis_offender_id: 1_056_827,
+            ethnicity_code: 'B1',
+            working_name: 'Y'
+          },
+          {
+            noms_id: 'A1234BU',
+            date_of_birth: '1980/02/20 00:00:00',
+            given_name_1: '',
+            given_name_2: 'LUKE',
+            given_name_3: 'FRANK',
+            surname: 'DOE',
+            title: 'MR',
+            gender: 'M',
+            pnc_number: '07/3862805R',
+            nationality_code: 'BRIT',
+            cro_number: '339223/02H',
+            establishment_code: 'LEI',
+            nomis_offender_id: 1_055_829,
+            ethnicity_code: 'W1',
+            working_name: 'N'
+          },
+          {
+            noms_id: 'A1234CD',
+            date_of_birth: '1990/03/10 00:00:00',
+            given_name_1: 'BOB',
+            given_name_2: 'ROBERT',
+            given_name_3: '',
+            surname: 'DYLAN',
+            title: 'MR',
+            gender: '',
+            pnc_number: '04/837105K',
+            nationality_code: 'BRIT',
+            cro_number: '378468/01T',
+            establishment_code: 'BXI',
+            nomis_offender_id: 1_055_847,
+            ethnicity_code: 'A1',
+            working_name: 'Y'
+          }
+        ]
+
+        ImportOffenders.call(import)
+        expect(import.error_log).to eq(expected_log.to_json)
+      end
+
       it 'sends an email' do
         expect { ImportOffenders.call(import) }
           .to change(ActionMailer::Base.deliveries, :count).by(1)
