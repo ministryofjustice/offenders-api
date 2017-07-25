@@ -1,10 +1,31 @@
 module ParseOffenders
+  KEYS_MAPPING = {
+    noms_number: :noms_id,
+    alias_offender_id: :nomis_offender_id,
+    alias_date_of_birth: :date_of_birth,
+    alias_given_name_1: :given_name_1,
+    alias_given_name_2: :given_name_2,
+    alias_given_name_3: :given_name_3,
+    alias_surname: :surname,
+    salutation: :title,
+    alias_gender: :gender,
+    pnc_id: :pnc_number,
+    nationality_code: :nationality_code,
+    ethnic_code: :ethnicity_code,
+    ethnic_description: nil,
+    sexual_orientation_code: nil,
+    sexual_orientation_description: nil,
+    criminal_records_office_number: :cro_number,
+    associated_establishment_code: :establishment_code,
+    alias_or_working_name?: :working_name
+  }.freeze
+
   module_function
 
   def call(data)
     errors = []
 
-    SmarterCSV.process(data, chunk_size: 1000, key_mapping: keys_mapping, remove_empty_values: false) do |chunk|
+    SmarterCSV.process(data, chunk_size: 1000, key_mapping: KEYS_MAPPING, remove_empty_values: false) do |chunk|
       chunk.each { |row| parse_row(row, errors) }
     end
 
@@ -26,17 +47,6 @@ module ParseOffenders
       set_current_offender(offender, identity, row)
     end
 
-    def keys_mapping
-      {
-        noms_number: :noms_id,
-        nomis_offender_id: :nomis_offender_id,
-        salutation: :title,
-        gender_code: :gender,
-        pnc_id: :pnc_number,
-        criminal_records_office_number: :cro_number
-      }
-    end
-
     def offender_attrs(row)
       row.slice(:noms_id, :establishment_code, :nationality_code)
     end
@@ -48,7 +58,7 @@ module ParseOffenders
     end
 
     def set_current_offender(offender, identity, row)
-      offender.update(current_identity: identity) if identity.persisted? && row[:working_name] == 'Y'
+      offender.update(current_identity: identity) if identity.persisted? && row[:working_name] == 'Working Name'
     end
   end
 end

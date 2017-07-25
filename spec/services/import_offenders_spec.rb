@@ -36,6 +36,7 @@ RSpec.describe ImportOffenders do
         expected_log = [
           {
             noms_id: '',
+            nomis_offender_id: 1_056_827,
             date_of_birth: '1970/01/30 00:00:00',
             given_name_1: 'LARRY',
             given_name_2: 'MARK',
@@ -45,14 +46,14 @@ RSpec.describe ImportOffenders do
             gender: 'M',
             pnc_number: '05/103329A',
             nationality_code: 'BRIT',
+            ethnicity_code: 'W1',
             cro_number: '309129/05R',
             establishment_code: 'LEI',
-            nomis_offender_id: 1_056_827,
-            ethnicity_code: 'B1',
-            working_name: 'Y'
+            working_name: 'Working Name'
           },
           {
-            noms_id: 'A1234BU',
+            noms_id: 'A1234BC',
+            nomis_offender_id: 1_055_829,
             date_of_birth: '1980/02/20 00:00:00',
             given_name_1: '',
             given_name_2: 'LUKE',
@@ -62,14 +63,14 @@ RSpec.describe ImportOffenders do
             gender: 'M',
             pnc_number: '07/3862805R',
             nationality_code: 'BRIT',
+            ethnicity_code: 'B1',
             cro_number: '339223/02H',
             establishment_code: 'LEI',
-            nomis_offender_id: 1_055_829,
-            ethnicity_code: 'W1',
-            working_name: 'N'
+            working_name: 'Alias'
           },
           {
-            noms_id: 'A1234CD',
+            noms_id: 'A1234BU',
+            nomis_offender_id: 1_055_847,
             date_of_birth: '1990/03/10 00:00:00',
             given_name_1: 'BOB',
             given_name_2: 'ROBERT',
@@ -79,11 +80,10 @@ RSpec.describe ImportOffenders do
             gender: '',
             pnc_number: '04/837105K',
             nationality_code: 'BRIT',
+            ethnicity_code: 'A1',
             cro_number: '378468/01T',
             establishment_code: 'BXI',
-            nomis_offender_id: 1_055_847,
-            ethnicity_code: 'A1',
-            working_name: 'Y'
+            working_name: 'Working Name'
           }
         ]
 
